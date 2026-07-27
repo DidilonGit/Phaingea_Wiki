@@ -24,6 +24,8 @@ jobs:
         uses: withastro/action@v3
         with:
           node-version: 22 # Astro 7 requiere Node >= 22.12
+        env:
+          PUBLIC_APP_VERSION: ${{ github.sha }} # versión = commit; alimenta la auto-recarga
         # withastro/action ejecuta npm ci + astro build y sube el artefacto de Pages
 
   deploy:

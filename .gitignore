@@ -1,5 +1,6 @@
-# herramientas locales de desarrollo
+# herramientas locales de desarrollo / notas internas
 .claude/
+CLAUDE.md
 
 # dependencias
 node_modules/

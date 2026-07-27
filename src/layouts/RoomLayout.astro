@@ -2,6 +2,7 @@
 // Layout común a todas las salas: barra superior + escena.
 import '../styles/global.css';
 import TopBar from '../components/TopBar.astro';
+import VersionWatcher from '../components/VersionWatcher.jsx';
 
 const { title = 'Phaingea' } = Astro.props;
 ---
@@ -18,5 +19,6 @@ const { title = 'Phaingea' } = Astro.props;
     <main class="room">
       <slot />
     </main>
+    <VersionWatcher client:idle />
   </body>
 </html>

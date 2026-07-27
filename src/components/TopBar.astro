@@ -1,6 +1,8 @@
 ---
 // Barra superior fija con textura de madera y bookmarks por categoría.
 // En Fase 0 los bookmarks son placeholders (sin permisos ni rutas reales todavía).
+const base = import.meta.env.BASE_URL; // p.ej. '/Phaingea_Wiki' (sin barra final)
+const woodUrl = `${base.replace(/\/$/, '')}/textures/wood.png`;
 const bookmarks = [
   { key: 'inicio', label: 'Inicio', color: '#c9a45a' },
   { key: 'deidades', label: 'Deidades', color: '#b98cc0' },
@@ -13,7 +15,7 @@ const bookmarks = [
 ];
 ---
 
-<header class="topbar">
+<header class="topbar" style={`--wood: url("${woodUrl}")`}>
   <div class="brand">PHAINGEA</div>
   <nav class="bookmarks">
     {
@@ -36,7 +38,15 @@ const bookmarks = [
     position: sticky;
     top: 0;
     z-index: 50;
-    background: linear-gradient(180deg, var(--wood-light), var(--wood) 55%, var(--wood-dark));
+    /* Madera: textura gris tintada a marrón (multiply) + velo marrón translúcido encima */
+    background-color: #6b4a2c;
+    background-image:
+      linear-gradient(180deg, rgba(92, 62, 38, 0.35), rgba(52, 33, 19, 0.6)),
+      var(--wood);
+    background-size: cover, cover;
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
+    background-blend-mode: normal, multiply;
     border-bottom: 2px solid #1c120a;
     box-shadow: var(--shadow-soft);
   }
