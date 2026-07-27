@@ -49,6 +49,10 @@
 - **2026-07-27** — **Fase 0 implementada.** Proyecto Astro 7 + React 19 + Firebase 12 montado en `Documents/Phaingea web`. Ficheros: `astro.config.mjs` (base `/Phaingea_Wiki`), `src/lib/firebase.js` (+ `firebaseConfig.js` con la config real), `TopBar.astro`, `RoomLayout.astro`, `index.astro` (observatorio landing), isla `FirebaseStatus.jsx`, `tokens.css`/`global.css`, workflow `.github/workflows/deploy.yml`. Build local OK y verificado en navegador. `git init` + commit como **Jowy05** + push a `DidilonGit/Phaingea_Wiki`.
 - **2026-07-27** — **Fase 0 PUBLICADA.** Didilon activó Pages (Source: GitHub Actions). Primer deploy falló por Node 20 en el runner (Astro 7 necesita Node ≥22.12) → arreglado con `node-version: 22` en el workflow. Segundo deploy OK. Web en vivo verificada: https://didilongit.github.io/Phaingea_Wiki/ muestra "Firebase conectado · proyecto phaingea", HTTP 200, sin errores. Limpieza de referencias a Claude (`.claude/` + `CLAUDE.md` gitignorados, commit sin trailer, contributors = solo Jowy05). **Fase 0 ✅ → siguiente: Fase 1 (login).**
 
+- **2026-07-27** — **Navbar con banderines.** `TopBar.astro` rediseñado: cada categoría es un pendón/banderín SVG (barra dorada + tela con forma y color propios + icono), tooltip con el nombre en hover/focus. Categorías: Inicio, Deidades, Regiones, Personajes, Galería, Sesiones, **Reglas**, Notificaciones, Perfil. Formas editables en `shapePath`, iconos en `icons`. Altura de barra a 78px.
+- **2026-07-27** — **Prototipo observatorio.** `prototipos/observatorio.html` (copia adaptada del proto Novalis 12): globo centrado, dial reposicionado como "sombrero" (arco simétrico sobre el globo, A0=200/A1=340), pines placeholder (WIP + lorem ipsum). Cabecera del archivo documenta dónde editar. Pendiente: mapa/contenido Phaingea + integrar en Astro.
+- **2026-07-27** — **Contributors:** verificado por API que el único contributor es Jowy05 (5 commits); el "claude" del panel web de GitHub es caché visual que se refresca solo (≤24h). Historial git limpio.
+
 ## Plantilla para próximas entradas del log
 
 ```

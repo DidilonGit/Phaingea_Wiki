@@ -1,36 +1,89 @@
 ---
-// Barra superior fija con textura de madera y bookmarks por categoría.
-// En Fase 0 los bookmarks son placeholders (sin permisos ni rutas reales todavía).
+// Barra superior de madera con "banderines" (pendones) colgando, uno por categoría.
+// Cada banderín = SVG: barra dorada (rod) + tela con FORMA y COLOR propios + ICONO.
+// El nombre de la categoría aparece como tooltip al hacer hover/focus.
+//
+// CÓMO EDITAR:
+// · Añadir/quitar categoría -> array `bookmarks` (key, label, color, shape).
+// · Formas de la tela -> objeto `shapePath` (recto | redondo | punta | cola).
+// · Iconos -> objeto `icons` (SVG interno, dibujado en una caja 24x24).
 const base = import.meta.env.BASE_URL; // p.ej. '/Phaingea_Wiki' (sin barra final)
 const woodUrl = `${base.replace(/\/$/, '')}/textures/wood.png`;
+
+// Formas de la tela del banderín (viewBox 0 0 54 80; tela de y=10 a la base).
+const shapePath = {
+  recto:   'M8,10 H46 V64 H8 Z',
+  redondo: 'M8,10 H46 V52 Q46,66 27,66 Q8,66 8,52 Z',
+  punta:   'M8,10 H46 V54 L27,68 L8,54 Z',
+  cola:    'M8,10 H46 V66 L27,55 L8,66 Z',
+};
+
+// Iconos simples (caja 24x24, se centran sobre la tela). fill oscuro por defecto.
+const icons = {
+  inicio:        '<circle cx="12" cy="11" r="5.4"/><ellipse cx="12" cy="11" rx="11" ry="3.4" fill="none" stroke="#20160d" stroke-width="1.7" transform="rotate(-18 12 11)"/>',
+  deidades:      '<circle cx="12" cy="12" r="4"/><g stroke="#20160d" stroke-width="1.7" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.6" y1="4.6" x2="6.7" y2="6.7"/><line x1="17.3" y1="17.3" x2="19.4" y2="19.4"/><line x1="19.4" y1="4.6" x2="17.3" y2="6.7"/><line x1="6.7" y1="17.3" x2="4.6" y2="19.4"/></g>',
+  regiones:      '<circle cx="12" cy="12" r="10" fill="none" stroke="#20160d" stroke-width="1.5"/><path d="M12 4 L14 11 L20 12 L14 13 L12 20 L10 13 L4 12 L10 11 Z"/>',
+  personajes:    '<circle cx="12" cy="8" r="4.2"/><path d="M4 21 Q4 13 12 13 Q20 13 20 21 Z"/>',
+  galeria:       '<rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="#20160d" stroke-width="1.7"/><circle cx="8" cy="10" r="1.7"/><path d="M6 17 L11 12 L14 15 L17 11 L19 17 Z"/>',
+  sesiones:      '<path d="M12 6 Q7 3.5 3 5.2 V18 Q7 16.2 12 19 Q17 16.2 21 18 V5.2 Q17 3.5 12 6 Z" fill="none" stroke="#20160d" stroke-width="1.7"/><line x1="12" y1="6" x2="12" y2="19" stroke="#20160d" stroke-width="1.5"/>',
+  notificaciones:'<path d="M12 3 Q6 3 6 11 L4.2 16 H19.8 L18 11 Q18 3 12 3 Z"/><path d="M9.8 18 Q12 21 14.2 18 Z"/>',
+  perfil:        '<rect x="5" y="3" width="14" height="18" rx="1.6"/><path d="M12 3 V12 L14.5 10 L17 12 V3 Z" fill="#efe6d2"/>',
+  reglas:        '<rect x="5" y="3.5" width="14" height="17" rx="1.8" fill="none" stroke="#20160d" stroke-width="1.7"/><line x1="8" y1="8" x2="16" y2="8" stroke="#20160d" stroke-width="1.5"/><line x1="8" y1="11.5" x2="16" y2="11.5" stroke="#20160d" stroke-width="1.5"/><line x1="8" y1="15" x2="13" y2="15" stroke="#20160d" stroke-width="1.5"/>',
+};
+
 const bookmarks = [
-  { key: 'inicio', label: 'Inicio', color: '#c9a45a' },
-  { key: 'deidades', label: 'Deidades', color: '#b98cc0' },
-  { key: 'regiones', label: 'Regiones', color: '#7fae6f' },
-  { key: 'personajes', label: 'Personajes', color: '#d79a5b' },
-  { key: 'galeria', label: 'Galería', color: '#6fa6c9' },
-  { key: 'sesiones', label: 'Sesiones', color: '#c98a6f' },
-  { key: 'notificaciones', label: 'Notificaciones', color: '#c9c06f' },
-  { key: 'perfil', label: 'Perfil', color: '#b0a48f' },
+  { key: 'inicio',         label: 'Inicio',         color: '#d9b45c', shape: 'punta'   },
+  { key: 'deidades',       label: 'Deidades',       color: '#9d7bc0', shape: 'redondo' },
+  { key: 'regiones',       label: 'Regiones',       color: '#6f9e5c', shape: 'recto'   },
+  { key: 'personajes',     label: 'Personajes',     color: '#c9803f', shape: 'cola'    },
+  { key: 'galeria',        label: 'Galería',        color: '#5f93b8', shape: 'punta'   },
+  { key: 'sesiones',       label: 'Sesiones',       color: '#b8603f', shape: 'redondo' },
+  { key: 'reglas',         label: 'Reglas',         color: '#b58a4a', shape: 'punta'   },
+  { key: 'notificaciones', label: 'Notificaciones', color: '#c0b24a', shape: 'recto'   },
+  { key: 'perfil',         label: 'Perfil',         color: '#a89880', shape: 'cola'    },
 ];
 ---
 
 <header class="topbar" style={`--wood: url("${woodUrl}")`}>
   <div class="brand">PHAINGEA</div>
-  <nav class="bookmarks">
+  <nav class="bookmarks" aria-label="Categorías">
     {
       bookmarks.map((b) => (
-        <span class="bookmark" style={`--bm: ${b.color}`}>
-          {b.label}
-        </span>
+        <button class="bm" style={`--c:${b.color}`} title={b.label} aria-label={b.label}>
+          <svg class="pennant" viewBox="0 0 54 80" width="44" height="66" aria-hidden="true">
+            <rect x="4" y="2" width="46" height="6" rx="3" fill="url(#rodGrad)" />
+            <circle cx="4" cy="5" r="3.4" fill="url(#rodGrad)" />
+            <circle cx="50" cy="5" r="3.4" fill="url(#rodGrad)" />
+            <path class="cloth" d={shapePath[b.shape]} />
+            <path class="sheen" d={shapePath[b.shape]} fill="url(#sheenGrad)" />
+            <g class="icono" transform="translate(15,23)" set:html={icons[b.key]} />
+          </svg>
+          <span class="tip">{b.label}</span>
+        </button>
       ))
     }
   </nav>
 </header>
 
+<!-- gradientes compartidos por todos los banderines -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="rodGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2dc94" />
+      <stop offset=".5" stop-color="#c9a45a" />
+      <stop offset="1" stop-color="#87692f" />
+    </linearGradient>
+    <linearGradient id="sheenGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".30" />
+      <stop offset=".5" stop-color="#ffffff" stop-opacity=".05" />
+      <stop offset="1" stop-color="#000000" stop-opacity=".22" />
+    </linearGradient>
+  </defs>
+</svg>
+
 <style>
   .topbar {
-    height: var(--topbar-h);
+    min-height: var(--topbar-h);
     display: flex;
     align-items: center;
     gap: 1.5rem;
@@ -56,25 +109,74 @@ const bookmarks = [
     letter-spacing: 0.25em;
     color: var(--gold);
     text-shadow: 0 1px 2px #000;
+    align-self: center;
   }
   .bookmarks {
     display: flex;
-    gap: 0.4rem;
+    gap: 0.5rem;
     flex-wrap: wrap;
+    align-items: flex-start;
   }
-  .bookmark {
-    font-size: 0.85rem;
-    color: var(--paper);
-    padding: 0.35rem 0.7rem;
-    border-radius: 0 0 8px 8px;
-    background: color-mix(in srgb, var(--bm) 22%, #2a1c10);
-    border-top: 3px solid var(--bm);
+
+  /* ---- banderín ---- */
+  .bm {
+    position: relative;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin-top: -2px; /* la barra dorada asoma pegada a la madera */
     cursor: pointer;
-    transition: transform 0.18s var(--ease), background 0.18s var(--ease);
-    user-select: none;
+    display: block;
   }
-  .bookmark:hover {
-    transform: translateY(2px);
-    background: color-mix(in srgb, var(--bm) 38%, #2a1c10);
+  .pennant {
+    display: block;
+    filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.45));
+    transition: transform 0.22s var(--ease);
+    transform-origin: 50% 5px; /* pivota desde la barra dorada, como un pendón */
+  }
+  .cloth {
+    fill: var(--c);
+    stroke: rgba(255, 255, 255, 0.45);
+    stroke-width: 1;
+  }
+  .icono {
+    fill: #20160d;
+  }
+  .bm:hover .pennant,
+  .bm:focus-visible .pennant {
+    transform: rotate(3.5deg) translateY(1px);
+  }
+  .bm:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* ---- tooltip con el nombre ---- */
+  .tip {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, 2px);
+    background: linear-gradient(#3a2415, #241609);
+    color: var(--paper);
+    border: 1px solid rgba(201, 164, 90, 0.5);
+    border-radius: 6px;
+    font-family: ui-monospace, 'Courier New', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.5rem;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+    z-index: 60;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  }
+  .bm:hover .tip,
+  .bm:focus-visible .tip {
+    opacity: 1;
+    transform: translate(-50%, 6px);
   }
 </style>
