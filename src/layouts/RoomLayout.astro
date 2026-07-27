@@ -1,0 +1,22 @@
+---
+// Layout común a todas las salas: barra superior + escena.
+import '../styles/global.css';
+import TopBar from '../components/TopBar.astro';
+
+const { title = 'Phaingea' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <TopBar />
+    <main class="room">
+      <slot />
+    </main>
+  </body>
+</html>

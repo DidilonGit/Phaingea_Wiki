@@ -1,0 +1,70 @@
+---
+// Observatorio / página principal (Fase 0: landing de cimientos).
+import RoomLayout from '../layouts/RoomLayout.astro';
+import FirebaseStatus from '../components/FirebaseStatus.jsx';
+---
+
+<RoomLayout title="Phaingea — Observatorio">
+  <section class="hero">
+    <div class="halo"></div>
+    <h1>Phaingea</h1>
+    <p class="tagline">Archivo del universo · enciclopedia de campañas</p>
+
+    <div class="status">
+      <FirebaseStatus client:load />
+    </div>
+
+    <p class="note">
+      Fase 0 · Cimientos. El proyecto Astro está montado, conectado a Firebase y
+      listo para desplegarse en GitHub Pages. Las salas y el dial llegan en las
+      siguientes fases.
+    </p>
+  </section>
+</RoomLayout>
+
+<style>
+  .hero {
+    position: relative;
+    max-width: 720px;
+    margin: 8vh auto 0;
+    text-align: center;
+  }
+  .halo {
+    position: absolute;
+    inset: -40% 50% auto;
+    width: 320px;
+    height: 320px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201, 164, 90, 0.28), transparent 65%);
+    filter: blur(6px);
+    pointer-events: none;
+  }
+  h1 {
+    position: relative;
+    font-family: var(--font-title);
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    letter-spacing: 0.1em;
+    margin: 0;
+    color: var(--gold);
+    text-shadow: 0 2px 24px rgba(201, 164, 90, 0.35);
+  }
+  .tagline {
+    color: var(--parchment);
+    opacity: 0.85;
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+  .status {
+    margin: 2rem 0 1.5rem;
+  }
+  .note {
+    max-width: 460px;
+    margin: 0 auto;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--stone);
+  }
+</style>

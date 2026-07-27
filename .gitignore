@@ -1,0 +1,19 @@
+# herramientas locales de desarrollo
+.claude/
+
+# dependencias
+node_modules/
+
+# build
+dist/
+.astro/
+
+# entorno / sistema
+.env
+.env.production
+.DS_Store
+Thumbs.db
+
+# logs
+npm-debug.log*
+*.log

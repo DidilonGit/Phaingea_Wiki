@@ -1,0 +1,36 @@
+/* Tokens base del sistema de diseño de Phaingea.
+   Ver docs/06-SISTEMA-DISENO.md. Valores iniciales, se afinan por fase. */
+:root {
+  /* Materiales */
+  --wood-dark: #2c1c11;
+  --wood: #4a3320;
+  --wood-light: #6b4a2c;
+  --leather-red: #7a2e26;
+  --leather-green: #3f5236;
+  --leather-black: #241f1c;
+  --paper: #efe6d2;
+  --parchment: #e3d4b0;
+  --stone: #8b8378;
+  --ink: #241a12;
+
+  /* Acentos / estados */
+  --gold: #c9a45a;
+  --gold-soft: #d9bd82;
+
+  /* Fondo espacio (observatorio) */
+  --space-0: #0a0a14;
+  --space-1: #141428;
+
+  /* Tipografía (provisional, se sustituye por fuentes definitivas) */
+  --font-title: Georgia, 'Times New Roman', serif;
+  --font-ui: Georgia, serif;
+  --font-body: Georgia, serif;
+
+  /* Ritmo */
+  --radius: 6px;
+  --shadow-soft: 0 4px 18px rgba(0, 0, 0, 0.35);
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Layout */
+  --topbar-h: 64px;
+}
