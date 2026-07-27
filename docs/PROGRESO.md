@@ -53,6 +53,8 @@
 - **2026-07-27** — **Prototipo observatorio.** `prototipos/observatorio.html` (copia adaptada del proto Novalis 12): globo centrado, dial reposicionado como "sombrero" (arco simétrico sobre el globo, A0=200/A1=340), pines placeholder (WIP + lorem ipsum). Cabecera del archivo documenta dónde editar. Pendiente: mapa/contenido Phaingea + integrar en Astro.
 - **2026-07-27** — **Contributors:** verificado por API que el único contributor es Jowy05 (5 commits); el "claude" del panel web de GitHub es caché visual que se refresca solo (≤24h). Historial git limpio.
 
+- **2026-07-27** — **Home convertida en SPA de una sola página.** El navbar conmuta vistas (`data-view` + script conmutador) sin cambiar de URL: Inicio = observatorio (globo de puntos), resto = placeholders "en construcción". Globo integrado en `index.astro` (generado desde `prototipos/observatorio.html`, quitando dock/ficha/panel de Novalis; globo autocontenido con `puntosFallback`). Globo **verde** (halo/limbo) con puntos blancos. Fondo `StarsCanvas` común. Banderines con estado activo. Eliminada la ruta suelta `observatorio.astro` y `public/observatorio.html`. Ver arquitectura en `CLAUDE.md`.
+
 ## Plantilla para próximas entradas del log
 
 ```

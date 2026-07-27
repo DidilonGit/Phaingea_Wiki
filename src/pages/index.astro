@@ -1,92 +1,1082 @@
 ---
-// Observatorio / página principal (Fase 0: landing de cimientos).
+// HOME (SPA): una sola página. El navbar conmuta las vistas de debajo sin cambiar de URL.
+// Inicio = observatorio (globo de puntos, portado del prototipo). Resto = placeholders.
 import RoomLayout from '../layouts/RoomLayout.astro';
-import FirebaseStatus from '../components/FirebaseStatus.jsx';
 import StarsCanvas from '../components/StarsCanvas.jsx';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
-<RoomLayout title="Phaingea — Observatorio">
+<RoomLayout title="Phaingea">
   <StarsCanvas client:load speedMultiplier={0.22} />
-  <section class="hero">
-    <div class="halo"></div>
-    <h1>Phaingea</h1>
-    <p class="tagline">Archivo del universo · enciclopedia de campañas</p>
 
-    <div class="status">
-      <FirebaseStatus client:load />
+  <section class="view obs" data-view="inicio" aria-label="Observatorio">
+    <div class="globo-wrap" id="globoWrap">
+      <div class="halo" aria-hidden="true"></div>
+      <svg id="montura" viewBox="0 0 100 100" aria-hidden="true"></svg>
+      <canvas id="globo" aria-label="Globo de puntos del mundo. Arrastra para girarlo."></canvas>
+      <div class="sombra" aria-hidden="true"></div>
+      <div id="capaMarcadores"></div>
+      <p id="cargando" role="status">calibrando lentes…</p>
+      <div id="tarjeta" role="dialog" aria-modal="false" aria-labelledby="tarjetaTitulo" hidden>
+        <p class="chip" id="tarjetaRegion"></p>
+        <h3 id="tarjetaTitulo"></h3>
+        <p class="lore" id="tarjetaL1"></p>
+        <p class="lore" id="tarjetaL2"></p>
+        <button class="cerrar" id="tarjetaCerrar" type="button" aria-label="Cerrar tarjeta">✕</button>
+      </div>
     </div>
-
-    <p class="note">
-      Fase 0 · Cimientos. El proyecto Astro está montado, conectado a Firebase y
-      listo para desplegarse en GitHub Pages. Las salas y el dial llegan en las
-      siguientes fases.
-    </p>
-
-    <a class="cta" href={`${base}/observatorio.html`}>Ver el observatorio (prototipo) →</a>
+    <div class="controles">
+      <button class="btn-icono" id="btnPausa" type="button" aria-label="Pausar rotación" aria-pressed="false">
+        <svg class="ic-pausa" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 1h3v12h-3zM8.5 1h3v12h-3z"/></svg>
+        <svg class="ic-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1l10 6-10 6z"/></svg>
+      </button>
+      <p class="pista">arrastra · ← → giran · doble clic centra</p>
+    </div>
   </section>
+
+  <section class="view" data-view="deidades" hidden><div class="wip">Deidades<span>· en construcción</span></div></section>
+  <section class="view" data-view="regiones" hidden><div class="wip">Regiones<span>· en construcción</span></div></section>
+  <section class="view" data-view="personajes" hidden><div class="wip">Personajes<span>· en construcción</span></div></section>
+  <section class="view" data-view="galeria" hidden><div class="wip">Galería<span>· en construcción</span></div></section>
+  <section class="view" data-view="sesiones" hidden><div class="wip">Sesiones<span>· en construcción</span></div></section>
+  <section class="view" data-view="reglas" hidden><div class="wip">Reglas<span>· en construcción</span></div></section>
+  <section class="view" data-view="notificaciones" hidden><div class="wip">Notificaciones<span>· en construcción</span></div></section>
+  <section class="view" data-view="perfil" hidden><div class="wip">Perfil<span>· en construcción</span></div></section>
+
+  <nav id="listaRM" aria-label="Lugares señalados" hidden><h2>Lugares señalados</h2><ul id="listaRMul"></ul></nav>
 </RoomLayout>
 
-<style>
-  .hero {
-    position: relative;
-    z-index: 1; /* por encima del canvas de estrellas (z-index:0) */
-    max-width: 720px;
-    margin: 8vh auto 0;
-    text-align: center;
+<style is:global>
+
+/* ============================================================
+   NOVALIS · Prototipo 12 — EL PLANETA
+   Observatorio: un globo de puntos con Engren girando delante.
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root{
+  --bg:        #0A0C10;
+  --bg-2:      #0E1116;
+  --bg-3:      #12161D;
+  --hueso:     #E8DFC8;   /* puntos del globo, titulares          */
+  --ambar:     #E4B75B;   /* marcadores, acentos                  */
+  --astato:    #9FE870;   /* arcos, focus                         */
+  --laton:     #B08D57;   /* montura astronómica, bordes          */
+  --laton-osc: #6E5637;
+  --texto:     #C9CFD6;
+  --mut:       #97A0AB;
+  --fs-mono:   'IBM Plex Mono', ui-monospace, monospace;
+  --fs-sans:   'Space Grotesk', system-ui, sans-serif;
+  --fs-serif:  'Spectral', Georgia, serif;
+}
+
+
+
+::selection{ background: rgba(228,183,91,.28); color: var(--hueso); }
+:focus-visible{ outline: 2px solid var(--astato); outline-offset: 3px; border-radius: 4px; }
+
+/* ---------- estrellas fijas ---------- */
+#estrellas{
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+}
+
+/* ---------- escena principal ---------- */
+.escena{
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr; justify-items: center;
+  gap: clamp(1rem, 4vw, 4rem);
+  align-items: center;
+  max-width: 1560px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 2rem clamp(1.2rem, 4vw, 4rem) 8.5rem;
+}
+
+/* ---------- panel izquierdo ---------- */
+.panel-izq{ display: none; }
+.kicker{
+  font-family: var(--fs-mono); font-size: .68rem; letter-spacing: .34em;
+  text-transform: uppercase; color: var(--laton);
+  margin-bottom: 1.6rem;
+}
+.kicker::before{ content:"◈ "; color: var(--ambar); }
+h1{ line-height: 1; }
+.tachado{
+  display: block;
+  font-weight: 500;
+  font-size: clamp(1rem, 1.7vw, 1.35rem);
+  letter-spacing: .42em;
+  color: var(--mut);
+  text-decoration: line-through;
+  text-decoration-color: rgba(228,183,91,.85);
+  text-decoration-thickness: 1px;
+  margin-bottom: .35rem;
+}
+.grande{
+  display: block;
+  font-size: clamp(3.2rem, 7.2vw, 6.2rem);
+  font-weight: 700;
+  letter-spacing: .05em;
+  color: var(--hueso);
+}
+.tagline{
+  font-family: var(--fs-serif); font-style: italic;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  color: var(--ambar);
+  margin-top: .9rem;
+}
+.lede{
+  font-family: var(--fs-serif);
+  font-size: 1.02rem; line-height: 1.65;
+  color: var(--texto);
+  margin-top: 1.3rem;
+  max-width: 42ch;
+}
+.lede em{ color: var(--hueso); font-style: normal; }
+.stats{
+  display: flex; flex-wrap: wrap; gap: .4rem .55rem;
+  margin-top: 1.7rem;
+  font-family: var(--fs-mono); font-size: .68rem;
+  letter-spacing: .07em; color: var(--mut);
+  list-style: none;
+}
+.stats li{
+  border: 1px solid rgba(176,141,87,.28);
+  border-radius: 999px;
+  padding: .32rem .7rem;
+  white-space: nowrap;
+}
+.stats b{ color: var(--ambar); font-weight: 500; }
+
+/* ---------- observatorio / globo ---------- */
+.obs{
+  position: relative;
+  display: grid; place-items: center; align-content: center;
+  min-height: min(92vh, 900px);
+}
+.globo-wrap{
+  position: relative;
+  width: min(66vmin, 620px);
+  aspect-ratio: 1;
+}
+#globo{
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  cursor: grab; touch-action: none;
+  border-radius: 50%;
+}
+#globo.agarrando{ cursor: grabbing; }
+.halo{
+  position: absolute; inset: -14%;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(232,223,200,.075) 36%,
+    rgba(232,223,200,.028) 50%,
+    transparent 64%);
+  pointer-events: none;
+}
+.sombra{
+  position: absolute; inset: 4%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 37% 34%,
+    transparent 52%,
+    rgba(5,6,9,.42) 76%,
+    rgba(5,6,9,.68) 96%);
+  pointer-events: none;
+}
+#cargando{
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-family: var(--fs-mono); font-size: .72rem;
+  letter-spacing: .28em; text-transform: uppercase;
+  color: var(--mut); pointer-events: none;
+}
+
+/* ---------- montura astronómica de latón ---------- */
+#montura{
+  position: absolute; inset: -14%;
+  width: 128%; height: 128%;
+  pointer-events: none;
+  transform: translateY(-9%);
+  opacity: .85;
+}
+
+/* ---------- marcadores ---------- */
+#capaMarcadores{ position: absolute; inset: 0; pointer-events: none; }
+.marcador{
+  position: absolute; top: 0; left: 0;
+  width: 36px; height: 36px;
+  background: none; border: 0; cursor: pointer;
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+.marcador .punto{
+  position: absolute; left: 50%; top: 50%;
+  width: 9px; height: 9px;
+  transform: translate(-50%,-50%);
+  border-radius: 50%;
+  background: var(--ambar);
+  box-shadow: 0 0 12px rgba(228,183,91,.85), 0 0 3px rgba(228,183,91,1);
+}
+.marcador .anillo{
+  position: absolute; left: 50%; top: 50%;
+  width: 11px; height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border-radius: 50%;
+  border: 1px solid rgba(228,183,91,.8);
+  animation: pulso 3.2s cubic-bezier(.2,.6,.35,1) infinite;
+}
+@keyframes pulso{
+  0%   { transform: scale(1);   opacity: .85; }
+  70%  { transform: scale(3.6); opacity: 0;   }
+  100% { transform: scale(3.6); opacity: 0;   }
+}
+.marcador .m-label{
+  position: absolute; left: 50%; bottom: calc(100% - 4px);
+  transform: translateX(-50%);
+  font-family: var(--fs-mono); font-size: .62rem;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--hueso);
+  text-shadow: 0 1px 8px #000, 0 0 2px #000;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.marcador:hover .punto,
+.marcador:focus-visible .punto{
+  background: var(--hueso);
+  box-shadow: 0 0 16px rgba(232,223,200,.95);
+}
+.marcador:focus-visible{ outline-offset: 0; border-radius: 50%; }
+
+/* ---------- controles ---------- */
+.controles{
+  margin-top: 1.6rem;
+  display: flex; align-items: center; gap: .9rem;
+  white-space: nowrap;
+}
+.btn-icono{
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(176,141,87,.5);
+  background: rgba(14,17,22,.78);
+  color: var(--hueso);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: transform .18s ease;
+}
+.btn-icono:hover{ border-color: var(--ambar); color: var(--ambar); transform: scale(1.07); }
+.btn-icono svg{ width: 14px; height: 14px; fill: currentColor; }
+.btn-icono .ic-play{ display: none; }
+.btn-icono[aria-pressed="true"] .ic-play{ display: block; }
+.btn-icono[aria-pressed="true"] .ic-pausa{ display: none; }
+.pista{
+  font-family: var(--fs-mono); font-size: .64rem;
+  letter-spacing: .12em; color: var(--mut);
+}
+
+
+/* ---------- dock de secciones ---------- */
+.dock{
+  position: fixed; z-index: 30;
+  left: 50%; bottom: 1.15rem;
+  transform: translateX(-50%);
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: .4rem;
+  max-width: min(94vw, 760px);
+  padding: .5rem .6rem;
+  background: rgba(14,17,22,.78);
+  border: 1px solid rgba(176,141,87,.38);
+  border-radius: 22px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 14px 40px rgba(0,0,0,.5);
+}
+.pill{
+  font-family: var(--fs-sans); font-weight: 500;
+  font-size: .74rem; letter-spacing: .11em; text-transform: uppercase;
+  color: var(--hueso);
+  background: linear-gradient(180deg, rgba(176,141,87,.17), rgba(176,141,87,.05));
+  border: 1px solid rgba(176,141,87,.42);
+  border-radius: 999px;
+  padding: .52rem .85rem;
+  cursor: pointer;
+  transition: transform .18s ease;
+}
+.pill:hover{ color: var(--ambar); border-color: var(--ambar); }
+.pill[data-activa]{ color: var(--astato); border-color: rgba(159,232,112,.6); }
+
+/* ---------- tarjeta de lugar (popover anclado) ---------- */
+#tarjeta{
+  position: absolute; left: 0; top: 0; z-index: 40;
+  width: min(285px, 76vw);
+  background: linear-gradient(180deg, var(--bg-3), #0C0F14);
+  border: 1px solid rgba(228,183,91,.45);
+  border-radius: 12px;
+  padding: 1rem 1.05rem 1.1rem;
+  box-shadow: 0 22px 60px rgba(0,0,0,.65), 0 0 0 1px rgba(0,0,0,.4);
+  will-change: transform, opacity;
+}
+#tarjeta[hidden]{ display: none; }
+#tarjeta .chip{
+  font-family: var(--fs-mono); font-size: .6rem;
+  letter-spacing: .26em; text-transform: uppercase;
+  color: var(--astato);
+  margin-bottom: .45rem;
+}
+#tarjeta h3{
+  font-size: 1.18rem; letter-spacing: .03em;
+  color: var(--hueso);
+  margin-bottom: .5rem;
+}
+#tarjeta p.lore{
+  font-family: var(--fs-serif);
+  font-size: .9rem; line-height: 1.5;
+  color: var(--texto);
+}
+#tarjeta p.lore + p.lore{ margin-top: .35rem; }
+.cerrar{
+  position: absolute; top: .5rem; right: .5rem;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(176,141,87,.4);
+  background: rgba(10,12,16,.6);
+  color: var(--mut);
+  font-size: .85rem; line-height: 1;
+  cursor: pointer;
+  display: grid; place-items: center;
+}
+.cerrar:hover{ color: var(--ambar); border-color: var(--ambar); }
+
+/* ---------- ficha del bestiario (dialog) ---------- */
+#ficha{
+  border: 1px solid rgba(176,141,87,.55);
+  border-radius: 14px;
+  background: var(--bg-2);
+  color: var(--texto);
+  padding: 0;
+  width: min(700px, 92vw);
+  max-height: min(86vh, 640px);
+  overflow: hidden;
+  box-shadow: 0 40px 120px rgba(0,0,0,.8);
+}
+#ficha::backdrop{ background: rgba(4,5,8,.72); backdrop-filter: blur(5px); }
+#ficha article{
+  display: grid; grid-template-columns: 46% 1fr;
+  min-height: 380px;
+}
+#ficha figure{ position: relative; min-height: 240px; }
+#ficha img{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: saturate(.92) contrast(1.04);
+}
+#ficha figure::after{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(90deg, transparent 62%, var(--bg-2) 100%);
+  pointer-events:none;
+}
+.ficha-texto{ padding: 2rem 2rem 1.8rem; align-self: center; }
+.ficha-texto .chip{
+  font-family: var(--fs-mono); font-size: .62rem;
+  letter-spacing: .28em; color: var(--astato);
+  text-transform: uppercase; margin-bottom: .7rem;
+}
+.ficha-texto h2{
+  font-size: clamp(1.6rem, 3.4vw, 2.1rem);
+  color: var(--hueso); letter-spacing: .03em;
+  margin-bottom: .9rem;
+}
+.ficha-texto p{
+  font-family: var(--fs-serif);
+  font-size: .98rem; line-height: 1.62;
+}
+.ficha-texto p + p{ margin-top: .55rem; }
+.ficha-texto .dato{
+  display: inline-block; margin-top: 1.1rem;
+  font-family: var(--fs-mono); font-size: .66rem;
+  letter-spacing: .14em; color: var(--ambar);
+  border: 1px solid rgba(228,183,91,.4);
+  border-radius: 999px; padding: .35rem .8rem;
+}
+
+/* ---------- lista accesible (visible con reduced-motion) ---------- */
+#listaRM{ display: none; margin-top: 1.6rem; }
+#listaRM h2{
+  font-family: var(--fs-mono); font-size: .66rem;
+  letter-spacing: .3em; text-transform: uppercase;
+  color: var(--mut); margin-bottom: .6rem;
+}
+#listaRM ul{ list-style: none; display: flex; flex-wrap: wrap; gap: .4rem; }
+#listaRM button{
+  font-family: var(--fs-sans); font-size: .78rem; letter-spacing: .06em;
+  color: var(--hueso);
+  background: none; cursor: pointer;
+  border: 1px solid rgba(228,183,91,.4);
+  border-radius: 999px; padding: .42rem .8rem;
+}
+#listaRM button:hover{ color: var(--ambar); border-color: var(--ambar); }
+#listaRM button::before{ content:"● "; color: var(--ambar); font-size: .6rem; }
+
+noscript p{
+  position: fixed; inset: auto 0 0 0; z-index: 60;
+  padding: 1rem; text-align: center;
+  font-family: var(--fs-mono); font-size: .75rem;
+  background: var(--bg-3); color: var(--ambar);
+}
+
+/* ---------- reduced motion: globo estático, sin pulso ---------- */
+@media (prefers-reduced-motion: reduce){
+  .marcador .anillo{ animation: none; opacity: 0; }
+  #listaRM{ display: block; }
+  .btn-icono, .pill{ transition: none; }
+  #tarjeta.centrada{
+    position: fixed; left: 50%; top: 50%;
+    transform: translate(-50%,-50%) !important;
   }
-  .halo {
-    position: absolute;
-    inset: -40% 50% auto;
-    width: 320px;
-    height: 320px;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(201, 164, 90, 0.28), transparent 65%);
-    filter: blur(6px);
-    pointer-events: none;
+}
+
+/* ---------- móvil ---------- */
+@media (max-width: 820px){
+  .escena{
+    grid-template-columns: 1fr;
+    padding: .6rem 1.1rem 9.5rem;
+    gap: 0;
   }
-  h1 {
-    position: relative;
-    font-family: var(--font-title);
-    font-size: clamp(3rem, 8vw, 5.5rem);
-    letter-spacing: 0.1em;
-    margin: 0;
-    color: var(--gold);
-    text-shadow: 0 2px 24px rgba(201, 164, 90, 0.35);
+  .obs{ order: -1; min-height: auto; padding: .6rem 0 1.4rem; }
+  .globo-wrap{ width: min(88vw, 58vh); }
+  .controles{ margin-top: 1.1rem; }
+  .pista{ display: none; }
+  .panel-izq{ max-width: none; }
+  .grande{ font-size: clamp(2.8rem, 13vw, 4.2rem); }
+  #ficha article{ grid-template-columns: 1fr; }
+  #ficha figure{ min-height: 200px; max-height: 230px; position: relative; }
+  #ficha img{ position: absolute; }
+  #ficha figure::after{
+    background: linear-gradient(180deg, transparent 55%, var(--bg-2) 100%);
   }
-  .tagline {
-    color: var(--parchment);
-    opacity: 0.85;
-    margin-top: 0.5rem;
-    letter-spacing: 0.05em;
-  }
-  .status {
-    margin: 2rem 0 1.5rem;
-  }
-  .note {
-    max-width: 460px;
-    margin: 0 auto;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    color: var(--stone);
-  }
-  .cta {
-    display: inline-block;
-    margin-top: 1.8rem;
-    padding: 0.7rem 1.4rem;
-    border: 1px solid rgba(201, 164, 90, 0.55);
-    border-radius: 999px;
-    color: var(--gold);
-    font-family: var(--font-ui);
-    letter-spacing: 0.04em;
-    background: rgba(201, 164, 90, 0.06);
-    transition: background 0.2s var(--ease), transform 0.2s var(--ease);
-  }
-  .cta:hover {
-    background: rgba(201, 164, 90, 0.16);
-    transform: translateY(-2px);
-  }
+  .ficha-texto{ padding: 1.4rem 1.4rem 1.6rem; }
+  .dock{ bottom: .8rem; }
+}
+
+/* --- integración SPA + observatorio --- */
+.view{ position: relative; z-index: 1; }
+.view[hidden]{ display: none !important; }
+.obs{ min-height: calc(100vh - var(--topbar-h) - 3rem); display: grid; place-items: center; align-content: center; padding: 1.5rem; }
+/* globo VERDE: halo/atmósfera verde (los puntos siguen blancos) */
+.halo{ background: radial-gradient(circle, rgba(159,232,112,.16) 34%, rgba(159,232,112,.05) 50%, transparent 64%) !important; }
+/* placeholders de las demás vistas */
+.wip{
+  min-height: calc(100vh - var(--topbar-h) - 3rem);
+  display: grid; place-content: center; text-align: center; gap: .4rem;
+  font-family: var(--font-title, Georgia, serif); color: var(--gold, #c9a45a);
+  font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: .06em;
+}
+.wip span{ font-family: ui-monospace, monospace; font-size: .9rem; letter-spacing: .2em; text-transform: uppercase; color: var(--stone, #8b8378); }
 </style>
+
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script is:inline>
+
+'use strict';
+/* ============================================================
+   EL PLANETA — motor del globo de puntos (canvas 2D, sin libs)
+   ============================================================ */
+const $  = s => document.querySelector(s);
+const RAD = Math.PI/180, TAU = Math.PI*2;
+const clamp = (v,a,b) => Math.min(b, Math.max(a,v));
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const G  = window.gsap || null;                 // GSAP solo para muelles de UI
+const URL_MAPA = 'https://jowy05.github.io/NovalisPage/mapa-mundial.jpg';
+
+/* --------- PRNG con semilla fija (fallback determinista) --------- */
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a>>>15, 1 | a);
+    t = t + Math.imul(t ^ t>>>7, 61 | t) ^ t;
+    return ((t ^ t>>>14) >>> 0) / 4294967296;
+  };
+}
+
+/* ============================================================
+   MARCADORES — lat/lon aproximadas, coherentes con el mapa:
+   Calixar al oeste · Cetus al noreste · Fortuna centro-sur ·
+   Vorath al sur. EDITA aquí para reubicar cualquier lugar.
+   ============================================================ */
+const MARCADORES = [
+  { id:'mehralt',    corto:'WIP',    nombre:'WIP', region:'WIP',
+    lat: 10, lon:-100,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+  { id:'heliopolis', corto:'WIP', nombre:'WIP',             region:'WIP',
+    lat: -8, lon:-20,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+  { id:'hjornheim',  corto:'WIP',  nombre:'WIP',              region:'WIP',
+    lat: 58, lon: 55,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+  { id:'kalmari',    corto:'WIP',    nombre:'WIP',                region:'WIP',
+    lat:-38, lon: 30,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+  { id:'pacthos',    corto:'WIP',    nombre:'WIP',                region:'WIP',
+    lat:-14, lon: 85,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+  { id:'karnatha',   corto:'WIP',   nombre:'WIP',               region:'WIP',
+    lat:-30, lon:-60,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+];
+/* Rutas del correo y del Astato (arcos de luz entre marcadores) */
+const RUTAS = [
+  ['mehralt','heliopolis'],
+  ['heliopolis','hjornheim'],
+  ['kalmari','karnatha'],
+  ['heliopolis','pacthos'],
+];
+
+/* --------- estado global del globo --------- */
+const st = {
+  rotY: 1.92,          // rotación acumulada (rad); arranca mirando Calixar/Fortuna
+  tilt: 0.14,          // inclinación (rad), + = polo norte hacia ti
+  vel: 0,              // inercia (rad/frame)
+  pausado: false,      // botón pausa
+  arrastrando: false,
+  animando: false,     // tween de centrado en curso
+  cargado: false,
+};
+const geo = { w:0, h:0, cx:0, cy:0, R:0, dpr:1 };
+let puntos = [];              // [{x,y,z,s,b}]  vector unitario + tamaño/brillo
+let usaFallback = false;
+let arcos = [];               // rutas precalculadas
+let marcadorAbierto = null;   // marcador con tarjeta abierta
+
+const lienzo = $('#globo');
+const ctx = lienzo.getContext('2d');
+const wrap = $('#globoWrap');
+
+/* --------- sprite de punto (pre-rasterizado: rápido y suave) --------- */
+function crearSprite(color, tam){
+  const c = document.createElement('canvas'); c.width = c.height = tam;
+  const x = c.getContext('2d');
+  const g = x.createRadialGradient(tam/2,tam/2,0, tam/2,tam/2,tam/2);
+  g.addColorStop(0, color); g.addColorStop(.55, color); g.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = g; x.fillRect(0,0,tam,tam);
+  return c;
+}
+const sprTierra = crearSprite('rgba(232,223,200,1)', 16);
+const sprArco   = crearSprite('rgba(159,232,112,1)', 16);
+
+/* --------- conversión lat/lon -> vector unitario --------- */
+function vecDe(lat, lon){
+  const f = lat*RAD, l = lon*RAD;
+  return { x: Math.cos(f)*Math.sin(l), y: Math.sin(f), z: Math.cos(f)*Math.cos(l) };
+}
+
+/* ============================================================
+   MUESTREO DEL MAPA REAL (equirectangular 2:1)
+   Rejilla de 84×50 = 4200 muestras sobre un canvas oculto de
+   180×90. Mar = azul-verdoso (b domina sobre r); tierra = resto.
+   ============================================================ */
+function muestrearMapa(img){
+  const W = 180, H = 90;
+  const oculto = document.createElement('canvas');
+  oculto.width = W; oculto.height = H;
+  const ox = oculto.getContext('2d', { willReadFrequently:true });
+  ox.drawImage(img, 0, 0, W, H);
+  const d = ox.getImageData(0, 0, W, H).data;   // lanza si el canvas queda "tainted"
+
+  const COLS = 84, FILAS = 50;
+  const rng = mulberry32(7);
+  const pts = [];
+  let muestras = 0, tierra = 0;
+  for (let f = 0; f < FILAS; f++){
+    const v = (f + .5) / FILAS;
+    const lat = 90 - 180*v;
+    const densidad = Math.cos(lat*RAD);         // densidad uniforme sobre la esfera
+    for (let c = 0; c < COLS; c++){
+      muestras++;
+      if (rng() > densidad) continue;
+      const u = (c + .5) / COLS;
+      const px = Math.min(W-1, u*W | 0), py = Math.min(H-1, v*H | 0);
+      const i = (py*W + px) * 4;
+      const r = d[i], g = d[i+1], b = d[i+2];
+      const lum = .2126*r + .7152*g + .0722*b;
+      const esMar = (b - r > 8 && b > 55);      // mares azul-verdosos del mapa
+      if (esMar || lum < 26) continue;          // fuera mar y trazos negros
+      tierra++;
+      for (let k = 0; k < 3; k++){              // 3 puntos por celda de tierra (densidad)
+        const jLat = lat + (rng()-.5) * (180/FILAS) * 1.15;
+        const jLon = -180 + 360*u + (rng()-.5) * (360/COLS) * 1.15;
+        const vv = vecDe(jLat, jLon);
+        pts.push({ ...vv, s: .7 + rng()*.7, b: .6 + rng()*.4 });
+      }
+    }
+  }
+  console.info(`[Engren] muestras: ${muestras} · celdas de tierra: ${tierra} · puntos dibujados: ${pts.length} · origen: mapa real`);
+  return pts;
+}
+
+/* ============================================================
+   FALLBACK — matriz de continentes aproximada (semilla fija):
+   ~30 blobs que evocan Calixar (O), Cetus (NE), Fortuna (C-S)
+   y Vorath (S). La experiencia nunca se rompe.
+   ============================================================ */
+function puntosFallback(){
+  const rng = mulberry32(1234);
+  const zonas = [
+    { lat:[-14, 40], lon:[-135,-55], n:10 },  // Calixar — oeste
+    { lat:[ 24, 68], lon:[  15,110], n: 8 },  // Cetus — noreste
+    { lat:[-30, 10], lon:[ -35, 22], n: 7 },  // Fortuna — centro-sur
+    { lat:[-62,-26], lon:[  -2, 72], n: 5 },  // Vorath — sur
+  ];
+  const blobs = [];
+  for (const z of zonas)
+    for (let i = 0; i < z.n; i++)
+      blobs.push({
+        lat: z.lat[0] + rng()*(z.lat[1]-z.lat[0]),
+        lon: z.lon[0] + rng()*(z.lon[1]-z.lon[0]),
+        rl: 5 + rng()*9,          // radio en latitud
+        ro: 8 + rng()*16,         // radio en longitud
+      });
+  const pts = [];
+  const COLS = 108, FILAS = 60;
+  for (let f = 0; f < FILAS; f++){
+    const lat = 90 - 180*(f+.5)/FILAS;
+    if (rng() > Math.cos(lat*RAD)) continue;
+    for (let c = 0; c < COLS; c++){
+      const lon = -180 + 360*(c+.5)/COLS;
+      let dentro = false;
+      for (const b of blobs){
+        const dl = (lat-b.lat)/b.rl, dn = (lon-b.lon)/b.ro;
+        if (dl*dl + dn*dn < 1 + (rng()-.5)*.5){ dentro = true; break; }
+      }
+      if (!dentro) continue;
+      for (let k = 0; k < 2; k++){
+        const vv = vecDe(lat + (rng()-.5)*3, lon + (rng()-.5)*3.4);
+        pts.push({ ...vv, s: .7 + rng()*.7, b: .6 + rng()*.4 });
+      }
+    }
+  }
+  console.info(`[Engren] puntos de tierra: ${pts.length} · origen: fallback (continentes aproximados)`);
+  return pts;
+}
+
+/* --------- carga del mapa con red de seguridad --------- */
+function cargarPuntos(){
+  return new Promise(res => {
+    if (location.search.includes('fallback')){    // ?fallback=1 fuerza la matriz local
+      usaFallback = true; res(puntosFallback()); return;
+    }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';                // GitHub Pages sirve CORS *
+    const plan_b = () => { usaFallback = true; res(puntosFallback()); };
+    const reloj = setTimeout(plan_b, 9000);
+    img.onload = () => {
+      clearTimeout(reloj);
+      try { res(muestrearMapa(img)); }            // canvas tainted -> catch
+      catch(e){ plan_b(); }
+    };
+    img.onerror = () => { clearTimeout(reloj); plan_b(); };
+    img.src = URL_MAPA;
+  });
+}
+
+/* --------- estrellas fijas del observatorio --------- */
+function pintarEstrellas(){ if(!document.getElementById('estrellas')) return;
+  const c = $('#estrellas');
+  const dpr = Math.min(2, devicePixelRatio || 1);
+  c.width  = innerWidth  * dpr;
+  c.height = innerHeight * dpr;
+  const x = c.getContext('2d');
+  x.setTransform(dpr,0,0,dpr,0,0);
+  const rng = mulberry32(42);
+  const n = Math.round(innerWidth * innerHeight / 16000);
+  for (let i = 0; i < n; i++){
+    const px = rng()*innerWidth, py = rng()*innerHeight;
+    const t = rng();
+    x.globalAlpha = .12 + t*.5;
+    x.fillStyle = t > .9 ? '#E4B75B' : '#E8DFC8';
+    const s = t > .96 ? 1.8 : 1 + t*.6;
+    x.fillRect(px, py, s, s);
+  }
+  x.globalAlpha = 1;
+}
+
+/* --------- montura astronómica de latón (SVG generado) --------- */
+function montarMontura(){
+  const svg = $('#montura'), NS = 'http://www.w3.org/2000/svg';
+  const P = (r,a) => [50 + r*Math.cos(a*RAD), 50 + r*Math.sin(a*RAD)];
+  const arco = (r,a0,a1) => {
+    const [x0,y0] = P(r,a0), [x1,y1] = P(r,a1);
+    return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${r} ${r} 0 ${a1-a0>180?1:0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+  };
+  const el = (tag, at) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in at) e.setAttribute(k, at[k]);
+    svg.appendChild(e); return e;
+  };
+  const A0 = 200, A1 = 340;   // sombrero: arco simétrico sobre el globo                    // media elipse generosa
+  el('path',{ d: arco(48.2, A0, A1), fill:'none', stroke:'#B08D57', 'stroke-width':.55, opacity:.9 });
+  el('path',{ d: arco(45.6, A0, A1), fill:'none', stroke:'#6E5637', 'stroke-width':.35, opacity:.8 });
+  for (let a = A0; a <= A1; a += 5){          // graduaciones
+    const mayor = a % 15 === 0;
+    const [x0,y0] = P(mayor ? 45.9 : 46.6, a), [x1,y1] = P(48, a);
+    el('line',{ x1:x0, y1:y0, x2:x1, y2:y1,
+      stroke: mayor ? '#B08D57' : '#6E5637',
+      'stroke-width': mayor ? .4 : .25, opacity:.85 });
+  }
+  for (const a of [A0, A1]){                  // pivotes en los extremos
+    const [px,py] = P(46.9, a);
+    el('circle',{ cx:px, cy:py, r:1.7, fill:'#0E1116', stroke:'#B08D57', 'stroke-width':.5 });
+    el('circle',{ cx:px, cy:py, r:.5,  fill:'#E4B75B' });
+  }
+}
+
+/* --------- medidas / retina --------- */
+function medir(){
+  const s = wrap.clientWidth;
+  geo.dpr = Math.min(2, devicePixelRatio || 1);
+  geo.w = geo.h = s;
+  geo.cx = geo.cy = s/2;
+  geo.R = s * .46;
+  lienzo.width = lienzo.height = Math.round(s * geo.dpr);
+  ctx.setTransform(geo.dpr, 0, 0, geo.dpr, 0, 0);
+  if (RM && st.cargado) pintar(0);
+}
+
+
+'use strict';
+/* ============================================================
+   RENDER — proyección ortográfica del hemisferio visible
+   ============================================================ */
+function rotar(v){
+  const cA = Math.cos(st.rotY), sA = Math.sin(st.rotY);
+  const cT = Math.cos(st.tilt), sT = Math.sin(st.tilt);
+  const x1 = v.x*cA + v.z*sA;
+  const z1 = v.z*cA - v.x*sA;
+  return { x: x1, y: v.y*cT - z1*sT, z: v.y*sT + z1*cT };
+}
+
+function pintar(t){
+  const { cx, cy, R, w } = geo;
+  ctx.clearRect(0, 0, w, w);
+
+  /* limbo del planeta */
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU);
+  ctx.strokeStyle = 'rgba(159,232,112,.28)'; ctx.lineWidth = 1.1; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, R*.995, 0, TAU);
+  ctx.fillStyle = 'rgba(232,223,200,.016)'; ctx.fill();
+
+  /* puntos de tierra (solo z > 0: hemisferio visible) */
+  const cA = Math.cos(st.rotY), sA = Math.sin(st.rotY);
+  const cT = Math.cos(st.tilt), sT = Math.sin(st.tilt);
+  const esc = R / 300;
+  for (let i = 0; i < puntos.length; i++){
+    const p = puntos[i];
+    const x1 = p.x*cA + p.z*sA;
+    const z1 = p.z*cA - p.x*sA;
+    const y2 = p.y*cT - z1*sT;
+    const z2 = p.y*sT + z1*cT;
+    if (z2 <= 0) continue;
+    const s = (1 + 1.1*z2) * p.s * esc * 1.35;      // ~1–1.6px, mayor al frente
+    ctx.globalAlpha = (.16 + .84*z2) * p.b;         // atenuado hacia el limbo
+    ctx.drawImage(sprTierra, cx + x1*R - s, cy - y2*R - s, s*2, s*2);
+  }
+  ctx.globalAlpha = 1;
+
+  pintarArcos(t);
+  colocarMarcadores();
+}
+
+/* ============================================================
+   ARCOS — rutas del correo y del Astato (se dibujan y desvanecen)
+   ============================================================ */
+function prepararArcos(){
+  const porId = Object.fromEntries(MARCADORES.map(m => [m.id, m]));
+  arcos = RUTAS.map(([a,b], i) => {
+    const va = vecDe(porId[a].lat, porId[a].lon);
+    const vb = vecDe(porId[b].lat, porId[b].lon);
+    const ang = Math.acos(clamp(va.x*vb.x + va.y*vb.y + va.z*vb.z, -1, 1));
+    return { va, vb, ang, sin: Math.sin(ang), fase: i*1650, ciclo: 6600 };
+  });
+}
+function puntoArco(a, tt){
+  const k1 = Math.sin((1-tt)*a.ang) / a.sin;
+  const k2 = Math.sin(tt*a.ang) / a.sin;
+  const e  = 1 + .17 * Math.sin(Math.PI*tt);        // elevación sobre la superficie
+  return { x:(a.va.x*k1 + a.vb.x*k2)*e,
+           y:(a.va.y*k1 + a.vb.y*k2)*e,
+           z:(a.va.z*k1 + a.vb.z*k2)*e };
+}
+function pintarArcos(t){
+  const { cx, cy, R } = geo;
+  const esc = R/300;
+  for (const a of arcos){
+    let head = 1, tail = 0;                         // reduced-motion: arco completo, quieto
+    if (!RM){
+      const p = ((t + a.fase) % a.ciclo) / a.ciclo;
+      head = p * 1.42; tail = head - .34;
+      if (tail > 1) continue;
+    }
+    const N = 44, kCabeza = Math.round(clamp(head,0,1)*N);
+    for (let k = 0; k <= N; k++){
+      const tt = k/N;
+      if (tt < tail || tt > head || tt > 1) continue;
+      const q = rotar(puntoArco(a, tt));
+      if (q.z <= .04) continue;
+      const cerca = RM ? .55 : (tt - tail)/.34;     // cola tenue, cabeza viva
+      const s = (1.1 + .9*q.z) * esc * (!RM && k === kCabeza ? 2.2 : 1.05);
+      ctx.globalAlpha = clamp(cerca,0,1) * (.2 + .65*q.z) * .95;
+      ctx.drawImage(sprArco, cx + q.x*R - s, cy - q.y*R - s, s*2, s*2);
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* ============================================================
+   MARCADORES DOM — botones accesibles proyectados con el globo
+   ============================================================ */
+function crearMarcadores(){
+  const capa = $('#capaMarcadores');
+  const listaUl = $('#listaRMul');
+  for (const m of MARCADORES){
+    m.v = vecDe(m.lat, m.lon);
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'marcador';
+    b.setAttribute('aria-label', `${m.nombre} — abrir tarjeta del lugar`);
+    b.innerHTML = `<span class="anillo" aria-hidden="true"></span>
+                   <span class="punto" aria-hidden="true"></span>
+                   <span class="m-label" aria-hidden="true">${m.corto}</span>`;
+    b.addEventListener('click', () => pulsarMarcador(m));
+    b.addEventListener('focus', () => {             // teclado: trae el lugar al frente
+      if (b.matches(':focus-visible') && rotar(m.v).z < .25) centrar(m);
+    });
+    capa.appendChild(b);
+    m.el = b;
+
+    const li = document.createElement('li');        // lista accesible (reduced-motion)
+    const bl = document.createElement('button');
+    bl.type = 'button'; bl.textContent = m.corto;
+    bl.setAttribute('aria-label', `${m.nombre} — abrir tarjeta del lugar`);
+    bl.addEventListener('click', () => { centrar(m); abrirTarjeta(m, true); });
+    li.appendChild(bl); listaUl.appendChild(li);
+  }
+}
+function colocarMarcadores(){
+  const { cx, cy, R } = geo;
+  for (const m of MARCADORES){
+    const q = rotar(m.v);
+    const detras = q.z < .04;
+    const sx = cx + q.x*R, sy = cy - q.y*R;
+    m.sx = sx; m.sy = sy; m.z = q.z;
+    m.el.style.transform =
+      `translate(${(sx-18).toFixed(1)}px, ${(sy-18).toFixed(1)}px) scale(${(detras ? .5 : .72 + .38*q.z).toFixed(3)})`;
+    m.el.style.opacity = detras ? .08 : (.3 + .7*q.z).toFixed(3);
+    m.el.style.pointerEvents = detras ? 'none' : 'auto';
+    m.el.style.zIndex = detras ? 1 : 2 + Math.round(q.z*10);
+    m.el.querySelector('.m-label').style.opacity = clamp((q.z - .38)/.3, 0, 1).toFixed(3);
+  }
+  if (marcadorAbierto) seguirTarjeta();
+}
+function pulsarMarcador(m){
+  if (seArrastro) return;                           // era un arrastre, no un clic
+  if (m.z < .3 && !RM) centrar(m, () => abrirTarjeta(m));
+  else abrirTarjeta(m);
+}
+
+/* --------- centrado animado de un marcador --------- */
+function centrar(m, luego){
+  const objRot = -m.lon*RAD;
+  let delta = (objRot - st.rotY) % TAU;             // camino más corto
+  if (delta >  Math.PI) delta -= TAU;
+  if (delta < -Math.PI) delta += TAU;
+  const objTilt = clamp(m.lat*RAD, -1.05, 1.05);
+  if (RM || !G){
+    st.rotY += delta; st.tilt = objTilt;
+    if (RM) pintar(0);
+    luego && luego(); return;
+  }
+  st.animando = true; st.vel = 0;
+  G.to(st, {
+    rotY: st.rotY + delta, tilt: objTilt,
+    duration: 1.05, ease: 'power3.inOut', overwrite: 'auto',
+    onComplete: () => { st.animando = false; luego && luego(); }
+  });
+}
+
+/* ============================================================
+   TARJETA DE LUGAR (popover anclado al marcador)
+   ============================================================ */
+const tarjeta = $('#tarjeta');
+function abrirTarjeta(m, centradaRM){
+  marcadorAbierto = m;
+  $('#tarjetaRegion').textContent = m.region;
+  $('#tarjetaTitulo').textContent = m.nombre;
+  $('#tarjetaL1').textContent = m.lore[0];
+  $('#tarjetaL2').textContent = m.lore[1];
+  tarjeta.hidden = false;
+  tarjeta.classList.toggle('centrada', !!(centradaRM && RM));
+  seguirTarjeta();
+  if (G && !RM) G.fromTo(tarjeta, { opacity:0, scale:.9 },
+    { opacity:1, scale:1, duration:.45, ease:'back.out(1.9)', overwrite:'auto',
+      transformOrigin:'left center' });
+  $('#tarjetaCerrar').focus({ preventScroll:true });
+}
+function seguirTarjeta(){
+  const m = marcadorAbierto; if (!m) return;
+  if (!RM && m.z < .05){ cerrarTarjeta(false); return; }   // se fue al otro hemisferio
+  if (tarjeta.classList.contains('centrada')) return;      // fija en el centro (RM)
+  const anchoT = tarjeta.offsetWidth || 285, altoT = tarjeta.offsetHeight || 150;
+  let x = m.sx + 22, y = m.sy - altoT*.5;
+  if (x + anchoT > geo.w + 40) x = m.sx - anchoT - 22;     // si no cabe, al otro lado
+  x = Math.max(x, -geo.cx*.35);
+  y = clamp(y, -24, geo.h - altoT + 24);
+  tarjeta.style.left = x.toFixed(1) + 'px';
+  tarjeta.style.top  = y.toFixed(1) + 'px';
+}
+function cerrarTarjeta(devolverFoco = true){
+  if (!marcadorAbierto) return;
+  const m = marcadorAbierto; marcadorAbierto = null;
+  tarjeta.hidden = true;
+  if (devolverFoco) m.el.focus({ preventScroll:true });
+}
+$('#tarjetaCerrar').addEventListener('click', () => cerrarTarjeta());
+
+/* ============================================================
+   INTERACCIÓN — arrastre con inercia, flechas, doble clic, pausa
+   ============================================================ */
+let seArrastro = false;
+if (!RM){
+  let px = 0, py = 0, velAcum = 0;
+  lienzo.addEventListener('pointerdown', e => {
+    try { lienzo.setPointerCapture(e.pointerId); } catch(_){ /* puntero sintético */ }
+    st.arrastrando = true; seArrastro = false;
+    st.vel = 0; velAcum = 0;
+    if (G) G.killTweensOf(st);
+    st.animando = false;
+    px = e.clientX; py = e.clientY;
+    lienzo.classList.add('agarrando');
+  });
+  lienzo.addEventListener('pointermove', e => {
+    if (!st.arrastrando) return;
+    const dx = e.clientX - px, dy = e.clientY - py;
+    if (Math.abs(dx) + Math.abs(dy) > 3) seArrastro = true;
+    px = e.clientX; py = e.clientY;
+    const k = 1 / geo.R;
+    st.rotY += dx * k;
+    st.tilt  = clamp(st.tilt + dy * k * .8, -1.05, 1.05);
+    velAcum = velAcum*.65 + (dx*k)*.35;             // suavizado para la inercia
+  });
+  const soltar = () => {
+    if (!st.arrastrando) return;
+    st.arrastrando = false;
+    st.vel = clamp(velAcum, -.09, .09);
+    lienzo.classList.remove('agarrando');
+    setTimeout(() => { seArrastro = false; }, 0);
+  };
+  lienzo.addEventListener('pointerup', soltar);
+  lienzo.addEventListener('pointercancel', soltar);
+}
+lienzo.addEventListener('dblclick', e => {          // doble clic: centra el marcador más próximo
+  const r = lienzo.getBoundingClientRect();
+  const mx = (e.clientX - r.left) * (geo.w / r.width);
+  const my = (e.clientY - r.top)  * (geo.h / r.height);
+  let mejor = null, dMin = Infinity;
+  for (const m of MARCADORES){
+    if (m.z < .04) continue;
+    const d = (m.sx-mx)**2 + (m.sy-my)**2;
+    if (d < dMin){ dMin = d; mejor = m; }
+  }
+  if (mejor) centrar(mejor);
+});
+addEventListener('keydown', e => {
+  if (e.key === 'Escape' && marcadorAbierto){ cerrarTarjeta(); return; }
+  if (e.target.closest && e.target.closest('dialog, input, textarea')) return;
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){
+    const dir = e.key === 'ArrowLeft' ? -1 : 1;
+    if (RM){ st.rotY += dir*.35; pintar(0); }
+    else st.vel = clamp(st.vel + dir*.011, -.06, .06);
+    e.preventDefault();
+  }
+});
+const btnPausa = $('#btnPausa');
+btnPausa.addEventListener('click', () => {
+  st.pausado = !st.pausado;
+  btnPausa.setAttribute('aria-pressed', String(st.pausado));
+  btnPausa.setAttribute('aria-label', st.pausado ? 'Reanudar rotación' : 'Pausar rotación');
+});
+
+/* ============================================================
+   DOCK — pastillas de latón (Bestiario abre la ficha)
+   ============================================================ */
+let rafId = 0, tPrev = 0;
+function frame(t){
+  if (!st.arrastrando && !st.animando){
+    if (Math.abs(st.vel) > .0004){ st.rotY += st.vel; st.vel *= .95; }   // inercia
+    else {
+      st.vel = 0;
+      if (!st.pausado && !marcadorAbierto)
+        st.rotY += .055 * Math.min(.05, (t - tPrev)/1000);               // giro lento
+    }
+  }
+  tPrev = t;
+  pintar(t);
+  rafId = requestAnimationFrame(frame);
+}
+document.addEventListener('visibilitychange', () => {
+  if (RM || !st.cargado) return;
+  if (document.hidden){ cancelAnimationFrame(rafId); rafId = 0; }
+  else if (!rafId){ tPrev = performance.now(); rafId = requestAnimationFrame(frame); }
+});
+
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
+window.__engren = {              // sonda mínima para depurar/verificar
+  get puntos(){ return puntos.length; },
+  get fallback(){ return usaFallback; },
+  st,
+};
+async function arrancar(){
+  pintarEstrellas();
+  montarMontura();
+  crearMarcadores();
+  prepararArcos();
+  medir();
+  new ResizeObserver(medir).observe(wrap);
+  addEventListener('resize', () => { medir(); pintarEstrellas(); });
+
+  puntos = puntosFallback(); usaFallback = true;
+  st.cargado = true;
+  $('#cargando').remove();
+
+  if (RM){
+    pintar(0);                                      // una sola vista, fija
+    btnPausa.style.display = 'none';
+  } else {
+    tPrev = performance.now();
+    rafId = requestAnimationFrame(frame);
+    if (G){                                         // entrada suave del observatorio
+      G.from('.globo-wrap',    { scale: .95, opacity: 0, duration: 1.1, ease: 'power2.out' });
+    }
+  }
+}
+arrancar();
+
+</script>
+<script is:inline>
+/* conmutador de vistas: tocar un banderín cambia lo de debajo (sin recargar) */
+(function(){
+  function bind(){
+    var bms = document.querySelectorAll('.bm[data-view]');
+    var views = document.querySelectorAll('.view[data-view]');
+    if(!bms.length){ return setTimeout(bind, 60); } // el navbar (isla) puede tardar
+    function activar(key){
+      views.forEach(function(v){ v.hidden = v.dataset.view !== key; });
+      bms.forEach(function(b){ b.classList.toggle('activo', b.dataset.view === key); });
+      window.dispatchEvent(new Event('resize')); // re-medir el globo al mostrarse
+    }
+    bms.forEach(function(b){ b.addEventListener('click', function(){ activar(b.dataset.view); }); });
+    activar('inicio');
+  }
+  bind();
+})();
+</script>
