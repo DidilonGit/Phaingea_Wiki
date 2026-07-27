@@ -186,10 +186,10 @@ h1{ line-height: 1; }
 
 /* ---------- montura astronómica de latón ---------- */
 #montura{
-  position: absolute; inset: -14%;
-  width: 128%; height: 128%;
+  position: absolute; inset: -3%;
+  width: 106%; height: 106%;
   pointer-events: none;
-  transform: translateY(-9%);
+  transform: none;
   opacity: .85;
 }
 
@@ -787,7 +787,7 @@ function montarMontura(){
     for (const k in at) e.setAttribute(k, at[k]);
     svg.appendChild(e); return e;
   };
-  const A0 = 200, A1 = 340;   // sombrero: arco simétrico sobre el globo                    // media elipse generosa
+  const A0 = 180, A1 = 360;   // sombrero: arco simétrico sobre el globo                    // media elipse generosa
   el('path',{ d: arco(48.2, A0, A1), fill:'none', stroke:'#B08D57', 'stroke-width':.55, opacity:.9 });
   el('path',{ d: arco(45.6, A0, A1), fill:'none', stroke:'#6E5637', 'stroke-width':.35, opacity:.8 });
   for (let a = A0; a <= A1; a += 5){          // graduaciones
