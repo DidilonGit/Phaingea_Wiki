@@ -22,6 +22,8 @@
 
 - El deploy usa `withastro/action@v3` con **`node-version: 22`** (Astro 7 requiere Node ≥ 22.12; el runner trae Node 20 por defecto → hay que forzarlo).
 - Repo limpio de referencias a Claude: `.claude/` y `CLAUDE.md` gitignorados; commits sin trailer de co-autor; contributors = solo Jowy05.
+- **Sistema de versiones con auto-recarga** (verificado en vivo): `version = github.sha`, expuesto en `/version.json`; la isla `VersionWatcher` recarga las pestañas cuando hay deploy nuevo. Detalle en `CLAUDE.md`.
+- **Banner con textura de madera** en `public/textures/wood.png` (gris tintada a marrón con multiply + velo translúcido). Ojo con `BASE_URL` sin barra final al construir rutas de assets.
 
 > Decisiones cerradas el 2026-07-27: **Realtime Database** como BD principal y **React** para las islas.
 
