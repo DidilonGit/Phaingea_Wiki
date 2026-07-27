@@ -1,24 +1,17 @@
 ---
 // Barra superior de madera con "banderines" (pendones) colgando, uno por categoría.
-// Cada banderín = SVG: barra dorada (rod) + tela con FORMA y COLOR propios + ICONO.
-// El nombre de la categoría aparece como tooltip al hacer hover/focus.
+// REPOSO: el banderín está ENROLLADO (barra dorada + rollo).
+// HOVER/FOCUS: se DESENROLLA -> aparece la tela (forma + color + icono) y el
+//              NOMBRE debajo.
 //
 // CÓMO EDITAR:
 // · Añadir/quitar categoría -> array `bookmarks` (key, label, color, shape).
-// · Formas de la tela -> objeto `shapePath` (recto | redondo | punta | cola).
-// · Iconos -> objeto `icons` (SVG interno, dibujado en una caja 24x24).
+// · Formas de la tela        -> clases CSS .cloth.recto/.redondo/.punta/.cola.
+// · Iconos                   -> objeto `icons` (SVG interno, caja 24x24).
 const base = import.meta.env.BASE_URL; // p.ej. '/Phaingea_Wiki' (sin barra final)
 const woodUrl = `${base.replace(/\/$/, '')}/textures/wood.png`;
 
-// Formas de la tela del banderín (viewBox 0 0 54 80; tela de y=10 a la base).
-const shapePath = {
-  recto:   'M8,10 H46 V64 H8 Z',
-  redondo: 'M8,10 H46 V52 Q46,66 27,66 Q8,66 8,52 Z',
-  punta:   'M8,10 H46 V54 L27,68 L8,54 Z',
-  cola:    'M8,10 H46 V66 L27,55 L8,66 Z',
-};
-
-// Iconos simples (caja 24x24, se centran sobre la tela). fill oscuro por defecto.
+// Iconos simples (caja 24x24). fill oscuro por defecto (.icono svg).
 const icons = {
   inicio:        '<circle cx="12" cy="11" r="5.4"/><ellipse cx="12" cy="11" rx="11" ry="3.4" fill="none" stroke="#20160d" stroke-width="1.7" transform="rotate(-18 12 11)"/>',
   deidades:      '<circle cx="12" cy="12" r="4"/><g stroke="#20160d" stroke-width="1.7" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.6" y1="4.6" x2="6.7" y2="6.7"/><line x1="17.3" y1="17.3" x2="19.4" y2="19.4"/><line x1="19.4" y1="4.6" x2="17.3" y2="6.7"/><line x1="6.7" y1="17.3" x2="4.6" y2="19.4"/></g>',
@@ -26,9 +19,9 @@ const icons = {
   personajes:    '<circle cx="12" cy="8" r="4.2"/><path d="M4 21 Q4 13 12 13 Q20 13 20 21 Z"/>',
   galeria:       '<rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="#20160d" stroke-width="1.7"/><circle cx="8" cy="10" r="1.7"/><path d="M6 17 L11 12 L14 15 L17 11 L19 17 Z"/>',
   sesiones:      '<path d="M12 6 Q7 3.5 3 5.2 V18 Q7 16.2 12 19 Q17 16.2 21 18 V5.2 Q17 3.5 12 6 Z" fill="none" stroke="#20160d" stroke-width="1.7"/><line x1="12" y1="6" x2="12" y2="19" stroke="#20160d" stroke-width="1.5"/>',
+  reglas:        '<rect x="5" y="3.5" width="14" height="17" rx="1.8" fill="none" stroke="#20160d" stroke-width="1.7"/><line x1="8" y1="8" x2="16" y2="8" stroke="#20160d" stroke-width="1.5"/><line x1="8" y1="11.5" x2="16" y2="11.5" stroke="#20160d" stroke-width="1.5"/><line x1="8" y1="15" x2="13" y2="15" stroke="#20160d" stroke-width="1.5"/>',
   notificaciones:'<path d="M12 3 Q6 3 6 11 L4.2 16 H19.8 L18 11 Q18 3 12 3 Z"/><path d="M9.8 18 Q12 21 14.2 18 Z"/>',
   perfil:        '<rect x="5" y="3" width="14" height="18" rx="1.6"/><path d="M12 3 V12 L14.5 10 L17 12 V3 Z" fill="#efe6d2"/>',
-  reglas:        '<rect x="5" y="3.5" width="14" height="17" rx="1.8" fill="none" stroke="#20160d" stroke-width="1.7"/><line x1="8" y1="8" x2="16" y2="8" stroke="#20160d" stroke-width="1.5"/><line x1="8" y1="11.5" x2="16" y2="11.5" stroke="#20160d" stroke-width="1.5"/><line x1="8" y1="15" x2="13" y2="15" stroke="#20160d" stroke-width="1.5"/>',
 };
 
 const bookmarks = [
@@ -50,48 +43,29 @@ const bookmarks = [
     {
       bookmarks.map((b) => (
         <button class="bm" style={`--c:${b.color}`} title={b.label} aria-label={b.label}>
-          <svg class="pennant" viewBox="0 0 54 80" width="44" height="66" aria-hidden="true">
-            <rect x="4" y="2" width="46" height="6" rx="3" fill="url(#rodGrad)" />
-            <circle cx="4" cy="5" r="3.4" fill="url(#rodGrad)" />
-            <circle cx="50" cy="5" r="3.4" fill="url(#rodGrad)" />
-            <path class="cloth" d={shapePath[b.shape]} />
-            <path class="sheen" d={shapePath[b.shape]} fill="url(#sheenGrad)" />
-            <g class="icono" transform="translate(15,23)" set:html={icons[b.key]} />
-          </svg>
-          <span class="tip">{b.label}</span>
+          <span class="rod" aria-hidden="true" />
+          <span class="roller" aria-hidden="true" />
+          <span class={`cloth ${b.shape}`} aria-hidden="true">
+            <svg class="icono" viewBox="0 0 24 24" set:html={icons[b.key]} />
+          </span>
+          <span class="name">{b.label}</span>
         </button>
       ))
     }
   </nav>
 </header>
 
-<!-- gradientes compartidos por todos los banderines -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <linearGradient id="rodGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#f2dc94" />
-      <stop offset=".5" stop-color="#c9a45a" />
-      <stop offset="1" stop-color="#87692f" />
-    </linearGradient>
-    <linearGradient id="sheenGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff" stop-opacity=".30" />
-      <stop offset=".5" stop-color="#ffffff" stop-opacity=".05" />
-      <stop offset="1" stop-color="#000000" stop-opacity=".22" />
-    </linearGradient>
-  </defs>
-</svg>
-
 <style>
   .topbar {
     min-height: var(--topbar-h);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1.5rem;
-    padding: 0 1.5rem;
+    padding: 0.5rem 1.5rem 0;
     position: sticky;
     top: 0;
     z-index: 50;
-    /* Madera: textura gris tintada a marrón (multiply) + velo marrón translúcido encima */
+    /* Madera: textura gris tintada a marrón (multiply) + velo marrón translúcido */
     background-color: #6b4a2c;
     background-image:
       linear-gradient(180deg, rgba(92, 62, 38, 0.35), rgba(52, 33, 19, 0.6)),
@@ -113,7 +87,7 @@ const bookmarks = [
   }
   .bookmarks {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.6rem;
     flex-wrap: wrap;
     align-items: flex-start;
   }
@@ -124,59 +98,108 @@ const bookmarks = [
     background: none;
     border: 0;
     padding: 0;
-    margin-top: -2px; /* la barra dorada asoma pegada a la madera */
     cursor: pointer;
-    display: block;
-  }
-  .pennant {
-    display: block;
-    filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.45));
-    transition: transform 0.22s var(--ease);
-    transform-origin: 50% 5px; /* pivota desde la barra dorada, como un pendón */
-  }
-  .cloth {
-    fill: var(--c);
-    stroke: rgba(255, 255, 255, 0.45);
-    stroke-width: 1;
-  }
-  .icono {
-    fill: #20160d;
-  }
-  .bm:hover .pennant,
-  .bm:focus-visible .pennant {
-    transform: rotate(3.5deg) translateY(1px);
-  }
-  .bm:focus-visible {
-    outline: 2px solid var(--gold);
-    outline-offset: 2px;
-    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 44px;
   }
 
-  /* ---- tooltip con el nombre ---- */
-  .tip {
+  /* barra dorada de la que cuelga el banderín */
+  .rod {
+    position: relative;
+    width: 42px;
+    height: 5px;
+    border-radius: 3px;
+    background: linear-gradient(#f2dc94, #c9a45a 55%, #87692f);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  .rod::before,
+  .rod::after {
+    content: '';
     position: absolute;
-    left: 50%;
-    top: 100%;
-    transform: translate(-50%, 2px);
-    background: linear-gradient(#3a2415, #241609);
-    color: var(--paper);
-    border: 1px solid rgba(201, 164, 90, 0.5);
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background: radial-gradient(circle at 35% 35%, #f5e3a0, #a9863f);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  .rod::before { left: -5px; }
+  .rod::after  { right: -5px; }
+
+  /* rollo: el banderín enrollado (estado de reposo) */
+  .roller {
+    width: 38px;
+    height: 11px;
+    margin-top: 1px;
     border-radius: 6px;
+    z-index: 2;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--c) 80%, #fff 12%),
+      var(--c) 45%,
+      color-mix(in srgb, var(--c) 55%, #000 32%)
+    );
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.45),
+      inset 0 -2px 3px rgba(0, 0, 0, 0.35),
+      inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    transition: opacity 0.25s var(--ease);
+  }
+
+  /* tela: se despliega en hover */
+  .cloth {
+    width: 38px;
+    height: 0;
+    overflow: hidden;
+    margin-top: -1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.16)), var(--c);
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.4));
+    transition: height 0.4s var(--ease);
+  }
+  .cloth.punta   { clip-path: polygon(0 0, 100% 0, 100% 76%, 50% 100%, 0 76%); }
+  .cloth.cola    { clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%); }
+  .cloth.redondo { border-radius: 0 0 19px 19px; }
+
+  .icono {
+    display: block;
+    width: 22px;
+    height: 22px;
+    fill: #20160d;
+    opacity: 0;
+    transition: opacity 0.2s ease 0.12s;
+  }
+
+  /* nombre debajo del banderín */
+  .name {
+    margin-top: 4px;
     font-family: ui-monospace, 'Courier New', monospace;
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 0.28rem 0.5rem;
+    color: var(--paper);
+    text-shadow: 0 1px 3px #000;
     white-space: nowrap;
-    pointer-events: none;
     opacity: 0;
-    transition: opacity 0.16s ease, transform 0.16s ease;
-    z-index: 60;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    transform: translateY(-3px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
   }
-  .bm:hover .tip,
-  .bm:focus-visible .tip {
-    opacity: 1;
-    transform: translate(-50%, 6px);
-  }
+
+  /* ---- desenrollar ---- */
+  .bm:hover .cloth,
+  .bm:focus-visible .cloth { height: 52px; }
+  .bm:hover .icono,
+  .bm:focus-visible .icono { opacity: 1; }
+  .bm:hover .roller,
+  .bm:focus-visible .roller { opacity: 0; }
+  .bm:hover .name,
+  .bm:focus-visible .name { opacity: 1; transform: translateY(0); }
+  .bm:focus-visible { outline: none; }
+  .bm:focus-visible .rod { outline: 2px solid var(--gold); outline-offset: 2px; }
 </style>

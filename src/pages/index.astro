@@ -2,9 +2,12 @@
 // Observatorio / página principal (Fase 0: landing de cimientos).
 import RoomLayout from '../layouts/RoomLayout.astro';
 import FirebaseStatus from '../components/FirebaseStatus.jsx';
+import StarsCanvas from '../components/StarsCanvas.jsx';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <RoomLayout title="Phaingea — Observatorio">
+  <StarsCanvas client:load speedMultiplier={0.4} />
   <section class="hero">
     <div class="halo"></div>
     <h1>Phaingea</h1>
@@ -19,12 +22,15 @@ import FirebaseStatus from '../components/FirebaseStatus.jsx';
       listo para desplegarse en GitHub Pages. Las salas y el dial llegan en las
       siguientes fases.
     </p>
+
+    <a class="cta" href={`${base}/observatorio.html`}>Ver el observatorio (prototipo) →</a>
   </section>
 </RoomLayout>
 
 <style>
   .hero {
     position: relative;
+    z-index: 1; /* por encima del canvas de estrellas (z-index:0) */
     max-width: 720px;
     margin: 8vh auto 0;
     text-align: center;
@@ -66,5 +72,21 @@ import FirebaseStatus from '../components/FirebaseStatus.jsx';
     font-size: 0.9rem;
     line-height: 1.6;
     color: var(--stone);
+  }
+  .cta {
+    display: inline-block;
+    margin-top: 1.8rem;
+    padding: 0.7rem 1.4rem;
+    border: 1px solid rgba(201, 164, 90, 0.55);
+    border-radius: 999px;
+    color: var(--gold);
+    font-family: var(--font-ui);
+    letter-spacing: 0.04em;
+    background: rgba(201, 164, 90, 0.06);
+    transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .cta:hover {
+    background: rgba(201, 164, 90, 0.16);
+    transform: translateY(-2px);
   }
 </style>
