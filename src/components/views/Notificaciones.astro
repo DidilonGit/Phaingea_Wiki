@@ -1,6 +1,11 @@
 ---
-// Vista Notificaciones (registro). Sin datos de muestra: estado vacío hasta que
-// haya eventos reales.
+// Vista Notificaciones (registro). Estructura con contenido PLACEHOLDER (WIP):
+// lista de avisos + "marcar todas como leídas", hasta conectar eventos reales.
+// Se mantiene la variedad leída/no leída (estructural).
+const notificaciones = [
+  { leida: false }, { leida: false }, { leida: false },
+  { leida: true }, { leida: true }, { leida: true },
+];
 ---
 
 <section class="view" data-view="notificaciones" hidden aria-label="Notificaciones">
@@ -8,11 +13,37 @@
     <header class="room-head">
       <p class="room-kicker">Registro</p>
       <h2 class="room-title">Notificaciones</h2>
-      <p class="room-sub">Los avisos de tus campañas.</p>
+      <p class="room-sub">Los registros importantes de tus campañas, reunidos en un solo margen.</p>
     </header>
-    <div class="empty">
-      <div class="ico">🔔</div>
-      <p>No tienes notificaciones.</p>
+
+    <div class="center" style="margin-bottom:1.2rem;">
+      <button class="btn ghost" data-marcar-todas type="button">Marcar todas como leídas</button>
+    </div>
+
+    <div class="stack" data-notif-lista>
+      {notificaciones.map((n) => (
+        <div class="panel">
+          <div class={n.leida ? 'notif leida' : 'notif'}>
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <p class="txt">WIP</p>
+              <p class="when">WIP</p>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   </div>
+
+  <script>
+    (function () {
+      const seccion = document.querySelector('.view[data-view="notificaciones"]');
+      if (!seccion) return;
+      const boton = seccion.querySelector('[data-marcar-todas]');
+      if (!boton) return;
+      boton.addEventListener('click', () => {
+        seccion.querySelectorAll('.notif').forEach((n) => n.classList.add('leida'));
+      });
+    })();
+  </script>
 </section>

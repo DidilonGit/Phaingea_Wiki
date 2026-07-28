@@ -1,6 +1,25 @@
 ---
-// Vista Galería (sala de exposición). Sin datos de muestra: estado vacío hasta
-// que se suban imágenes reales (con tags y filtros).
+// Vista Galería (sala de exposición). Estructura con contenido PLACEHOLDER (WIP):
+// filtros por tag + marcos + lightbox. Se mantienen los tags (estructural, para
+// que el filtro funcione); el nombre de cada marco va como "WIP".
+const marcos = [
+  { t: '🖼️', tags: 'personaje', v: false },
+  { t: '🏔️', tags: 'paisaje', v: true },
+  { t: '☠', tags: 'villano personaje', v: true },
+  { t: '⚔', tags: 'grupal', v: false },
+  { t: '🗝️', tags: 'objeto', v: false },
+  { t: '🖼️', tags: 'personaje', v: true },
+  { t: '🌫️', tags: 'paisaje', v: false },
+  { t: '🐉', tags: 'villano', v: false },
+];
+const filtros = [
+  { key: 'todos', label: 'Todos' },
+  { key: 'personaje', label: 'Personaje' },
+  { key: 'grupal', label: 'Grupal' },
+  { key: 'paisaje', label: 'Paisaje' },
+  { key: 'villano', label: 'Villano' },
+  { key: 'objeto', label: 'Objeto' },
+];
 ---
 
 <section class="view" data-view="galeria" hidden aria-label="Galería">
@@ -8,11 +27,84 @@
     <header class="room-head">
       <p class="room-kicker">Sala de exposición</p>
       <h2 class="room-title">Galería</h2>
-      <p class="room-sub">Ilustraciones del mundo, cada una en su marco.</p>
+      <p class="room-sub">Un tomo de ilustraciones del mundo: retratos, paisajes y reliquias. Filtra por tema o toca un marco para ampliarlo.</p>
     </header>
-    <div class="empty">
-      <div class="ico">🖼️</div>
-      <p>La galería está vacía.</p>
+
+    <div class="chips">
+      {filtros.map((f) => (
+        <button class="chip" data-filtro={f.key} aria-pressed={f.key === 'todos' ? 'true' : 'false'}>{f.label}</button>
+      ))}
+    </div>
+
+    <div class="gallery" style="margin-top:1.4rem">
+      {marcos.map((m) => (
+        <figure class={`frame${m.v ? ' v' : ''}`} data-tags={m.tags} tabindex="0">
+          <div class="ph">
+            <span aria-hidden="true" style="font-size:2.4rem;line-height:1">{m.t}</span>
+            <figcaption style="margin-top:.4rem;font-size:.85rem;letter-spacing:.04em">WIP</figcaption>
+          </div>
+        </figure>
+      ))}
     </div>
   </div>
 </section>
+
+<style>
+  .galeria-lightbox {
+    position: fixed; inset: 0; z-index: 50; display: grid; place-items: center;
+    background: rgba(6, 5, 3, 0.86); backdrop-filter: blur(2px); padding: 5vh 5vw; cursor: zoom-out;
+  }
+  .galeria-lightbox[hidden] { display: none; }
+  .galeria-lightbox .frame { width: min(70vh, 90vw); max-height: 90vh; cursor: default; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), inset 0 0 0 2px rgba(201, 164, 90, 0.5); }
+  .galeria-lightbox .ph span { font-size: 5rem !important; }
+</style>
+
+<script>
+  (() => {
+    const view = document.querySelector('.view[data-view="galeria"]');
+    if (!view) return;
+    const chips = Array.from(view.querySelectorAll('.chip'));
+    const frames = Array.from(view.querySelectorAll('.frame'));
+    if (!frames.length) return;
+
+    function aplicarFiltro(key) {
+      frames.forEach((f) => {
+        const tags = (f.getAttribute('data-tags') || '').split(/\s+/);
+        f.hidden = !(key === 'todos' || tags.includes(key));
+      });
+    }
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        chips.forEach((c) => c.setAttribute('aria-pressed', 'false'));
+        chip.setAttribute('aria-pressed', 'true');
+        aplicarFiltro(chip.getAttribute('data-filtro') || 'todos');
+      });
+    });
+
+    const overlay = document.createElement('div');
+    overlay.className = 'galeria-lightbox';
+    overlay.hidden = true;
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    view.appendChild(overlay);
+
+    function abrir(frame) {
+      const ph = frame.querySelector('.ph');
+      if (!ph) return;
+      overlay.innerHTML = '';
+      const big = document.createElement('figure');
+      big.className = frame.classList.contains('v') ? 'frame v' : 'frame';
+      big.appendChild(ph.cloneNode(true));
+      overlay.appendChild(big);
+      overlay.hidden = false;
+    }
+    function cerrar() { overlay.hidden = true; overlay.innerHTML = ''; }
+
+    frames.forEach((frame) => {
+      frame.addEventListener('click', () => abrir(frame));
+      frame.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(frame); } });
+    });
+    overlay.addEventListener('click', cerrar);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !overlay.hidden) cerrar(); });
+  })();
+</script>

@@ -1,6 +1,7 @@
 ---
-// Vista Reglas (compendio). Sin datos de muestra: estado vacío hasta publicar
-// el reglamento real.
+// Vista Reglas (compendio). Estructura con contenido PLACEHOLDER (WIP): tomo del
+// reglamento + secciones, hasta publicar las reglas reales.
+const SECCIONES = [1, 2, 3, 4];
 ---
 
 <section class="view" data-view="reglas" hidden aria-label="Reglas">
@@ -8,11 +9,32 @@
     <header class="room-head">
       <p class="room-kicker">Compendio</p>
       <h2 class="room-title">Reglas</h2>
-      <p class="room-sub">El reglamento de la mesa.</p>
+      <p class="room-sub">El reglamento de la mesa, con sus mañas y costumbres.</p>
     </header>
-    <div class="empty">
-      <div class="ico">📕</div>
-      <p>Aún no hay reglas publicadas.</p>
+
+    <div class="atril">
+      <article class="book book-leather-black" aria-label="Tomo del reglamento">
+        <span class="book-title">WIP</span>
+        <span class="book-sub">WIP</span>
+      </article>
+    </div>
+
+    <div class="stack reglas-secciones">
+      {SECCIONES.map(() => (
+        <section class="panel">
+          <h3 class="regla-titulo">WIP</h3>
+          <p class="regla-texto">WIP</p>
+        </section>
+      ))}
     </div>
   </div>
 </section>
+
+<style>
+  .reglas-secciones { max-width: 720px; margin: 2rem auto 0; }
+  .regla-titulo {
+    font-family: var(--font-title); color: var(--gold-soft);
+    letter-spacing: 0.04em; margin: 0 0 0.4rem; font-size: 1.2rem;
+  }
+  .regla-texto { font-family: var(--font-body); color: var(--paper); line-height: 1.6; margin: 0; }
+</style>

@@ -1,6 +1,17 @@
 ---
-// Vista Personajes (archivador). Sin datos de muestra: estado vacío hasta que
-// haya personajes reales (vendrán de la base de datos por campaña).
+// Vista Personajes (archivador). Estructura de fichas con contenido PLACEHOLDER
+// (WIP) hasta conectar los personajes reales por campaña.
+// Se mantiene lo estructural (estados: activo/fallecido/delegado); los datos
+// inventados van como "WIP".
+const fichas = [
+  { estado: 'activo' },
+  { estado: 'delegado' },
+  { estado: 'activo' },
+  { estado: 'fallecido' },
+  { estado: 'delegado' },
+  { estado: 'fallecido' },
+];
+const rotulo = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 ---
 
 <section class="view" data-view="personajes" hidden aria-label="Personajes">
@@ -8,11 +19,21 @@
     <header class="room-head">
       <p class="room-kicker">Archivador</p>
       <h2 class="room-title">Personajes</h2>
-      <p class="room-sub">Las fichas de los héroes de cada campaña.</p>
+      <p class="room-sub">Fichas de los héroes de cada campaña.</p>
     </header>
-    <div class="empty">
-      <div class="ico">🗄️</div>
-      <p>El archivador está vacío. Aún no hay personajes.</p>
+
+    <div class="grid">
+      {fichas.map((p) => (
+        <article class="char">
+          <div class="avatar" aria-hidden="true">?</div>
+          <div class="body">
+            <div class="name">WIP</div>
+            <div class="sub mono">WIP</div>
+            <span class={`badge ${p.estado}`}>{rotulo(p.estado)}</span>
+            <p class="mono" style="font-size:0.72rem;color:#6a5f4c;margin-top:0.55rem;">Jugador: WIP</p>
+          </div>
+        </article>
+      ))}
     </div>
   </div>
 </section>

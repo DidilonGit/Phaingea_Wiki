@@ -1,6 +1,10 @@
 ---
-// Vista Regiones (sala de cartografía). Sin datos de muestra: mesa vacía a la
-// espera del mapamundi real de Phaingea.
+// Vista Regiones (sala de cartografía). Estructura con contenido PLACEHOLDER
+// (WIP): mapamundi con pines + fichas de región + comentarios, hasta conectar
+// el mapa y las regiones reales.
+const PINES = [1, 2, 3, 4];
+const REGIONES = [1, 2, 3, 4, 5, 6];
+const COMENTARIOS = [1, 2];
 ---
 
 <section class="view" data-view="regiones" hidden aria-label="Regiones">
@@ -8,31 +12,57 @@
     <header class="room-head">
       <p class="room-kicker">Sala de cartografía</p>
       <h2 class="room-title">Regiones</h2>
-      <p class="room-sub">La mesa de cartografía, lista para el mapamundi de Phaingea.</p>
+      <p class="room-sub">El mapamundi de Phaingea, desplegado sobre la mesa de cartografía. Sigue los pines para adentrarte en cada tierra.</p>
     </header>
 
-    <div class="panel mapa" aria-label="Mapamundi (vacío)">
-      <span class="mapa-nota mono">Sin mapa cargado</span>
+    <div class="panel mapa" aria-label="Mapamundi de Phaingea">
+      {PINES.map((_, i) => (
+        <span class={`pin pin-${i + 1}`}><b></b><em>WIP</em></span>
+      ))}
+      <span class="mapa-nota mono">WIP</span>
     </div>
 
-    <div class="empty" style="min-height:26vh">
-      <div class="ico">🗺️</div>
-      <p>No hay regiones registradas.</p>
+    <div class="grid" style="margin-top:1.4rem;">
+      {REGIONES.map(() => (
+        <article class="panel">
+          <h3 class="reg-nom">WIP</h3>
+          <p class="reg-desc">WIP</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="comments">
+      <h3>Comentarios</h3>
+      {COMENTARIOS.map(() => (
+        <div class="comment">
+          <p class="meta"><b>WIP</b></p>
+          <p>WIP</p>
+        </div>
+      ))}
+      <form class="comment-form" onsubmit="return false;">
+        <input type="text" placeholder="Deja tu comentario sobre el mapa…" aria-label="Escribir comentario" />
+        <button class="btn" type="submit">Comentar</button>
+      </form>
     </div>
   </div>
 </section>
 
 <style>
   .mapa {
-    position: relative;
-    min-height: 300px;
-    overflow: hidden;
+    position: relative; min-height: 340px; overflow: hidden;
     background:
-      radial-gradient(120% 90% at 50% 30%, rgba(201, 164, 90, 0.1), transparent 60%),
-      linear-gradient(160deg, rgba(74, 51, 32, 0.6), rgba(26, 18, 11, 0.9));
+      radial-gradient(120% 90% at 50% 30%, rgba(201, 164, 90, 0.14), transparent 60%),
+      linear-gradient(160deg, rgba(74, 51, 32, 0.75), rgba(26, 18, 11, 0.92));
   }
-  .mapa-nota {
-    position: absolute; right: 0.9rem; bottom: 0.7rem;
-    font-size: 0.66rem; color: var(--stone); letter-spacing: 0.08em;
-  }
+  .mapa-nota { position: absolute; right: 0.9rem; bottom: 0.7rem; font-size: 0.66rem; color: var(--stone); letter-spacing: 0.08em; }
+  .pin { position: absolute; display: flex; align-items: center; gap: 0.4rem; transform: translate(-50%, -50%); cursor: pointer; transition: filter 0.15s var(--ease), transform 0.15s var(--ease); }
+  .pin b { width: 12px; height: 12px; border-radius: 50%; flex: none; background: radial-gradient(circle at 35% 30%, #f4dfa6, var(--gold)); box-shadow: 0 0 0 3px rgba(201, 164, 90, 0.22), 0 2px 6px rgba(0, 0, 0, 0.55); }
+  .pin em { font-family: var(--font-title); font-style: normal; font-size: 0.82rem; color: var(--paper); white-space: nowrap; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); }
+  .pin:hover { filter: brightness(1.12); transform: translate(-50%, -50%) scale(1.06); }
+  .pin-1 { top: 28%; left: 22%; }
+  .pin-2 { top: 68%; left: 40%; }
+  .pin-3 { top: 34%; left: 66%; }
+  .pin-4 { top: 74%; left: 78%; }
+  .reg-nom { font-family: var(--font-title); color: var(--gold-soft); letter-spacing: 0.04em; margin: 0 0 0.4rem; font-size: 1.15rem; }
+  .reg-desc { color: var(--paper); font-family: var(--font-body); line-height: 1.5; font-size: 0.9rem; }
 </style>

@@ -1,6 +1,7 @@
 ---
-// Vista Deidades (capilla). Sin datos de muestra: estado vacío hasta conectar
-// el contenido real (libro/PDF del panteón).
+// Vista Deidades (capilla). Estructura con contenido PLACEHOLDER (WIP): un libro
+// sobre el atril + comentarios generales, hasta conectar el contenido real.
+const COMENTARIOS = [1, 2];
 ---
 
 <section class="view" data-view="deidades" hidden aria-label="Deidades">
@@ -8,11 +9,28 @@
     <header class="room-head">
       <p class="room-kicker">Capilla</p>
       <h2 class="room-title">Deidades</h2>
-      <p class="room-sub">El atril espera un tomo. Aquí vivirá el panteón de Phaingea.</p>
+      <p class="room-sub">El panteón de Phaingea, custodiado en la penumbra de la capilla.</p>
     </header>
-    <div class="empty">
-      <div class="ico">⛪</div>
-      <p>Aún no hay contenido de deidades.</p>
+
+    <div class="atril">
+      <article class="book book-leather-green" role="button" tabindex="0" aria-label="Abrir libro de deidades">
+        <span class="book-title">WIP</span>
+        <span class="book-sub">WIP</span>
+      </article>
+    </div>
+
+    <div class="comments">
+      <h3>Comentarios</h3>
+      {COMENTARIOS.map(() => (
+        <div class="comment">
+          <p class="meta"><b>WIP</b></p>
+          <p>WIP</p>
+        </div>
+      ))}
+      <form class="comment-form" onsubmit="return false;">
+        <input type="text" placeholder="Deja tu comentario en la capilla…" aria-label="Escribir comentario" />
+        <button class="btn" type="submit">Comentar</button>
+      </form>
     </div>
   </div>
 </section>

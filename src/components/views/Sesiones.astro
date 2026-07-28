@@ -1,6 +1,8 @@
 ---
-// Vista Sesiones (diario de campaña). Sin datos de muestra: estado vacío hasta
-// que se registren sesiones reales.
+// Vista Sesiones (diario de campaña). Estructura con contenido PLACEHOLDER (WIP)
+// hasta conectar las sesiones reales. Se mantiene el número de sesión.
+const SESIONES = [1, 2, 3, 4, 5].map((n) => ({ num: n }));
+const COMENTARIOS = [1, 2];
 ---
 
 <section class="view" data-view="sesiones" hidden aria-label="Sesiones">
@@ -8,11 +10,32 @@
     <header class="room-head">
       <p class="room-kicker">Diario de campaña</p>
       <h2 class="room-title">Sesiones</h2>
-      <p class="room-sub">Cada sesión, su experiencia y lo que dejó.</p>
+      <p class="room-sub">Cada página de este tomo recoge una sesión: lo vivido, la experiencia repartida y las heridas que dejó.</p>
     </header>
-    <div class="empty">
-      <div class="ico">📓</div>
-      <p>Aún no se ha registrado ninguna sesión.</p>
+
+    <div class="stack">
+      {SESIONES.map((s) => (
+        <div class="panel">
+          <div class="session">
+            <div class="num">{s.num}</div>
+            <div>
+              <strong>WIP</strong>
+              <p class="muted">WIP</p>
+            </div>
+            <div class="xp">WIP</div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="comments">
+      <h3>Comentarios de la sesión</h3>
+      {COMENTARIOS.map(() => (
+        <div class="comment">
+          <p class="meta"><b>WIP</b></p>
+          <p>WIP</p>
+        </div>
+      ))}
     </div>
   </div>
 </section>
