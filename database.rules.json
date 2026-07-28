@@ -1,7 +1,17 @@
 {
   "rules": {
-    "// NOTA": "Prototipo con login 'de confianza' (hash SHA-256 en cliente). La BD está abierta a lectura/escritura porque el login no es una barrera real. Endurecer antes de tener datos serios.",
+    "//": "Phaingea · reglas RTDB. Lectura abierta (el login descarga /usuarios). Escritura DENEGADA por defecto; solo se abre /usuarios (crear cuenta / cambiar pass·rol). Los nodos de datos reales (campanas, personajes, sesiones...) se anadiran aqui cuando se conecten. Login = puerta de UX de confianza, no barrera criptografica.",
     ".read": true,
-    ".write": true
+    ".write": false,
+
+    "usuarios": {
+      "$user": {
+        ".write": "!data.exists() || !newData.exists()",
+        ".validate": "newData.hasChildren(['pass','rol'])",
+        "pass": { ".write": true, ".validate": "newData.isString() && newData.val().length < 300" },
+        "rol":  { ".write": true, ".validate": "newData.isString() && newData.val().length < 30" },
+        "$otro": { ".validate": false }
+      }
+    }
   }
 }
