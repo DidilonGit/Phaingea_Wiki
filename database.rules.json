@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "// NOTA": "Prototipo con login 'de confianza' (hash SHA-256 en cliente). La BD está abierta a lectura/escritura porque el login no es una barrera real. Endurecer antes de tener datos serios.",
+    ".read": true,
+    ".write": true
+  }
+}

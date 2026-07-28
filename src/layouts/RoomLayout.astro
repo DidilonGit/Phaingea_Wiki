@@ -4,6 +4,7 @@ import '../styles/global.css';
 import '../styles/views.css';
 import TopBar from '../components/TopBar.astro';
 import VersionWatcher from '../components/VersionWatcher.jsx';
+import AuthGate from '../components/AuthGate.jsx';
 
 const { title = 'Phaingea' } = Astro.props;
 ---
@@ -20,6 +21,7 @@ const { title = 'Phaingea' } = Astro.props;
     <main class="room">
       <slot />
     </main>
+    <AuthGate client:load />
     <VersionWatcher client:idle />
   </body>
 </html>
