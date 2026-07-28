@@ -28,9 +28,10 @@ export function leerSesion() {
 }
 
 // Helpers de rol (para gatear UI más adelante).
+// 'admin' es equivalente a 'owner' (mismos permisos globales).
 export function esOwner(u) {
-  return !!u && u.rol === 'owner';
+  return !!u && (u.rol === 'owner' || u.rol === 'admin');
 }
 export function esMasterOOwner(u) {
-  return !!u && (u.rol === 'owner' || u.rol === 'master');
+  return !!u && (u.rol === 'owner' || u.rol === 'admin' || u.rol === 'master');
 }

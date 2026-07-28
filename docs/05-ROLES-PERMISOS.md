@@ -1,5 +1,7 @@
 # 05 · Roles y permisos
 
+> **Nota (prototipo):** el rol **`admin`** es un alias de **`owner`** (mismos permisos globales). En código lo tratan igual los helpers `esOwner` / `esMasterOOwner` de `src/stores/user.js`.
+
 ## Los cuatro roles
 
 | Rol | Alcance | Puede |
