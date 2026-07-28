@@ -34,6 +34,16 @@ export default function AuthGate() {
     }
   }
 
+  // Textura de madera (misma que el banner) para el card.
+  const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  const woodBg = {
+    backgroundColor: '#6b4a2c',
+    backgroundImage: `linear-gradient(180deg, rgba(74,50,30,.5), rgba(32,21,11,.78)), url("${base}/textures/wood.png")`,
+    backgroundSize: 'cover, cover',
+    backgroundPosition: 'center, center',
+    backgroundBlendMode: 'normal, multiply',
+  };
+
   // --- logueado: chapita de usuario ---
   if (user) {
     return (
@@ -51,7 +61,7 @@ export default function AuthGate() {
   // --- no logueado: overlay ---
   return (
     <div style={ov.backdrop} role="dialog" aria-modal="true" aria-label="Acceso a Phaingea">
-      <form style={ov.card} onSubmit={enviar}>
+      <form style={{ ...ov.card, ...woodBg }} onSubmit={enviar}>
         <div style={ov.brand}>PHAINGEA</div>
         <p style={ov.kicker}>{modo === 'login' ? 'Entrar en el archivo' : 'Crear una cuenta'}</p>
 
@@ -108,33 +118,35 @@ const ov = {
   card: {
     width: 'min(380px, 100%)',
     display: 'grid', gap: '0.9rem',
-    background: 'linear-gradient(180deg, var(--parchment), #d8c8a2)',
-    color: 'var(--ink)',
-    border: '1px solid rgba(201,164,90,.6)', borderRadius: '12px',
+    color: 'var(--paper)',
+    border: '2px solid #1c120a', borderRadius: '12px',
     padding: '1.8rem 1.6rem 1.6rem',
-    boxShadow: '0 30px 80px rgba(0,0,0,.6)',
+    boxShadow: '0 30px 80px rgba(0,0,0,.6), inset 0 0 0 1px rgba(201,164,90,.35)',
   },
   brand: {
     fontFamily: 'var(--font-title)', fontWeight: 700, letterSpacing: '0.25em',
-    textAlign: 'center', color: '#5a3d26', fontSize: '1.4rem',
+    textAlign: 'center', color: 'var(--gold)', fontSize: '1.5rem',
+    textShadow: '0 1px 2px #000',
   },
   kicker: {
     textAlign: 'center', fontFamily: 'ui-monospace, monospace', fontSize: '0.7rem',
-    letterSpacing: '0.18em', textTransform: 'uppercase', color: '#7a6a4a', marginTop: '-0.4rem',
+    letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--parchment)',
+    opacity: 0.85, marginTop: '-0.4rem',
   },
-  label: { display: 'grid', gap: '0.3rem', fontFamily: 'var(--font-ui)', fontSize: '0.8rem', color: '#5a4a2c' },
+  label: { display: 'grid', gap: '0.3rem', fontFamily: 'var(--font-ui)', fontSize: '0.8rem', color: 'var(--parchment)' },
   input: {
-    padding: '0.6rem 0.7rem', borderRadius: '8px', border: '1px solid rgba(90,61,38,.4)',
-    background: 'rgba(255,255,255,.55)', color: 'var(--ink)', fontSize: '1rem',
+    padding: '0.6rem 0.7rem', borderRadius: '8px', border: '1px solid rgba(201,164,90,.45)',
+    background: 'rgba(239,230,210,.92)', color: 'var(--ink)', fontSize: '1rem',
   },
-  error: { color: '#8a2020', fontSize: '0.82rem', margin: 0, fontFamily: 'var(--font-body)' },
+  error: { color: '#f0a29c', fontSize: '0.82rem', margin: 0, fontFamily: 'var(--font-body)' },
   btn: {
-    marginTop: '0.3rem', padding: '0.7rem', borderRadius: '8px', border: 0, cursor: 'pointer',
-    background: 'var(--wood)', color: 'var(--paper)', fontFamily: 'var(--font-ui)',
-    fontWeight: 600, letterSpacing: '0.05em', fontSize: '1rem',
+    marginTop: '0.3rem', padding: '0.7rem', borderRadius: '8px', border: '1px solid #8a6d34', cursor: 'pointer',
+    background: 'linear-gradient(180deg, var(--gold-soft), var(--gold))', color: 'var(--ink)',
+    fontFamily: 'var(--font-ui)', fontWeight: 700, letterSpacing: '0.05em', fontSize: '1rem',
+    textShadow: '0 1px 0 rgba(255,255,255,.25)',
   },
   switch: {
-    background: 'none', border: 0, cursor: 'pointer', color: '#6a4a2c',
+    background: 'none', border: 0, cursor: 'pointer', color: 'var(--gold-soft)',
     fontFamily: 'var(--font-body)', fontSize: '0.82rem', textDecoration: 'underline',
   },
 };
