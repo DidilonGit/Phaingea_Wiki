@@ -1076,9 +1076,21 @@ arrancar();
     var bms = document.querySelectorAll('.bm[data-view]');
     var views = document.querySelectorAll('.view[data-view]');
     if(!bms.length){ return setTimeout(bind, 60); }
+    var poc = document.querySelector('.view[data-view="pociones"] iframe');
     function activar(key){
       views.forEach(function(v){ v.hidden = v.dataset.view !== key; });
       bms.forEach(function(b){ b.classList.toggle('activo', b.dataset.view === key); });
+      // Sala de Pociones: cargar el iframe solo mientras está activa; al salir se
+      // descarga (about:blank) para que la app deje de generar burbujas y no se
+      // acumulen ni exploten de golpe al volver.
+      if (poc) {
+        var real = poc.getAttribute('data-src');
+        if (key === 'pociones') {
+          if (real && poc.getAttribute('src') !== real) poc.setAttribute('src', real);
+        } else if (poc.getAttribute('src') !== 'about:blank') {
+          poc.setAttribute('src', 'about:blank');
+        }
+      }
       window.dispatchEvent(new Event('resize'));
     }
     bms.forEach(function(b){ b.addEventListener('click', function(){ activar(b.dataset.view); }); });
