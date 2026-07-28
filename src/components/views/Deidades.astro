@@ -1,18 +1,6 @@
 ---
-/*
-  Vista "Deidades" (Capilla) — sala del SPA de Phaingea.
-  Concepto: sala religiosa. Sobre un atril reposa UN libro (categoría tipo PDF,
-  heredada de "Base de Phaingea"). Debajo del libro van los comentarios
-  GENERALES de la sala.
-
-  Sistema de diseño compartido: usa clases de src/styles/views.css y variables
-  de src/styles/tokens.css (importados globalmente; NO reimportar aquí).
-
-  Cómo editar lo habitual:
-  - Cambiar el libro/categoría -> bloque .atril (.book .book-title / .book-sub).
-  - Añadir/editar comentarios -> duplicar un .comment dentro de .comments.
-  - Datos MOCK inventados; el prototipo es navegable pero sin backend real.
-*/
+// Vista Deidades (capilla). Sin datos de muestra: estado vacío hasta conectar
+// el contenido real (libro/PDF del panteón).
 ---
 
 <section class="view" data-view="deidades" hidden aria-label="Deidades">
@@ -20,46 +8,11 @@
     <header class="room-head">
       <p class="room-kicker">Capilla</p>
       <h2 class="room-title">Deidades</h2>
-      <p class="room-sub">El panteón de Phaingea, custodiado en la penumbra de la capilla.</p>
+      <p class="room-sub">El atril espera un tomo. Aquí vivirá el panteón de Phaingea.</p>
     </header>
-
-    <!-- Atril con el tomo heredado (categoría tipo PDF) -->
-    <div class="atril">
-      <article class="book book-leather-green" role="button" tabindex="0" aria-label="Abrir Panteón de Phaingea">
-        <span class="book-title">Panteón de Phaingea</span>
-        <span class="book-sub">Heredado de Base de Phaingea</span>
-      </article>
-      <p class="mono muted center" style="margin-top:1rem; font-size:0.72rem;">
-        Contenido heredado de «Base de Phaingea» &middot; solo lectura
-      </p>
-    </div>
-
-    <!-- Comentarios GENERALES de la sala -->
-    <div class="comments">
-      <h3>Comentarios</h3>
-
-      <div class="comment">
-        <p class="meta"><b>Ithriel Vaelmar (Jugador: Aldo) — 12 Neblina, 341</b></p>
-        <p>Cada vez que abro este tomo me pregunto si Vaeloth escucha desde el otro lado del velo. Dejé una ofrenda en el atril por si acaso.</p>
-        <div class="react"><span>🕯️ 3</span><span>🙏 2</span></div>
-      </div>
-
-      <div class="comment">
-        <p class="meta"><b>Morganna del Ocaso (Jugadora: Bea) — 03 Escarcha, 342</b></p>
-        <p>Ojo con la sección de los Dioses Menores: el texto heredado tiene una nota al margen que contradice lo que nos contó el clérigo de Solmyr.</p>
-        <div class="react"><span>👀 5</span></div>
-      </div>
-
-      <div class="comment">
-        <p class="meta"><b>Draven Corvo Negro (Jugador: Carlos) — 19 Brasa, 342</b></p>
-        <p>Confirmo: el panteón coincide con lo que vimos en las ruinas de Kaeldrath. Añadí un marcador en la página de la Diosa Silente.</p>
-        <div class="react"><span>📜 4</span><span>🔥 1</span></div>
-      </div>
-
-      <form class="comment-form" onsubmit="return false;">
-        <input type="text" placeholder="Deja tu comentario en la capilla…" aria-label="Escribir comentario" />
-        <button class="btn" type="submit">Comentar</button>
-      </form>
+    <div class="empty">
+      <div class="ico">⛪</div>
+      <p>Aún no hay contenido de deidades.</p>
     </div>
   </div>
 </section>

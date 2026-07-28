@@ -176,6 +176,14 @@
 .xpbar { height: 12px; border-radius: 999px; background: rgba(0, 0, 0, 0.4); overflow: hidden; border: 1px solid rgba(201, 164, 90, 0.3); }
 .xpbar > i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), #8fae6f); }
 
+/* ---- estado vacío (sin datos aún) ---- */
+.empty {
+  display: grid; place-content: center; justify-items: center; text-align: center;
+  gap: 0.6rem; min-height: 42vh; color: var(--stone);
+}
+.empty .ico { font-size: 2.6rem; opacity: 0.55; line-height: 1; }
+.empty p { font-family: var(--font-body); font-size: 1rem; max-width: 32ch; }
+
 /* ---- utilidades ---- */
 .stack { display: grid; gap: 1rem; }
 .center { text-align: center; }

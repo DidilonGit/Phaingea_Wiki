@@ -1,37 +1,6 @@
 ---
-/*
-  Vista GALERÍA (sala de exposición).
-  Concepto: libro de ilustraciones; cada imagen en un marco; filtros por tags;
-  clic amplía la imagen oscureciendo el resto (lightbox).
-
-  CÓMO EDITAR LO HABITUAL:
-  - Marcos: edita el array `marcos` de abajo (inicial/emoji, nombre, tags, vertical).
-    Los `tags` deben coincidir con los `data-filtro` de los chips.
-  - Filtros: edita el array `filtros`. "todos" es especial (muestra todo).
-  - Estilo de marcos/chips/galería: vive en `src/styles/views.css` (compartido, NO reimportar).
-  - Lógica de filtrado + lightbox: el <script> del final (scoped a esta sección).
-*/
-
-// Datos MOCK. `t` = inicial o emoji para el marcador CSS (.ph). `v` = marco vertical.
-const marcos = [
-  { t: "K",  nombre: "Kaelen",          tags: "personaje",          v: false },
-  { t: "🏔️", nombre: "Picos de Vhar",    tags: "paisaje",            v: true  },
-  { t: "☠",  nombre: "El Innombrable",   tags: "villano personaje",  v: true  },
-  { t: "⚔",  nombre: "La Compañía",      tags: "grupal",             v: false },
-  { t: "🗝️", nombre: "Llave de Sombra",  tags: "objeto",             v: false },
-  { t: "S",  nombre: "Syrella",          tags: "personaje",          v: true  },
-  { t: "🌫️", nombre: "Marisma Gris",     tags: "paisaje",            v: false },
-  { t: "🐉", nombre: "Vorthax",          tags: "villano",            v: false },
-];
-
-const filtros = [
-  { key: "todos",     label: "Todos"     },
-  { key: "personaje", label: "Personaje" },
-  { key: "grupal",    label: "Grupal"    },
-  { key: "paisaje",   label: "Paisaje"   },
-  { key: "villano",   label: "Villano"   },
-  { key: "objeto",    label: "Objeto"    },
-];
+// Vista Galería (sala de exposición). Sin datos de muestra: estado vacío hasta
+// que se suban imágenes reales (con tags y filtros).
 ---
 
 <section class="view" data-view="galeria" hidden aria-label="Galería">
@@ -39,108 +8,11 @@ const filtros = [
     <header class="room-head">
       <p class="room-kicker">Sala de exposición</p>
       <h2 class="room-title">Galería</h2>
-      <p class="room-sub">Un tomo de ilustraciones del mundo: retratos, paisajes y reliquias. Filtra por tema o toca un marco para ampliarlo.</p>
+      <p class="room-sub">Ilustraciones del mundo, cada una en su marco.</p>
     </header>
-
-    <div class="chips">
-      {filtros.map((f) => (
-        <button
-          class="chip"
-          data-filtro={f.key}
-          aria-pressed={f.key === "todos" ? "true" : "false"}
-        >{f.label}</button>
-      ))}
-    </div>
-
-    <div class="gallery" style="margin-top:1.4rem">
-      {marcos.map((m) => (
-        <figure class={`frame${m.v ? " v" : ""}`} data-tags={m.tags} tabindex="0">
-          <div class="ph">
-            <span aria-hidden="true" style="font-size:2.4rem;line-height:1">{m.t}</span>
-            <figcaption style="margin-top:.4rem;font-size:.85rem;letter-spacing:.04em">{m.nombre}</figcaption>
-          </div>
-        </figure>
-      ))}
+    <div class="empty">
+      <div class="ico">🖼️</div>
+      <p>La galería está vacía.</p>
     </div>
   </div>
 </section>
-
-<style>
-  /* Overlay del lightbox (scoped a esta vista). El resto de estilos son compartidos. */
-  .galeria-lightbox {
-    position: fixed; inset: 0; z-index: 50;
-    display: grid; place-items: center;
-    background: rgba(6, 5, 3, 0.86);
-    backdrop-filter: blur(2px);
-    padding: 5vh 5vw; cursor: zoom-out;
-  }
-  .galeria-lightbox[hidden] { display: none; }
-  .galeria-lightbox .frame {
-    width: min(70vh, 90vw); max-height: 90vh; cursor: default;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), inset 0 0 0 2px rgba(201, 164, 90, 0.5);
-  }
-  .galeria-lightbox .ph { font-size: 1.4rem; }
-  .galeria-lightbox .ph span { font-size: 5rem !important; }
-</style>
-
-<script>
-  // Scoped a la sección [data-view="galeria"]. Robusto: sale si falta algo.
-  (() => {
-    const view = document.querySelector('.view[data-view="galeria"]');
-    if (!view) return;
-
-    const chips = Array.from(view.querySelectorAll('.chip'));
-    const frames = Array.from(view.querySelectorAll('.frame'));
-    if (!frames.length) return;
-
-    // (1) Filtrado por tag.
-    function aplicarFiltro(key) {
-      frames.forEach((f) => {
-        const tags = (f.getAttribute('data-tags') || '').split(/\s+/);
-        const visible = key === 'todos' || tags.includes(key);
-        f.hidden = !visible;
-      });
-    }
-    chips.forEach((chip) => {
-      chip.addEventListener('click', () => {
-        chips.forEach((c) => c.setAttribute('aria-pressed', 'false'));
-        chip.setAttribute('aria-pressed', 'true');
-        aplicarFiltro(chip.getAttribute('data-filtro') || 'todos');
-      });
-    });
-
-    // (2) Lightbox: overlay creado por JS, reutiliza el .ph del marco pulsado.
-    const overlay = document.createElement('div');
-    overlay.className = 'galeria-lightbox';
-    overlay.hidden = true;
-    overlay.setAttribute('role', 'dialog');
-    overlay.setAttribute('aria-modal', 'true');
-    view.appendChild(overlay);
-
-    function abrir(frame) {
-      const ph = frame.querySelector('.ph');
-      if (!ph) return;
-      overlay.innerHTML = '';
-      const big = document.createElement('figure');
-      big.className = frame.classList.contains('v') ? 'frame v' : 'frame';
-      big.appendChild(ph.cloneNode(true));
-      overlay.appendChild(big);
-      overlay.hidden = false;
-    }
-    function cerrar() {
-      overlay.hidden = true;
-      overlay.innerHTML = '';
-    }
-
-    frames.forEach((frame) => {
-      frame.addEventListener('click', () => abrir(frame));
-      frame.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(frame); }
-      });
-    });
-    overlay.addEventListener('click', cerrar);
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !overlay.hidden) cerrar();
-    });
-  })();
-</script>

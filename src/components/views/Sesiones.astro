@@ -1,65 +1,6 @@
 ---
-/*
-  Vista "Sesiones" — Diario de campaña.
-  Metáfora: cada página del libro es una sesión (título, subtítulo,
-  experiencia general y descripción).
-
-  Clases/variables del sistema compartido (NO reimportar aquí):
-    - src/styles/views.css  -> .view .room .stack .panel .session .num .xp
-                               .comments .comment .muted
-    - src/styles/tokens.css -> --gold, --parchment, etc.
-
-  Cómo editar lo habitual:
-    - Añadir/quitar sesiones: edita el array SESIONES de abajo.
-    - Cambiar comentarios de ejemplo: edita el array COMENTARIOS.
-    - Todo son datos MOCK; sin recursos externos.
-*/
-
-const SESIONES = [
-  {
-    num: 1,
-    titulo: 'Sesión 1 — El juramento de ceniza',
-    desc: 'La compañía se conoce en la posada del Cuervo Pálido y jura perseguir al Heraldo de Ceniza.',
-    xp: 'XP +300',
-  },
-  {
-    num: 2,
-    titulo: 'Sesión 2 — El puente de los ahogados',
-    desc: 'Cruzan el vado maldito de Vhael; un pacto con la ondina les cuesta un recuerdo a cada uno.',
-    xp: 'XP +380',
-  },
-  {
-    num: 3,
-    titulo: 'Sesión 3 — La cripta de sal',
-    desc: 'Descienden a las salinas sepulcrales y despiertan a los centinelas de cristal salino.',
-    xp: 'XP +450',
-  },
-  {
-    num: 4,
-    titulo: 'Sesión 4 — El mercado de nombres',
-    desc: 'En Corte-Bruma regatean secretos con el Gremio de los Sin-Rostro para hallar al traidor.',
-    xp: 'XP +520',
-  },
-  {
-    num: 5,
-    titulo: 'Sesión 5 — Bajo el sol partido',
-    desc: 'Asedio al torreón de Aldebrand; el Heraldo cae, pero su corona escapa hacia el norte.',
-    xp: 'XP +610',
-  },
-];
-
-const COMENTARIOS = [
-  {
-    autor: 'Kaelith (jugadora de Ysolde)',
-    sesion: 'Sobre la Sesión 3',
-    texto: 'La cripta de sal fue puro terror: cada paso crujía y juraría que los centinelas nos miraban antes de despertar. Mi mejor tirada de sigilo… malgastada.',
-  },
-  {
-    autor: 'Dorn (jugador de Bramble)',
-    sesion: 'Sobre la Sesión 5',
-    texto: 'Derribar el torreón valió cada punto de vida. Lástima lo de la corona: ya intuyo que la próxima campaña empieza persiguiéndola.',
-  },
-];
+// Vista Sesiones (diario de campaña). Sin datos de muestra: estado vacío hasta
+// que se registren sesiones reales.
 ---
 
 <section class="view" data-view="sesiones" hidden aria-label="Sesiones">
@@ -67,32 +8,11 @@ const COMENTARIOS = [
     <header class="room-head">
       <p class="room-kicker">Diario de campaña</p>
       <h2 class="room-title">Sesiones</h2>
-      <p class="room-sub">Cada página de este tomo recoge una sesión: lo vivido, la experiencia repartida y las heridas que dejó.</p>
+      <p class="room-sub">Cada sesión, su experiencia y lo que dejó.</p>
     </header>
-
-    <div class="stack">
-      {SESIONES.map((s) => (
-        <div class="panel">
-          <div class="session">
-            <div class="num">{s.num}</div>
-            <div>
-              <strong>{s.titulo}</strong>
-              <p class="muted">{s.desc}</p>
-            </div>
-            <div class="xp">{s.xp}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-
-    <div class="comments">
-      <h3>Comentarios de la sesión</h3>
-      {COMENTARIOS.map((c) => (
-        <div class="comment">
-          <p class="meta"><b>{c.autor}</b> · {c.sesion}</p>
-          <p>{c.texto}</p>
-        </div>
-      ))}
+    <div class="empty">
+      <div class="ico">📓</div>
+      <p>Aún no se ha registrado ninguna sesión.</p>
     </div>
   </div>
 </section>

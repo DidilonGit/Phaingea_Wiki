@@ -1,24 +1,6 @@
 ---
-/*
-  Vista: Notificaciones (registro simplificado de eventos de las campañas)
-  ------------------------------------------------------------------------
-  - Usa el sistema de diseño compartido (views.css + tokens.css), ya
-    importado globalmente. NO reimportar aquí.
-  - Datos MOCK: eventos de ejemplo. Para editar la lista, toca el array
-    `notificaciones` de abajo (cada objeto = un panel).
-  - El botón "Marcar todas como leídas" añade la clase .leida a todos los
-    .notif de ESTA sección (guardas para operar sólo dentro de la vista).
-  - Cómo cambiar el aspecto de una notificación: clases .notif / .dot /
-    .txt / .when / .leida están en src/styles/views.css.
-*/
-const notificaciones = [
-  { msg: 'Nueva sesión programada en <b>La Grieta de Vael</b> para el próximo sábado.', when: 'hace 20 min', leida: false },
-  { msg: 'Se ha repartido experiencia en <b>Los Ecos de Phaingea</b> (+450 XP por cabeza).', when: 'hace 2 h', leida: false },
-  { msg: 'Se han añadido 4 imágenes nuevas a la galería de <b>El Sínodo de Ceniza</b>.', when: 'hace 6 h', leida: false },
-  { msg: 'El personaje <b>Doran el Tuerto</b> ha caído en combate. Descanse en la piedra.', when: 'ayer', leida: true },
-  { msg: 'Nueva entrada en el diario de sesiones de <b>La Grieta de Vael</b> (Sesión 12).', when: 'hace 3 días', leida: true },
-  { msg: 'La campaña <b>Herederos del Alba</b> ha sido marcada como finalizada.', when: 'hace 1 semana', leida: true },
-];
+// Vista Notificaciones (registro). Sin datos de muestra: estado vacío hasta que
+// haya eventos reales.
 ---
 
 <section class="view" data-view="notificaciones" hidden aria-label="Notificaciones">
@@ -26,39 +8,11 @@ const notificaciones = [
     <header class="room-head">
       <p class="room-kicker">Registro</p>
       <h2 class="room-title">Notificaciones</h2>
-      <p class="room-sub">Los registros importantes de tus campañas, reunidos en un solo margen.</p>
+      <p class="room-sub">Los avisos de tus campañas.</p>
     </header>
-
-    <div class="center" style="margin-bottom:1.2rem;">
-      <button class="btn ghost" data-marcar-todas type="button">Marcar todas como leídas</button>
-    </div>
-
-    <div class="stack" data-notif-lista>
-      {notificaciones.map((n) => (
-        <div class="panel">
-          <div class={n.leida ? 'notif leida' : 'notif'}>
-            <span class="dot" aria-hidden="true"></span>
-            <div>
-              <p class="txt" set:html={n.msg}></p>
-              <p class="when">{n.when}</p>
-            </div>
-          </div>
-        </div>
-      ))}
+    <div class="empty">
+      <div class="ico">🔔</div>
+      <p>No tienes notificaciones.</p>
     </div>
   </div>
-
-  <script>
-    // Marca todos los .notif de ESTA sección como leídos (añade .leida).
-    // Guardas: si no existen los nodos, no hace nada (robusto).
-    (function () {
-      const seccion = document.querySelector('.view[data-view="notificaciones"]');
-      if (!seccion) return;
-      const boton = seccion.querySelector('[data-marcar-todas]');
-      if (!boton) return;
-      boton.addEventListener('click', () => {
-        seccion.querySelectorAll('.notif').forEach((n) => n.classList.add('leida'));
-      });
-    })();
-  </script>
 </section>
