@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useStore } from '@nanostores/react';
 import { $user, guardarSesion, cerrarSesion, leerSesion } from '../stores/user.js';
 import { login, registrar } from '../lib/auth.js';
@@ -12,25 +12,72 @@ export default function AuthGate() {
   const [pass, setPass] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const cardRef = useRef(null);
+  const backdropRef = useRef(null);
 
-  // Auto-login desde la sesión guardada.
+  // Auto-login desde la sesión + animación de ENTRADA del overlay.
   useEffect(() => {
     const s = leerSesion();
-    if (s && s.nombre) $user.set(s);
+    if (s && s.nombre) {
+      $user.set(s);
+      return;
+    }
+    backdropRef.current?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, easing: 'ease' });
+    cardRef.current?.animate(
+      [
+        { transform: 'scale(.9) translateY(14px)', opacity: 0 },
+        { transform: 'scale(1) translateY(0)', opacity: 1 },
+      ],
+      { duration: 520, easing: 'cubic-bezier(.2,.7,.3,1)' }
+    );
   }, []);
+
+  // Sacudida cuando el login falla.
+  function animarError() {
+    cardRef.current?.animate(
+      [
+        { transform: 'translateX(0)' },
+        { transform: 'translateX(-10px)' },
+        { transform: 'translateX(9px)' },
+        { transform: 'translateX(-7px)' },
+        { transform: 'translateX(5px)' },
+        { transform: 'translateX(0)' },
+      ],
+      { duration: 420, easing: 'ease-in-out' }
+    );
+  }
+
+  // Salida al entrar bien: el panel se agranda, brilla y se cierra revelando la web.
+  function animarSalida() {
+    const card = cardRef.current;
+    backdropRef.current?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 520, easing: 'ease', fill: 'forwards' });
+    if (!card) return Promise.resolve();
+    const a = card.animate(
+      [
+        { transform: 'scale(1)', opacity: 1, filter: 'brightness(1)' },
+        { transform: 'scale(1.07)', opacity: 1, filter: 'brightness(1.18)', offset: 0.32 },
+        { transform: 'scale(.5) translateY(-24px)', opacity: 0, filter: 'brightness(1.3)', offset: 1 },
+      ],
+      { duration: 560, easing: 'cubic-bezier(.55,.06,.68,.19)', fill: 'forwards' }
+    );
+    return a.finished.catch(() => {});
+  }
 
   async function enviar(e) {
     e.preventDefault();
+    if (busy) return;
     setError('');
     setBusy(true);
     const fn = modo === 'login' ? login : registrar;
     const r = await fn(nombre, pass);
     setBusy(false);
     if (r.ok) {
+      await animarSalida();
       guardarSesion(r.user);
       setPass('');
     } else {
       setError(r.error || 'Algo ha ido mal.');
+      animarError();
     }
   }
 
@@ -60,8 +107,8 @@ export default function AuthGate() {
 
   // --- no logueado: overlay ---
   return (
-    <div style={ov.backdrop} role="dialog" aria-modal="true" aria-label="Acceso a Phaingea">
-      <form style={{ ...ov.card, ...woodBg }} onSubmit={enviar}>
+    <div ref={backdropRef} style={ov.backdrop} role="dialog" aria-modal="true" aria-label="Acceso a Phaingea">
+      <form ref={cardRef} style={{ ...ov.card, ...woodBg }} onSubmit={enviar}>
         <div style={ov.brand}>PHAINGEA</div>
         <p style={ov.kicker}>{modo === 'login' ? 'Entrar en el archivo' : 'Crear una cuenta'}</p>
 
