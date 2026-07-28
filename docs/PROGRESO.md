@@ -4,9 +4,9 @@
 
 ## Estado actual
 
-- **Fase actual:** 0 · Cimientos — **✅ COMPLETADA Y PUBLICADA**. Web en vivo en https://didilongit.github.io/Phaingea_Wiki/ mostrando "Firebase conectado".
-- **Última actualización:** 2026-07-27 — Fase 0 desplegada y verificada en vivo.
-- **Siguiente paso concreto:** arrancar **Fase 1 (login usuario+contraseña + barra con permisos)**. Antes, activar en la consola de Firebase el proveedor **Email/contraseña** y añadir `didilongit.github.io` a dominios autorizados de Auth.
+- **Prototipo general de toda la web ✅** (SPA de una página): navbar de banderines conmuta 9 salas, cada una su componente en `src/components/views/` con contenido MOCK y estética común (`views.css`). Observatorio (globo verde) + Deidades, Regiones, Personajes, Galería (filtros+lightbox), Sesiones, Reglas, Notificaciones, Perfil. Fondo de estrellas girando. Build OK, sin errores de consola.
+- **Última actualización:** 2026-07-27 — prototipo general completo y desplegado.
+- **Siguiente paso concreto:** **Fase 1 (login usuario+contraseña + permisos por rol)** y empezar a sustituir MOCK por datos reales (Realtime Database). Antes: activar en la consola de Firebase el proveedor **Email/contraseña** y añadir `didilongit.github.io` a dominios autorizados de Auth.
 
 ## Bloqueos / esperando de ti
 
@@ -54,6 +54,8 @@
 - **2026-07-27** — **Contributors:** verificado por API que el único contributor es Jowy05 (5 commits); el "claude" del panel web de GitHub es caché visual que se refresca solo (≤24h). Historial git limpio.
 
 - **2026-07-27** — **Home convertida en SPA de una sola página.** El navbar conmuta vistas (`data-view` + script conmutador) sin cambiar de URL: Inicio = observatorio (globo de puntos), resto = placeholders "en construcción". Globo integrado en `index.astro` (generado desde `prototipos/observatorio.html`, quitando dock/ficha/panel de Novalis; globo autocontenido con `puntosFallback`). Globo **verde** (halo/limbo) con puntos blancos. Fondo `StarsCanvas` común. Banderines con estado activo. Eliminada la ruta suelta `observatorio.astro` y `public/observatorio.html`. Ver arquitectura en `CLAUDE.md`.
+
+- **2026-07-27** — **Prototipo general de toda la web.** Sistema de estilos compartido `src/styles/views.css` (salas/cards/comentarios/etc., importado global en RoomLayout). Creadas 8 vistas-componente en `src/components/views/` (Deidades capilla+libro, Regiones cartografía+mapa+pines, Personajes archivador de fichas con estados, Galería con filtros por tag + lightbox, Sesiones diario+XP, Reglas compendio, Notificaciones registro, Perfil diario personal+barra XP), conectadas al conmutador del navbar. Contenido MOCK. Corregidos 2 bugs: comentario de frontmatter cerrado con `-->` en Regiones (→ `*/`), y `querySelector('[data-view=..])` que cazaba el banderín en Galería/Notificaciones (→ `.view[data-view=..]`). Build OK, 9 vistas verificadas, filtro de galería OK, sin errores.
 
 ## Plantilla para próximas entradas del log
 

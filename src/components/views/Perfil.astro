@@ -1,0 +1,103 @@
+---
+/*
+  Vista PERFIL — "Diario personal".
+  Subpáginas conceptuales: personaje de la campaña actual, perfil del jugador, ajustes.
+  Datos MOCK (placeholder). UI en español. Sin recursos externos.
+  Usa el sistema compartido (views.css / tokens.css): .diary, .panel, .char, .avatar, .xpbar, .mono.
+
+  Cómo editar lo habitual:
+  - Jugador / campañas: bloque IZQUIERDA (nombre, inicial del avatar, lista de campañas).
+  - Personaje actual: bloque DERECHA (nombre, raza·clase, ancho de la barra en <i style="width:..">, texto de nivel/XP).
+  - Ajustes: checkboxes al final (puramente visuales).
+*/
+---
+
+<section class="view" data-view="perfil" hidden aria-label="Perfil">
+  <div class="room">
+    <header class="room-head">
+      <p class="room-kicker">Diario personal</p>
+      <h2 class="room-title">Perfil</h2>
+      <p class="room-sub">Tu cuaderno de bitácora: quién eres en la mesa y quién eres en la aventura.</p>
+    </header>
+
+    <!-- Dos columnas: Jugador (izq) y Personaje actual (der) -->
+    <div class="diary">
+      <!-- IZQUIERDA: el jugador -->
+      <div class="panel stack">
+        <div class="perfil-jugador">
+          <div class="char avatar-solo" aria-hidden="true"><span>K</span></div>
+          <div>
+            <p class="mono muted">Jugador</p>
+            <h3 class="perfil-nombre">Kaeld el Cronista</h3>
+          </div>
+        </div>
+        <div>
+          <p class="mono muted">Campañas:</p>
+          <ul class="perfil-lista">
+            <li>Las Cenizas de Phaingea <span class="mono muted">· en curso</span></li>
+            <li>El Concilio de las Mareas <span class="mono muted">· concluida</span></li>
+            <li>Ecos del Velo Menor <span class="mono muted">· pausada</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- DERECHA: el personaje de la campaña actual -->
+      <div class="panel stack">
+        <div>
+          <p class="mono muted">Personaje actual</p>
+          <h3 class="perfil-nombre">Vaelith Sombraluna</h3>
+          <p class="mono muted">Elfa del Ocaso · Hechicera de las Estrellas</p>
+        </div>
+        <div>
+          <div class="xpbar" role="progressbar" aria-label="Experiencia" aria-valuenow="766" aria-valuemin="0" aria-valuemax="1300">
+            <i style="width:59%"></i>
+          </div>
+          <p class="mono" style="margin-top:0.5rem">Nivel 5 · 766 / 1300 XP</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ajustes (puramente visual) -->
+    <div class="panel stack perfil-ajustes">
+      <h3 class="perfil-nombre">Ajustes</h3>
+      <label><input type="checkbox" checked /> Sonidos</label>
+      <label><input type="checkbox" checked /> Recargar al publicar nueva versión</label>
+      <label><input type="checkbox" /> Modo pergamino de alto contraste</label>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Cabecera del jugador: avatar + identidad */
+  .perfil-jugador { display: flex; align-items: center; gap: 1rem; }
+
+  /* Avatar cuadrado con inicial, reusando el look de .char .avatar del sistema */
+  .avatar-solo {
+    width: 72px; height: 72px; flex: none;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--stone), #5c554b);
+    color: var(--paper);
+    font-family: var(--font-title); font-size: 2.2rem;
+    border-radius: 8px;
+  }
+  .avatar-solo > span { line-height: 1; }
+
+  .perfil-nombre {
+    font-family: var(--font-title); color: var(--gold-soft);
+    font-size: 1.3rem; letter-spacing: 0.03em; margin: 0.1rem 0 0;
+  }
+
+  .perfil-lista { list-style: none; margin: 0.4rem 0 0; padding: 0; display: grid; gap: 0.4rem; }
+  .perfil-lista li {
+    font-family: var(--font-body); color: var(--paper);
+    border-left: 2px solid rgba(201, 164, 90, 0.4); padding-left: 0.6rem;
+  }
+
+  /* Ajustes: separación cómoda de las opciones */
+  .perfil-ajustes { margin-top: 1.2rem; }
+  .perfil-ajustes label {
+    display: flex; align-items: center; gap: 0.55rem;
+    font-family: var(--font-body); color: var(--paper); cursor: pointer;
+  }
+  .perfil-ajustes input { accent-color: var(--gold); width: 1rem; height: 1rem; }
+</style>

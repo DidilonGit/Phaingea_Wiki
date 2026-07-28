@@ -1,0 +1,54 @@
+---
+/*
+  Vista "Personajes" — Archivador de fichas de personajes jugadores.
+  ----------------------------------------------------------------------------
+  CÓMO EDITAR LO HABITUAL:
+  - Los datos son MOCK y viven en el array `fichas` de aquí abajo. Añade/quita
+    objetos para cambiar las tarjetas. La inicial del avatar se saca sola de
+    `nombre` (primera letra), no hace falta tocarla.
+  - Estados válidos: 'activo' | 'fallecido' | 'delegado'. El valor se usa tal
+    cual como clase del badge (.badge.activo / .fallecido / .delegado) y para
+    la etiqueta visible (capitalizada).
+  - TODO el estilo viene del sistema compartido (views.css + tokens.css), ya
+    importados globalmente. NO reimportar aquí ni usar recursos externos.
+  - Esta sección arranca oculta (`hidden`); el conmutador del SPA la muestra
+    según el `data-view="personajes"`.
+*/
+
+// Fichas MOCK. 6 personajes variados, 3 estados repartidos (2 de cada uno).
+const fichas = [
+  { nombre: 'Aldric Vhalor',   raza: 'Humano',    edad: 34, sexo: 'M', estado: 'activo',    jugador: 'Marta' },
+  { nombre: 'Sylwen Aeloria',  raza: 'Elfa',      edad: 214, sexo: 'F', estado: 'delegado',  jugador: 'Iker' },
+  { nombre: 'Borin Piedrahonda', raza: 'Enano',   edad: 128, sexo: 'M', estado: 'activo',    jugador: 'Nuria' },
+  { nombre: 'Kazrek Solígneo',  raza: 'Dracónido', edad: 47, sexo: 'M', estado: 'fallecido',  jugador: 'David' },
+  { nombre: 'Nyx Vermell',      raza: 'Tiefling',  edad: 29, sexo: 'F', estado: 'delegado',  jugador: 'Clara' },
+  { nombre: 'Pippa Tejoverde',  raza: 'Mediana',   edad: 41, sexo: 'F', estado: 'fallecido',  jugador: 'Óscar' },
+];
+
+// Capitaliza el estado para la etiqueta visible del badge.
+const rotulo = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+---
+
+<section class="view" data-view="personajes" hidden aria-label="Personajes">
+  <div class="room">
+    <header class="room-head">
+      <p class="room-kicker">Archivador</p>
+      <h2 class="room-title">Personajes</h2>
+      <p class="room-sub">Fichas de los héroes que cruzaron Phaingea: los que aún respiran, los caídos y los legados a otras manos.</p>
+    </header>
+
+    <div class="grid">
+      {fichas.map((p) => (
+        <article class="char">
+          <div class="avatar" aria-hidden="true">{p.nombre.charAt(0)}</div>
+          <div class="body">
+            <div class="name">{p.nombre}</div>
+            <div class="sub mono">{p.raza} · {p.edad} años · {p.sexo}</div>
+            <span class={`badge ${p.estado}`}>{rotulo(p.estado)}</span>
+            <p class="mono" style="font-size:0.72rem;color:#6a5f4c;margin-top:0.55rem;">Jugador: {p.jugador}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

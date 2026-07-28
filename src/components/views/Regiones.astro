@@ -1,0 +1,133 @@
+---
+/*
+  Vista "Regiones" (Sala de cartografía) — sala del SPA de Phaingea.
+  Concepto: sala de cartografía. Categoría tipo PDF, heredada de "Base de
+  Phaingea". Se accede a las entradas desde el mapamundi.
+
+  Sistema de diseño compartido: usa clases de src/styles/views.css y variables
+  de src/styles/tokens.css (importados globalmente; NO reimportar aquí).
+
+  Cómo editar lo habitual:
+  - Mover/añadir pines del mapa -> lista .mapa .pin + reglas .pin-N del <style>
+    scoped (top/left en % dentro del .mapa, que es position:relative).
+  - Añadir/editar regiones -> duplicar una tarjeta .panel dentro del .grid.
+  - Añadir/editar comentarios -> duplicar un .comment dentro de .comments.
+  - Datos MOCK inventados; los pines son decorativos (prototipo sin backend).
+*/
+---
+
+<section class="view" data-view="regiones" hidden aria-label="Regiones">
+  <div class="room">
+    <header class="room-head">
+      <p class="room-kicker">Sala de cartografía</p>
+      <h2 class="room-title">Regiones</h2>
+      <p class="room-sub">El mapamundi de Phaingea, desplegado sobre la mesa de cartografía. Sigue los pines para adentrarte en cada tierra.</p>
+    </header>
+
+    <!-- Mapamundi: panel con pines de región (decorativos en el prototipo) -->
+    <div class="panel mapa" aria-label="Mapamundi de Phaingea">
+      <span class="pin pin-1" role="button" tabindex="0" aria-label="Ir a Valdeluna"><b></b><em>Valdeluna</em></span>
+      <span class="pin pin-2" role="button" tabindex="0" aria-label="Ir a Marisombra"><b></b><em>Marisombra</em></span>
+      <span class="pin pin-3" role="button" tabindex="0" aria-label="Ir a Cumbres de Karrëth"><b></b><em>Cumbres de Karrëth</em></span>
+      <span class="pin pin-4" role="button" tabindex="0" aria-label="Ir a Yermo de Ashkar"><b></b><em>Yermo de Ashkar</em></span>
+      <span class="mapa-nota mono">Pergamino cartográfico &middot; heredado de «Base de Phaingea»</span>
+    </div>
+
+    <!-- Regiones registradas -->
+    <div class="grid" style="margin-top:1.4rem;">
+      <article class="panel">
+        <h3 class="reg-nom">Valdeluna</h3>
+        <p class="reg-desc">Valles de plata bajo una luna que nunca se pone del todo. Sus aldeas druídicas custodian los círculos de piedra más antiguos del continente.</p>
+      </article>
+      <article class="panel">
+        <h3 class="reg-nom">Marisombra</h3>
+        <p class="reg-desc">Archipiélago de brumas y faros apagados. Los marinos juran que las corrientes cambian según los humores de algo que duerme en el abismo.</p>
+      </article>
+      <article class="panel">
+        <h3 class="reg-nom">Cumbres de Karrëth</h3>
+        <p class="reg-desc">Fortalezas talladas en la roca helada, hogar de los clanes forjadores. El viento arrastra ecos de martillos que nadie ha visto golpear.</p>
+      </article>
+      <article class="panel">
+        <h3 class="reg-nom">Yermo de Ashkar</h3>
+        <p class="reg-desc">Desierto de cristal negro donde ardió una guerra olvidada. Bajo la arena aún laten reliquias que enloquecen a quien las desentierra.</p>
+      </article>
+      <article class="panel">
+        <h3 class="reg-nom">Bosque de Eldoria</h3>
+        <p class="reg-desc">Fronda perpetua donde los árboles recuerdan nombres. Las sendas se reordenan de noche y solo los pactados con la espesura hallan la salida.</p>
+      </article>
+      <article class="panel">
+        <h3 class="reg-nom">Ciudadela de Solmyr</h3>
+        <p class="reg-desc">Capital dorada y burocrática, cruce de todas las rutas. Sus gremios registran cada trato en tomos que jamás salen de la Gran Biblioteca.</p>
+      </article>
+    </div>
+
+    <!-- Comentarios GENERALES de la sala -->
+    <div class="comments">
+      <h3>Comentarios</h3>
+
+      <div class="comment">
+        <p class="meta"><b>Ithriel Vaelmar (Jugador: Aldo) — 08 Neblina, 342</b></p>
+        <p>El pin de Marisombra está mal colocado: el archipiélago cae mucho más al sur según los mapas que copiamos en el faro. ¿Lo corregimos?</p>
+        <div class="react"><span>🗺️ 4</span><span>👀 2</span></div>
+      </div>
+
+      <div class="comment">
+        <p class="meta"><b>Draven Corvo Negro (Jugador: Carlos) — 21 Escarcha, 342</b></p>
+        <p>Añadí una nota sobre el Yermo de Ashkar: lo que encontramos bajo la arena coincide demasiado con las ruinas de Kaeldrath. Cuidado ahí.</p>
+        <div class="react"><span>🔥 3</span><span>📜 1</span></div>
+      </div>
+
+      <form class="comment-form" onsubmit="return false;">
+        <input type="text" placeholder="Deja tu comentario sobre el mapa…" aria-label="Escribir comentario" />
+        <button class="btn" type="submit">Comentar</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* --- Mapamundi: el .panel actúa de lienzo relativo para los pines --- */
+  .mapa {
+    position: relative;
+    min-height: 340px;
+    overflow: hidden;
+    /* Pergamino oscurecido con degradado tipo mapa antiguo */
+    background:
+      radial-gradient(120% 90% at 50% 30%, rgba(201, 164, 90, 0.14), transparent 60%),
+      linear-gradient(160deg, rgba(74, 51, 32, 0.75), rgba(26, 18, 11, 0.92));
+  }
+  .mapa-nota {
+    position: absolute; right: 0.9rem; bottom: 0.7rem;
+    font-size: 0.66rem; color: var(--stone); letter-spacing: 0.08em;
+  }
+
+  /* --- Pines de región (decorativos): punto dorado + etiqueta --- */
+  .pin {
+    position: absolute; display: flex; align-items: center; gap: 0.4rem;
+    transform: translate(-50%, -50%); cursor: pointer;
+    transition: filter 0.15s var(--ease), transform 0.15s var(--ease);
+  }
+  .pin b {
+    width: 12px; height: 12px; border-radius: 50%; flex: none;
+    background: radial-gradient(circle at 35% 30%, #f4dfa6, var(--gold));
+    box-shadow: 0 0 0 3px rgba(201, 164, 90, 0.22), 0 2px 6px rgba(0, 0, 0, 0.55);
+  }
+  .pin em {
+    font-family: var(--font-title); font-style: normal; font-size: 0.82rem;
+    color: var(--paper); white-space: nowrap; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+  .pin:hover { filter: brightness(1.12); transform: translate(-50%, -50%) scale(1.06); }
+
+  /* Posiciones (en % dentro del .mapa; ajústalas a ojo para recolocar) */
+  .pin-1 { top: 28%; left: 22%; }
+  .pin-2 { top: 68%; left: 40%; }
+  .pin-3 { top: 34%; left: 66%; }
+  .pin-4 { top: 74%; left: 78%; }
+
+  /* --- Tarjetas de región --- */
+  .reg-nom {
+    font-family: var(--font-title); color: var(--gold-soft);
+    letter-spacing: 0.04em; margin: 0 0 0.4rem; font-size: 1.15rem;
+  }
+  .reg-desc { color: var(--paper); font-family: var(--font-body); line-height: 1.5; font-size: 0.9rem; }
+</style>

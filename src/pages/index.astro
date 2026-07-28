@@ -3,6 +3,14 @@
 // Inicio = observatorio (globo de puntos, portado del prototipo). Resto = placeholders.
 import RoomLayout from '../layouts/RoomLayout.astro';
 import StarsCanvas from '../components/StarsCanvas.jsx';
+import Deidades from '../components/views/Deidades.astro';
+import Regiones from '../components/views/Regiones.astro';
+import Personajes from '../components/views/Personajes.astro';
+import Galeria from '../components/views/Galeria.astro';
+import Sesiones from '../components/views/Sesiones.astro';
+import Reglas from '../components/views/Reglas.astro';
+import Notificaciones from '../components/views/Notificaciones.astro';
+import Perfil from '../components/views/Perfil.astro';
 ---
 
 <RoomLayout title="Phaingea">
@@ -33,14 +41,14 @@ import StarsCanvas from '../components/StarsCanvas.jsx';
     </div>
   </section>
 
-  <section class="view" data-view="deidades" hidden><div class="wip">Deidades<span>· en construcción</span></div></section>
-  <section class="view" data-view="regiones" hidden><div class="wip">Regiones<span>· en construcción</span></div></section>
-  <section class="view" data-view="personajes" hidden><div class="wip">Personajes<span>· en construcción</span></div></section>
-  <section class="view" data-view="galeria" hidden><div class="wip">Galería<span>· en construcción</span></div></section>
-  <section class="view" data-view="sesiones" hidden><div class="wip">Sesiones<span>· en construcción</span></div></section>
-  <section class="view" data-view="reglas" hidden><div class="wip">Reglas<span>· en construcción</span></div></section>
-  <section class="view" data-view="notificaciones" hidden><div class="wip">Notificaciones<span>· en construcción</span></div></section>
-  <section class="view" data-view="perfil" hidden><div class="wip">Perfil<span>· en construcción</span></div></section>
+  <Deidades />
+  <Regiones />
+  <Personajes />
+  <Galeria />
+  <Sesiones />
+  <Reglas />
+  <Notificaciones />
+  <Perfil />
 
   <nav id="listaRM" aria-label="Lugares señalados" hidden><h2>Lugares señalados</h2><ul id="listaRMul"></ul></nav>
 </RoomLayout>

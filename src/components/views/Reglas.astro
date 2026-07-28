@@ -1,0 +1,106 @@
+---
+/**
+ * Vista "Reglas" del SPA de Phaingea.
+ * =====================================================================
+ * Sala del compendio: el reglamento de la mesa (Pathfinder 1e + reglas
+ * de la casa). Estética de archivo medieval como el resto de vistas.
+ *
+ * Usa el sistema de diseño compartido (views.css + tokens.css), YA
+ * importados globalmente: NO reimportar aquí. Clases empleadas:
+ *   .view/.room/.room-head  -> contenedor de sala estándar
+ *   .atril + .book(.book-leather-black) -> el tomo del reglamento
+ *   .stack + .panel         -> las secciones de reglas
+ *
+ * CÓMO EDITAR LO HABITUAL:
+ *   - Cambiar las secciones de reglas: edita el array `SECCIONES` de abajo
+ *     (cada entrada = un .panel con su <h3> y su <p>).
+ *   - Cambiar el tomo: edita `.book-title` / `.book-sub` en el markup.
+ *   - Datos MOCK plausibles; nada de recursos externos.
+ * =====================================================================
+ */
+
+// Secciones del reglamento. Añadir/editar aquí = añadir/editar un panel.
+const SECCIONES = [
+  {
+    titulo: 'Creación de personaje',
+    texto:
+      'Nivel 1 con 20 puntos de compra. Se permiten las razas del Manual ' +
+      'Básico y las nativas de Phaingea acordadas con el máster. Cada personaje ' +
+      'trae una vinculación con el mundo (un juramento, una deuda o un secreto) ' +
+      'que sirve de gancho para las tramas.',
+  },
+  {
+    titulo: 'Experiencia y niveles',
+    texto:
+      'Se usa progresión por hitos: se sube de nivel al cerrar arcos de la ' +
+      'historia, no por contar la experiencia moneda a moneda. El máster anuncia ' +
+      'la subida al final de la sesión y el nivel máximo de la campaña es 15.',
+  },
+  {
+    titulo: 'Combate y muerte',
+    texto:
+      'Iniciativa estándar de Pathfinder 1e. A 0 puntos de golpe caes ' +
+      'inconsciente; mueres al llegar a menos tu Constitución. La estabilización ' +
+      'permite tiradas de la muerte, y un aliado adyacente puede gastar una acción ' +
+      'para asistir. La resurrección existe, pero siempre deja una cicatriz.',
+  },
+  {
+    titulo: 'Convivencia en mesa',
+    texto:
+      'Respeto ante todo: se avisa con antelación si no se puede asistir y se ' +
+      'usan velos y líneas rojas para los temas delicados. Las discusiones de ' +
+      'reglas se resuelven rápido en el momento y, si hace falta, se revisan con ' +
+      'calma entre sesiones. En la mesa se juega en equipo.',
+  },
+];
+---
+
+<section class="view" data-view="reglas" hidden aria-label="Reglas">
+  <div class="room">
+    <header class="room-head">
+      <p class="room-kicker">Compendio</p>
+      <h2 class="room-title">Reglas</h2>
+      <p class="room-sub">El reglamento de la mesa, con sus mañas y costumbres</p>
+    </header>
+
+    <!-- Tomo del reglamento sobre el atril -->
+    <div class="atril">
+      <article class="book book-leather-black" aria-label="Tomo del reglamento">
+        <span class="book-title">Reglas de Phaingea</span>
+        <span class="book-sub">Pathfinder 1e · reglas de la casa</span>
+      </article>
+    </div>
+
+    <!-- Secciones de reglas -->
+    <div class="stack reglas-secciones">
+      {SECCIONES.map((s) => (
+        <section class="panel">
+          <h3 class="regla-titulo">{s.titulo}</h3>
+          <p class="regla-texto">{s.texto}</p>
+        </section>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Estilos scoped mínimos: el grueso viene de views.css/tokens.css.
+     Solo afinamos la tipografía de las secciones para el tono "reglamento". */
+  .reglas-secciones {
+    max-width: 720px;
+    margin: 2rem auto 0;
+  }
+  .regla-titulo {
+    font-family: var(--font-title);
+    color: var(--gold-soft);
+    letter-spacing: 0.04em;
+    margin: 0 0 0.4rem;
+    font-size: 1.2rem;
+  }
+  .regla-texto {
+    font-family: var(--font-body);
+    color: var(--paper);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>
