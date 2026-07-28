@@ -71,17 +71,6 @@ export default function AuthGate() {
     e.preventDefault();
     if (busy) return;
     setError('');
-
-    // Modo demo (?demo=1): salta la comprobación y reproduce la animación de éxito.
-    // Solo para previsualizar la animación; el login normal no se ve afectado.
-    if (typeof location !== 'undefined' && new URLSearchParams(location.search).has('demo')) {
-      setBusy(true);
-      await animarSalida();
-      guardarSesion({ nombre: (nombre || 'Invitado').trim(), rol: 'jugador' });
-      setBusy(false);
-      return;
-    }
-
     setBusy(true);
     const fn = modo === 'login' ? login : registrar;
     const r = await fn(nombre, pass);
