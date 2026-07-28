@@ -60,13 +60,28 @@ export default function AuthGate() {
       ],
       { duration: 560, easing: 'cubic-bezier(.55,.06,.68,.19)', fill: 'forwards' }
     );
-    return a.finished.catch(() => {});
+    // Timeout de seguridad: garantiza que la promesa resuelve aunque finished no lo haga.
+    return Promise.race([
+      a.finished.catch(() => {}),
+      new Promise((res) => setTimeout(res, 650)),
+    ]);
   }
 
   async function enviar(e) {
     e.preventDefault();
     if (busy) return;
     setError('');
+
+    // Modo demo (?demo=1): salta la comprobación y reproduce la animación de éxito.
+    // Solo para previsualizar la animación; el login normal no se ve afectado.
+    if (typeof location !== 'undefined' && new URLSearchParams(location.search).has('demo')) {
+      setBusy(true);
+      await animarSalida();
+      guardarSesion({ nombre: (nombre || 'Invitado').trim(), rol: 'jugador' });
+      setBusy(false);
+      return;
+    }
+
     setBusy(true);
     const fn = modo === 'login' ? login : registrar;
     const r = await fn(nombre, pass);
