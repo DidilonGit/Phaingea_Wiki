@@ -97,6 +97,6 @@ nuevo `src/lib/permisos.js` · `src/components/TopBar.astro`
 
 ## Criterios de hecho
 
-- [ ] Con jugador sin acceso a una campaña privada, esa campaña no aparece y sus categorías quedan bloqueadas.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Con jugador sin acceso a una campaña privada, esa campaña no aparece y sus categorías quedan bloqueadas.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

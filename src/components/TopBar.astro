@@ -267,6 +267,14 @@ const bookmarks = [
   /* (el banderín de Moderación arranca oculto vía style inline; lo muestra el
      script de gating solo para máster/owner/admin) */
 
+  /* Sin acceso a la categoría: apagado, grisáceo y no interactuable (guía §3) */
+  .bm.bloqueado {
+    filter: grayscale(1) brightness(0.55);
+    opacity: 0.55;
+    pointer-events: none;
+    cursor: default;
+  }
+
   /* banderín gateado sin permiso: oculto (guía §3/§25: Moderación solo se
      muestra a máster/owner) */
   /* categoría activa: muestra el nombre y marca el rollo en dorado */
@@ -283,27 +291,58 @@ const bookmarks = [
 </style>
 
 <script is:inline>
-  // Gating del banderín de Moderación: visible solo para máster/owner/admin.
-  // Lee la sesión de localStorage y reacciona al evento 'phaingea:user' que
-  // emite el store de usuario (src/stores/user.js) al iniciar/cerrar sesión.
+  // Permisos en la barra (guía §3, §21):
+  //  · Moderación: visible solo para máster/owner/admin.
+  //  · Categorías sin acceso (campaña privada en la que no participas):
+  //    banderín apagado y no interactuable.
+  // Escucha 'phaingea:user' (stores/user.js) y 'phaingea:campana'
+  // (stores/campaign.js) para recalcular en vivo.
   (function () {
-    function rolActual() {
-      try {
-        var s = JSON.parse(localStorage.getItem('phaingea_session') || 'null');
-        return s && s.rol ? s.rol : null;
-      } catch (e) {
-        return null;
-      }
+    var usuario = null;
+    var campana = null;
+
+    try {
+      usuario = JSON.parse(localStorage.getItem('phaingea_session') || 'null');
+    } catch (e) {}
+
+    function esOwner(u) { return !!u && (u.rol === 'owner' || u.rol === 'admin'); }
+    function esMaster(u, c) {
+      return esOwner(u) || (!!u && !!c && !!(c.masters || {})[u.nombre]);
     }
-    function aplicar(rol) {
-      var permitido = rol === 'master' || rol === 'owner' || rol === 'admin';
-      document.querySelectorAll('.bm[data-gated="mod"]').forEach(function (b) {
-        b.style.display = permitido ? '' : 'none';
+    function participa(u, c) {
+      return esMaster(u, c) || (!!u && !!c && !!(c.jugadores || {})[u.nombre]);
+    }
+    function puedeVerCampana(u, c) {
+      if (!c) return true; // aún cargando
+      if (esOwner(u)) return true;
+      if (c.estado === 'privada') return participa(u, c);
+      return true;
+    }
+
+    function aplicar() {
+      var verMod = esMaster(usuario, campana);
+      var verCampana = puedeVerCampana(usuario, campana);
+      document.querySelectorAll('.bm[data-view]').forEach(function (b) {
+        var esMod = b.getAttribute('data-gated') === 'mod';
+        if (esMod) {
+          b.style.display = verMod ? '' : 'none';
+          b.classList.remove('bloqueado');
+          return;
+        }
+        // El Observatorio siempre accesible (es el selector de campañas).
+        var siempre = b.getAttribute('data-view') === 'inicio';
+        b.classList.toggle('bloqueado', !siempre && !verCampana);
       });
     }
-    aplicar(rolActual());
+
+    aplicar();
     window.addEventListener('phaingea:user', function (e) {
-      aplicar(e.detail && e.detail.rol ? e.detail.rol : null);
+      usuario = e.detail || null;
+      aplicar();
+    });
+    window.addEventListener('phaingea:campana', function (e) {
+      campana = e.detail || null;
+      aplicar();
     });
   })();
 </script>
