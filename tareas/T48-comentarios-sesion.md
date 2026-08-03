@@ -37,6 +37,6 @@ Máster y owner podrán moderarlo.
 
 ## Criterios de hecho
 
-- [ ] Un jugador no puede crear dos comentarios en la misma sesión, sí editar el suyo.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Un jugador no puede crear dos comentarios en la misma sesión, sí editar el suyo.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

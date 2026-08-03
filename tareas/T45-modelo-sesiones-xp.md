@@ -59,6 +59,6 @@ nuevo `src/lib/db/sesiones.js` · `src/lib/db/personajes.js` (xpTotal) · `datab
 
 ## Criterios de hecho
 
-- [ ] Editar el XP de una sesión cambia el nivel calculado del personaje afectado.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Editar el XP de una sesión cambia el nivel calculado del personaje afectado.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

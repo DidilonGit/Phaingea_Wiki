@@ -71,6 +71,6 @@ No habrá un segundo listado duplicado debajo del libro.
 
 ## Criterios de hecho
 
-- [ ] Índice → sesión → volver funciona con ≥6 sesiones seed.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Índice → sesión → volver funciona con ≥6 sesiones seed.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

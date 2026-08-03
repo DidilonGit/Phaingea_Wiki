@@ -49,6 +49,6 @@ Su índice funcionará de forma similar al de Sesiones y permitirá abrir cualqu
 
 ## Criterios de hecho
 
-- [ ] En Base se ven Eventos sin rastro de XP; en campañas normales, Sesiones normal.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] En Base se ven Eventos sin rastro de XP; en campañas normales, Sesiones normal.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

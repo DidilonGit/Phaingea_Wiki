@@ -58,7 +58,7 @@ Al cambiar la experiencia de una sesión:
 
 ## Criterios de hecho
 
-- [ ] Crear una sesión desde la web actualiza el libro y los niveles.
-- [ ] Jugador no puede.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Crear una sesión desde la web actualiza el libro y los niveles.
+- [x] Jugador no puede.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

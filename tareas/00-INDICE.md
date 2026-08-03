@@ -55,11 +55,11 @@
 | [T42](T42-vista-ampliada-galeria.md) | Vista ampliada de imagen | 4 | T40 | ⬜ |
 | [T43](T43-subida-imagenes.md) | Subida de imágenes con aprobación y límite de pendientes | 4 | T12, T39, T40 | ⬜ |
 | [T44](T44-moderacion-galeria.md) | Moderación de la Galería | 4 | T16, T43 | ⬜ |
-| [T45](T45-modelo-sesiones-xp.md) | Modelo de sesiones + recálculo de XP | 4 | T15, T32 | ⬜ |
-| [T46](T46-libro-sesiones.md) | Libro de sesiones con índice interno | 4 | T09, T45 | ⬜ |
-| [T47](T47-crear-editar-sesion.md) | Crear y editar sesiones (máster) | 4 | T16, T45, T46 | ⬜ |
-| [T48](T48-comentarios-sesion.md) | Comentarios de sesión (uno por jugador) | 4 | T13, T46 | ⬜ |
-| [T49](T49-eventos-base.md) | Eventos (Sesiones en Base de Phaingea) | 4 | T46 | ⬜ |
+| [T45](T45-modelo-sesiones-xp.md) | Modelo de sesiones + recálculo de XP | 4 | T15, T32 | ✅ |
+| [T46](T46-libro-sesiones.md) | Libro de sesiones con índice interno | 4 | T09, T45 | ✅ |
+| [T47](T47-crear-editar-sesion.md) | Crear y editar sesiones (máster) | 4 | T16, T45, T46 | ✅ |
+| [T48](T48-comentarios-sesion.md) | Comentarios de sesión (uno por jugador) | 4 | T13, T46 | ✅ |
+| [T49](T49-eventos-base.md) | Eventos (Sesiones en Base de Phaingea) | 4 | T46 | ✅ |
 | [T50](T50-taller-escena-libro.md) | Taller: escena y libro de reglas | 4 | T01, T09, T10, T11 | ✅ |
 | [T51](T51-panel-tips.md) | Panel de tips del Taller | 4 | T16, T50 | ⬜ |
 | [T52](T52-mascota-taller.md) | Mascota del Taller | 4 | T51 | ⬜ |
