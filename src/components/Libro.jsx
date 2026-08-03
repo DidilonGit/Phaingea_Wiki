@@ -1,4 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+
+// Extrae el texto plano de un nodo React (para el buscador, T10).
+function extraerTexto(nodo) {
+  if (nodo == null || typeof nodo === 'boolean') return '';
+  if (typeof nodo === 'string' || typeof nodo === 'number') return String(nodo);
+  if (Array.isArray(nodo)) return nodo.map(extraerTexto).join(' ');
+  if (nodo.props && nodo.props.children != null) return extraerTexto(nodo.props.children);
+  return '';
+}
 
 // ============================================================================
 // LIBRO — componente compartido de libros (guía §27).
@@ -33,10 +42,29 @@ export default function Libro({
   const [vista, setVista] = useState('portada');
   const [girando, setGirando] = useState(null); // 'adelante' | 'atras' | null
   const [irA, setIrA] = useState('');
+  const [busqueda, setBusqueda] = useState('');
   const contRef = useRef(null);
 
   const total = paginas.length;
   const tituloDe = (i) => titulosPaginas[i] || `Página ${i + 1}`;
+
+  // --- Buscador (T10): índice de texto plano por página, calculado una vez ---
+  const textos = useMemo(() => paginas.map((p) => extraerTexto(p).toLowerCase()), [paginas]);
+  const resultados = useMemo(() => {
+    const q = busqueda.trim().toLowerCase();
+    if (q.length < 2) return null;
+    const res = [];
+    textos.forEach((t, i) => {
+      const pos = t.indexOf(q);
+      if (pos === -1) return;
+      const ini = Math.max(0, pos - 30);
+      res.push({
+        pagina: i,
+        contexto: (ini > 0 ? '…' : '') + t.slice(ini, pos + q.length + 30) + '…',
+      });
+    });
+    return res;
+  }, [busqueda, textos]);
 
   // Navegar con animación de giro: se marca la dirección, a mitad de la
   // animación se cambia el contenido y se completa el giro.
@@ -142,6 +170,31 @@ export default function Libro({
           />
         </form>
         <button className="ctrl" onClick={siguiente} disabled={(vista === total - 1 && total > 0) || !!girando} aria-label="Página siguiente">›</button>
+        <div className="buscador">
+          <input
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            placeholder="🔎 buscar en el libro…"
+            aria-label="Buscar en el libro"
+          />
+          {resultados && (
+            <div className="buscador-resultados" role="listbox" aria-label="Resultados de búsqueda">
+              {resultados.length === 0 && <p className="sin-resultados mono">Sin resultados</p>}
+              {resultados.map((r) => (
+                <button
+                  key={r.pagina}
+                  onClick={() => {
+                    navegar(r.pagina, typeof vista === 'number' && r.pagina < vista ? 'atras' : 'adelante');
+                    setBusqueda('');
+                  }}
+                >
+                  <span className="mono br-pag">{tituloDe(r.pagina)} · pág. {r.pagina + 1}</span>
+                  <span className="br-ctx">{r.contexto}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <style>{css}</style>
@@ -227,4 +280,25 @@ const css = `
   border: 1px solid rgba(201,164,90,.4); background: rgba(0,0,0,.3); color: var(--paper);
   font-size: .75rem;
 }
+.buscador { position: relative; }
+.buscador input {
+  width: 170px; padding: .4rem .7rem; border-radius: 999px;
+  border: 1px solid rgba(201,164,90,.4); background: rgba(0,0,0,.3); color: var(--paper);
+  font-size: .78rem; font-family: var(--font-body);
+}
+.buscador-resultados {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 40;
+  width: min(320px, 80vw); max-height: 260px; overflow-y: auto;
+  background: linear-gradient(180deg, #2a1e13, #1a120b);
+  border: 1px solid rgba(201,164,90,.45); border-radius: 10px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.6); padding: .35rem;
+}
+.buscador-resultados button {
+  display: grid; gap: .15rem; width: 100%; text-align: left; cursor: pointer;
+  background: none; border: 0; padding: .45rem .5rem; border-radius: 6px;
+}
+.buscador-resultados button:hover { background: rgba(201,164,90,.12); }
+.br-pag { color: var(--gold); font-size: .62rem; letter-spacing: .06em; }
+.br-ctx { color: var(--parchment); font-size: .78rem; font-family: var(--font-body); }
+.sin-resultados { color: var(--stone); font-size: .7rem; text-align: center; margin: .4rem 0; }
 `;

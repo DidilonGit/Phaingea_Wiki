@@ -39,6 +39,6 @@ La animación nunca debe obligar al usuario a pasar decenas de páginas manualme
 
 ## Criterios de hecho
 
-- [ ] Buscar una palabra presente en varias páginas lista todas y navega bien.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Buscar una palabra presente en varias páginas lista todas y navega bien.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
