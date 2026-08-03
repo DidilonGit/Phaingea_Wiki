@@ -60,8 +60,8 @@ Cuando alguien no tenga acceso a una categoría, su banderín podrá mostrarse a
 
 ## Criterios de hecho
 
-- [ ] El navbar muestra: Observatorio, Capilla, Cartografía, Podios, Galería, Sesiones, Taller, Sala de Pociones, Buzón (en este orden).
-- [ ] No existe banderín de Perfil.
-- [ ] Todas las salas conmutan bien y ninguna muestra su nombre como título grande dentro.
-- [ ] Build OK y verificado en navegador.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] El navbar muestra: Observatorio, Capilla, Cartografía, Podios, Galería, Sesiones, Taller, Sala de Pociones, Buzón (en este orden).
+- [x] No existe banderín de Perfil.
+- [x] Todas las salas conmutan bien y ninguna muestra su nombre como título grande dentro.
+- [x] Build OK y verificado en navegador.
+- [x] Commit como Jowy05 + push (deploy verde).

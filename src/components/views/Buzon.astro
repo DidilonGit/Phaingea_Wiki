@@ -1,18 +1,17 @@
 ---
-// Vista Notificaciones (registro). Estructura con contenido PLACEHOLDER (WIP):
-// lista de avisos + "marcar todas como leídas", hasta conectar eventos reales.
-// Se mantiene la variedad leída/no leída (estructural).
+// Vista Buzón (notificaciones por campaña). Estructura con contenido
+// PLACEHOLDER (WIP): lista de avisos + "marcar todas como leídas" (la escena de
+// cartas/sobre real llega en T56-T58). Se mantiene la variedad leída/no leída.
+// Sin título de sala: el banderín activo ya indica dónde estás (guía §3).
 const notificaciones = [
   { leida: false }, { leida: false }, { leida: false },
   { leida: true }, { leida: true }, { leida: true },
 ];
 ---
 
-<section class="view" data-view="notificaciones" hidden aria-label="Notificaciones">
+<section class="view" data-view="buzon" hidden aria-label="Buzón">
   <div class="room">
     <header class="room-head">
-      <p class="room-kicker">Registro</p>
-      <h2 class="room-title">Notificaciones</h2>
       <p class="room-sub">Los registros importantes de tus campañas, reunidos en un solo margen.</p>
     </header>
 
@@ -37,7 +36,7 @@ const notificaciones = [
 
   <script>
     (function () {
-      const seccion = document.querySelector('.view[data-view="notificaciones"]');
+      const seccion = document.querySelector('.view[data-view="buzon"]');
       if (!seccion) return;
       const boton = seccion.querySelector('[data-marcar-todas]');
       if (!boton) return;

@@ -1,8 +1,9 @@
 ---
-// Vista Personajes (archivador). Estructura de fichas con contenido PLACEHOLDER
-// (WIP) hasta conectar los personajes reales por campaña.
-// Se mantiene lo estructural (estados: activo/fallecido/delegado); los datos
-// inventados van como "WIP".
+// Vista Podios (personajes de la campaña). Estructura de fichas con contenido
+// PLACEHOLDER (WIP) hasta conectar los personajes reales por campaña (la escena
+// de podio real llega en T33). Se mantiene lo estructural (estados:
+// activo/fallecido/delegado); los datos inventados van como "WIP".
+// Sin título de sala: el banderín activo ya indica dónde estás (guía §3).
 const fichas = [
   { estado: 'activo' },
   { estado: 'delegado' },
@@ -14,11 +15,9 @@ const fichas = [
 const rotulo = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 ---
 
-<section class="view" data-view="personajes" hidden aria-label="Personajes">
+<section class="view" data-view="podios" hidden aria-label="Podios">
   <div class="room">
     <header class="room-head">
-      <p class="room-kicker">Archivador</p>
-      <h2 class="room-title">Personajes</h2>
       <p class="room-sub">Fichas de los héroes de cada campaña.</p>
     </header>
 
