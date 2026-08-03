@@ -75,6 +75,6 @@ Cerrar la carta pulsando fuera no la archiva.
 
 ## Criterios de hecho
 
-- [ ] Flujo leer/cerrar/archivar exacto a la guía; el contador baja solo al archivar.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Flujo leer/cerrar/archivar exacto a la guía; el contador baja solo al archivar.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

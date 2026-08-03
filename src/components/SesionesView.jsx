@@ -18,6 +18,7 @@ import Libro from './Libro.jsx';
 import Modal, { useDobleConfirmacion } from './Modal.jsx';
 import Comentarios from './Comentarios.jsx';
 import BotonMod from './BotonMod.jsx';
+import { notificar, participantesDe, registrar } from '../lib/db/notificaciones.js';
 
 // ============================================================================
 // SESIONES (guía §14) — y EVENTOS en Base de Phaingea (§15).
@@ -160,6 +161,8 @@ export default function SesionesView() {
         <EditorEntrada
           esBase={esBase}
           campanaId={campana.id}
+          campana={campana}
+          autor={user?.nombre || ''}
           personajes={ordenAlfabetico(personajes)}
           editor={editor}
           onCerrar={() => setEditor(null)}
@@ -183,7 +186,7 @@ function BorrarEntrada({ campanaId, id, alBorrar }) {
   );
 }
 
-function EditorEntrada({ esBase, campanaId, personajes, editor, onCerrar }) {
+function EditorEntrada({ esBase, campanaId, campana, autor, personajes, editor, onCerrar }) {
   const [d, setD] = useState(editor.datos);
   const [error, setError] = useState('');
   const campo = (k) => ({ value: d[k] ?? '', onChange: (e) => setD({ ...d, [k]: e.target.value }) });
@@ -192,8 +195,15 @@ function EditorEntrada({ esBase, campanaId, personajes, editor, onCerrar }) {
     e.preventDefault();
     try {
       if (esBase) {
-        if (editor.modo === 'nueva') await crearEvento(campanaId, d);
-        else await actualizarEvento(campanaId, editor.id, d);
+        if (editor.modo === 'nueva') {
+          await crearEvento(campanaId, d);
+          // Aviso y registro de la acción (guía §18.7, §26)
+          await notificar(campanaId, participantesDe(campana), {
+            asunto: 'Evento publicado', tipo: 'evento',
+            contenido: `Se ha publicado el evento «${d.titulo}».`,
+          });
+          await registrar(campanaId, { tipo: 'evento_publicado', actor: autor, resumen: d.titulo });
+        } else await actualizarEvento(campanaId, editor.id, d);
       } else {
         const datos = {
           ...d,
@@ -205,8 +215,21 @@ function EditorEntrada({ esBase, campanaId, personajes, editor, onCerrar }) {
               .filter(([, v]) => v !== 0)
           ),
         };
-        if (editor.modo === 'nueva') await crearSesion(campanaId, datos);
-        else await actualizarSesion(campanaId, editor.id, datos);
+        if (editor.modo === 'nueva') {
+          await crearSesion(campanaId, datos);
+          await notificar(campanaId, participantesDe(campana), {
+            asunto: 'Sesión publicada', tipo: 'sesion',
+            contenido: `Se han publicado las notas de «${datos.titulo}» con ${datos.xpGeneral} de experiencia general.`,
+          });
+          await registrar(campanaId, { tipo: 'sesion_creada', actor: autor, resumen: datos.titulo });
+        } else {
+          await actualizarSesion(campanaId, editor.id, datos);
+          await notificar(campanaId, participantesDe(campana), {
+            asunto: 'Experiencia actualizada', tipo: 'xp',
+            contenido: `Ha cambiado la experiencia de «${datos.titulo}». Tu nivel puede haberse actualizado.`,
+          });
+          await registrar(campanaId, { tipo: 'xp_repartida', actor: autor, resumen: datos.titulo });
+        }
       }
       onCerrar();
     } catch (err) {

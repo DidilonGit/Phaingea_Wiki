@@ -1,48 +1,19 @@
 ---
-// Vista Buzón (notificaciones por campaña). Estructura con contenido
-// PLACEHOLDER (WIP): lista de avisos + "marcar todas como leídas" (la escena de
-// cartas/sobre real llega en T56-T58). Se mantiene la variedad leída/no leída.
-// Sin título de sala: el banderín activo ya indica dónde estás (guía §3).
-const notificaciones = [
-  { leida: false }, { leida: false }, { leida: false },
-  { leida: true }, { leida: true }, { leida: true },
-];
+// Vista BUZÓN (guía §18): rincón de correspondencia con el sobre de cartas
+// pendientes, la carta ampliada y el álbum de archivadas. Toda la lógica vive
+// en la isla BuzonView. Sin título de sala (guía §3).
+//
+// CÓMO EDITAR:
+//  · Datos -> /notificaciones/{campanaId}/{usuario} (src/lib/db/notificaciones.js).
+//  · Quién genera avisos -> llamadas a notificar() desde sesiones y galería.
+import BuzonView from '../BuzonView.jsx';
 ---
 
 <section class="view" data-view="buzon" hidden aria-label="Buzón">
   <div class="room">
     <header class="room-head">
-      <p class="room-sub">Los registros importantes de tus campañas, reunidos en un solo margen.</p>
+      <p class="room-sub">Las cartas de tus campañas, esperando junto al fuego.</p>
     </header>
-
-    <div class="center" style="margin-bottom:1.2rem;">
-      <button class="btn ghost" data-marcar-todas type="button">Marcar todas como leídas</button>
-    </div>
-
-    <div class="stack" data-notif-lista>
-      {notificaciones.map((n) => (
-        <div class="panel">
-          <div class={n.leida ? 'notif leida' : 'notif'}>
-            <span class="dot" aria-hidden="true"></span>
-            <div>
-              <p class="txt">WIP</p>
-              <p class="when">WIP</p>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
+    <BuzonView client:load />
   </div>
-
-  <script>
-    (function () {
-      const seccion = document.querySelector('.view[data-view="buzon"]');
-      if (!seccion) return;
-      const boton = seccion.querySelector('[data-marcar-todas]');
-      if (!boton) return;
-      boton.addEventListener('click', () => {
-        seccion.querySelectorAll('.notif').forEach((n) => n.classList.add('leida'));
-      });
-    })();
-  </script>
 </section>

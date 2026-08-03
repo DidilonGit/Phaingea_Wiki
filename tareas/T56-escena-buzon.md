@@ -54,6 +54,6 @@ Al hacer hover sobre una carta, esta sobresale del abanico.
 
 ## Criterios de hecho
 
-- [ ] Con pendientes reales, el abanico se forma con animación.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Con pendientes reales, el abanico se forma con animación.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

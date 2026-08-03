@@ -49,6 +49,6 @@ nuevo `src/lib/db/notificaciones.js` · enganches en `sesiones.js`/`galeria.js`/
 
 ## Criterios de hecho
 
-- [ ] Crear una sesión genera cartas a los jugadores de la campaña.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Crear una sesión genera cartas a los jugadores de la campaña.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

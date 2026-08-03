@@ -65,11 +65,11 @@
 | [T52](T52-mascota-taller.md) | Mascota del Taller | 4 | T51 | ⬜ |
 | [T53](T53-animacion-verter-pocion.md) | Animación de verter poción en el caldero | 4 | — | ✅ |
 | [T54](T54-estructura-botellas.md) | Estructura de botellas y huecos reservados | 4 | T53 | ✅ |
-| [T55](T55-modelo-notificaciones.md) | Modelo de notificaciones + helper notificar() | 4 | T07 | ⬜ |
-| [T56](T56-escena-buzon.md) | Escena del Buzón (sobre y abanico de cartas) | 4 | T55 | ⬜ |
-| [T57](T57-carta-y-archivar.md) | Carta: lectura y archivado | 4 | T56 | ⬜ |
-| [T58](T58-album-cartas.md) | Álbum de cartas archivadas | 4 | T57 | ⬜ |
-| [T59](T59-icono-sobre-topbar.md) | Icono de sobre con contador junto al perfil | 4 | T55 | ⬜ |
+| [T55](T55-modelo-notificaciones.md) | Modelo de notificaciones + helper notificar() | 4 | T07 | ✅ |
+| [T56](T56-escena-buzon.md) | Escena del Buzón (sobre y abanico de cartas) | 4 | T55 | ✅ |
+| [T57](T57-carta-y-archivar.md) | Carta: lectura y archivado | 4 | T56 | ✅ |
+| [T58](T58-album-cartas.md) | Álbum de cartas archivadas | 4 | T57 | ✅ |
+| [T59](T59-icono-sobre-topbar.md) | Icono de sobre con contador junto al perfil | 4 | T55 | ✅ |
 | [T60](T60-panel-moderacion.md) | Panel de Moderación completo | 4 | T08, T17 | ⬜ |
 | [T61](T61-solicitudes-y-registros.md) | Solicitudes pendientes + registros importantes | 4 | T55, T60 | ⬜ |
 | [T62](T62-herencia-contenido.md) | Herencia de contenido (Capilla y Cartografía) | 4 | T06, T23, T27 | ⬜ |

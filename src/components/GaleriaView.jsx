@@ -20,6 +20,7 @@ import {
   MAX_TAGS_NUEVOS,
   TAGS_SUGERIDOS,
 } from '../lib/db/galeria.js';
+import { notificar, registrar } from '../lib/db/notificaciones.js';
 
 // ============================================================================
 // GALERÍA (guía §13) — museo de imágenes.
@@ -174,8 +175,18 @@ export default function GaleriaView() {
                 <div className="mod-imagen">
                   {ampliada.estado === 'pendiente' && (
                     <>
-                      <button className="btn" onClick={() => { aprobarImagen(campana.id, ampliada.id); setAmpliada(null); }}>Aprobar</button>
-                      <button className="btn ghost" onClick={() => { denegarImagen(campana.id, ampliada.id); setAmpliada(null); }}>Denegar</button>
+                      <button className="btn" onClick={async () => {
+                        await aprobarImagen(campana.id, ampliada.id);
+                        await notificar(campana.id, [ampliada.autor], { asunto: 'Imagen aprobada', tipo: 'galeria', contenido: `Tu imagen «${ampliada.titulo}» ya está en la galería.` });
+                        await registrar(campana.id, { tipo: 'imagen_aprobada', actor: user?.nombre, resumen: ampliada.titulo });
+                        setAmpliada(null);
+                      }}>Aprobar</button>
+                      <button className="btn ghost" onClick={async () => {
+                        await denegarImagen(campana.id, ampliada.id);
+                        await notificar(campana.id, [ampliada.autor], { asunto: 'Imagen denegada', tipo: 'galeria', contenido: `Tu propuesta «${ampliada.titulo}» no se ha publicado.` });
+                        await registrar(campana.id, { tipo: 'imagen_denegada', actor: user?.nombre, resumen: ampliada.titulo });
+                        setAmpliada(null);
+                      }}>Denegar</button>
                     </>
                   )}
                   <BorrarImagen campanaId={campana.id} id={ampliada.id} alBorrar={() => setAmpliada(null)} />
@@ -192,6 +203,7 @@ export default function GaleriaView() {
           user={user}
           tagsExistentes={tags}
           aprobadaDirecta={esGestor}
+          campana={campana}
           onCerrar={() => setSubiendo(false)}
         />
       )}
@@ -213,7 +225,7 @@ function BorrarImagen({ campanaId, id, alBorrar }) {
   );
 }
 
-function SubirImagen({ campanaId, user, tagsExistentes, aprobadaDirecta, onCerrar }) {
+function SubirImagen({ campanaId, user, tagsExistentes, aprobadaDirecta, campana, onCerrar }) {
   const [titulo, setTitulo] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [seleccion, setSeleccion] = useState([]);
@@ -266,6 +278,14 @@ function SubirImagen({ campanaId, user, tagsExistentes, aprobadaDirecta, onCerra
         ratio: previa?.ratio,
         aprobadaDirecta,
       });
+      if (!aprobadaDirecta) {
+        // Avisar a quienes pueden aprobarla (guía §13.7)
+        const aprobadores = Object.keys(campana?.masters || {});
+        await notificar(campanaId, aprobadores, {
+          asunto: 'Solicitud pendiente', tipo: 'galeria',
+          contenido: `${user.nombre} ha propuesto la imagen «${titulo}» para la galería.`,
+        });
+      }
       onCerrar();
     } catch (err) {
       setError(err.message);

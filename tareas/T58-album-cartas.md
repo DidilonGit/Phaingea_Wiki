@@ -36,6 +36,6 @@ El álbum:
 
 ## Criterios de hecho
 
-- [ ] Las archivadas se consultan desde el álbum.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Las archivadas se consultan desde el álbum.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

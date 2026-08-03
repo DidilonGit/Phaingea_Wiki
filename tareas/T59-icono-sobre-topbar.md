@@ -42,6 +42,6 @@ Al pulsarlo:
 
 ## Criterios de hecho
 
-- [ ] Contador reactivo en tiempo real; clic abre el Buzón desplegado.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Contador reactivo en tiempo real; clic abre el Buzón desplegado.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
