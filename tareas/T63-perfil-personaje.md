@@ -62,7 +62,7 @@ Máster y owner podrán seguir viendo su información completa.
 
 ## Criterios de hecho
 
-- [ ] Guardar se refleja en Podios al instante.
-- [ ] Con otra cuenta, el personaje oculto sale enmascarado.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Guardar se refleja en Podios al instante.
+- [x] Con otra cuenta, el personaje oculto sale enmascarado.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

@@ -42,6 +42,6 @@ La imagen de perfil general será una inicial sobre un fondo de color escogido p
 
 ## Criterios de hecho
 
-- [ ] El color elegido persiste y se ve en topbar y comentarios.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] El color elegido persiste y se ve en topbar y comentarios.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

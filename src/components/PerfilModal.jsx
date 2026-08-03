@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { $user } from '../stores/user.js';
 import { leerPrefs, guardarPrefs, aplicarPrefs } from '../lib/prefs.js';
+import PerfilPersonaje from './PerfilPersonaje.jsx';
+import PerfilJugador from './PerfilJugador.jsx';
 
 // Ventana de Perfil (guía §19.1-19.2): se abre desde el avatar de la esquina
 // superior derecha. Casi a pantalla completa con marco de madera; la sala
@@ -96,29 +98,9 @@ export default function PerfilModal({ abierto, onCerrar }) {
 
           {/* contenido */}
           <div style={st.contenido}>
-            {tab === 'personaje' && (
-              <div className="empty" style={{ minHeight: '40vh' }}>
-                <div className="ico">❔</div>
-                <p className="muted">No tienes ningún personaje en esta campaña todavía.</p>
-              </div>
-            )}
+            {tab === 'personaje' && <PerfilPersonaje />}
 
-            {tab === 'jugador' && (
-              <div className="stack" style={{ maxWidth: '480px', margin: '0 auto' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <div style={st.avatarGrande} aria-hidden="true">{inicial}</div>
-                  <div>
-                    <p className="mono muted" style={{ margin: 0 }}>Jugador</p>
-                    <h3 style={st.nombre}>{user.nombre}</h3>
-                    <span style={st.rol}>{user.rol}</span>
-                  </div>
-                </div>
-                <div>
-                  <p className="mono muted">Campañas</p>
-                  <p className="muted">No participas en ninguna campaña todavía.</p>
-                </div>
-              </div>
-            )}
+            {tab === 'jugador' && <PerfilJugador />}
 
             {tab === 'ajustes' && (
               <div className="stack" style={{ maxWidth: '480px', margin: '0 auto' }}>

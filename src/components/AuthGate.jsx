@@ -115,8 +115,8 @@ export default function AuthGate() {
             title="Abrir perfil"
             aria-label="Abrir perfil"
           >
-            <span style={chip.avatar}>{inicial}</span>
-            <span style={chip.name}>{user.nombre}</span>
+            <span style={{ ...chip.avatar, ...(user.colorAvatar ? { background: user.colorAvatar } : {}) }}>{inicial}</span>
+            <span style={chip.name}>{user.nombreVisible || user.nombre}</span>
           </button>
           <button style={chip.salir} onClick={cerrarSesion} title="Cerrar sesión">
             Salir
