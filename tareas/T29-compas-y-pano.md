@@ -52,7 +52,7 @@ El borrado debe ser controlable por el usuario, no una eliminación automática 
 
 ## Criterios de hecho
 
-- [ ] Dibujar círculo y trazo, borrar parte con el paño, limpiar todo.
-- [ ] Los dibujos siguen alineados al hacer pan/zoom.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Dibujar círculo y trazo, borrar parte con el paño, limpiar todo.
+- [x] Los dibujos siguen alineados al hacer pan/zoom.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

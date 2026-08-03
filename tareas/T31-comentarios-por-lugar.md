@@ -29,6 +29,6 @@ Cambiar de mapa o lugar cambia también el hilo de comentarios.
 
 ## Criterios de hecho
 
-- [ ] Dos lugares tienen hilos separados.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Dos lugares tienen hilos separados.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

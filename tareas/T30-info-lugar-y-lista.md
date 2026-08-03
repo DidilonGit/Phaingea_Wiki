@@ -53,6 +53,6 @@ Seleccionar un elemento abrirá su información o su mapa.
 
 ## Criterios de hecho
 
-- [ ] Desplegable y lista funcionan y cambian con el lugar activo.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Desplegable y lista funcionan y cambian con el lugar activo.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

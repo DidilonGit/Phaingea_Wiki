@@ -37,6 +37,6 @@ Al seleccionarla:
 
 ## Criterios de hecho
 
-- [ ] Efecto lupa fluido y sin artefactos; entrar/salir del modo es obvio.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Efecto lupa fluido y sin artefactos; entrar/salir del modo es obvio.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

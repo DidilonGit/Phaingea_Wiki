@@ -70,6 +70,6 @@ nuevo `src/lib/db/lugares.js` · `database.rules.json`
 
 ## Criterios de hecho
 
-- [ ] Árbol de 3 lugares de prueba legible con helpers.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Árbol de 3 lugares de prueba legible con helpers.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

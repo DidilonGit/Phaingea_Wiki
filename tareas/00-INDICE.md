@@ -36,12 +36,12 @@
 | [T23](T23-libro-deidades.md) | Libro de deidades sobre el atril | 4 | T09, T10, T11, T22 | ⬜ |
 | [T24](T24-comentarios-capilla.md) | Comentarios generales de la Capilla | 4 | T13, T14, T22 | ✅ |
 | [T25](T25-escena-cartografia.md) | Escena de Cartografía (marco y ganchos) | 4 | T01 | ✅ |
-| [T26](T26-modelo-lugares.md) | Modelo de lugares en RTDB (jerarquía) | 4 | T07 | ⬜ |
-| [T27](T27-visor-de-mapa.md) | Visor de mapa (pan, zoom, pines, entrar a lugares) | 4 | T25, T26 | ⬜ |
-| [T28](T28-herramienta-lupa.md) | Herramienta Lupa | 4 | T27 | ⬜ |
-| [T29](T29-compas-y-pano.md) | Herramientas Compás (dibujo) y Paño (borrado) | 4 | T27 | ⬜ |
-| [T30](T30-info-lugar-y-lista.md) | Información del lugar + lista de lugares | 4 | T27 | ⬜ |
-| [T31](T31-comentarios-por-lugar.md) | Comentarios por lugar | 4 | T13, T27 | ⬜ |
+| [T26](T26-modelo-lugares.md) | Modelo de lugares en RTDB (jerarquía) | 4 | T07 | ✅ |
+| [T27](T27-visor-de-mapa.md) | Visor de mapa (pan, zoom, pines, entrar a lugares) | 4 | T25, T26 | ✅ |
+| [T28](T28-herramienta-lupa.md) | Herramienta Lupa | 4 | T27 | ✅ |
+| [T29](T29-compas-y-pano.md) | Herramientas Compás (dibujo) y Paño (borrado) | 4 | T27 | ✅ |
+| [T30](T30-info-lugar-y-lista.md) | Información del lugar + lista de lugares | 4 | T27 | ✅ |
+| [T31](T31-comentarios-por-lugar.md) | Comentarios por lugar | 4 | T13, T27 | ✅ |
 | [T32](T32-modelo-personajes.md) | Modelo de personajes en RTDB | 4 | T07, T15 | ⬜ |
 | [T33](T33-escena-podios.md) | Escena de Podios (podio, info, navegación circular) | 4 | T32 | ⬜ |
 | [T34](T34-filtros-y-grupos-podios.md) | Filtros por estado y grupos en Podios | 4 | T33 | ⬜ |

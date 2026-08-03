@@ -69,6 +69,6 @@ nueva isla `src/components/MapaViewer.jsx` en Cartografia
 
 ## Criterios de hecho
 
-- [ ] Navegar mapamundi → región → volver funciona con zoom/pan fluidos.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Navegar mapamundi → región → volver funciona con zoom/pan fluidos.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
