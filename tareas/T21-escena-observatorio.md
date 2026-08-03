@@ -39,7 +39,7 @@ Debe ser una escena limpia, amplia y algo solemne. No debe sentirse como una hab
 
 ## Criterios de hecho
 
-- [ ] La escena transmite la abertura del observatorio; el globo y el dial se ven limpios.
-- [ ] Sin caída de FPS apreciable.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] La escena transmite la abertura del observatorio; el globo y el dial se ven limpios.
+- [x] Sin caída de FPS apreciable.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

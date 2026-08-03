@@ -467,7 +467,36 @@ noscript p{
 /* --- integración SPA + observatorio --- */
 .view{ position: relative; z-index: 1; }
 .view[hidden]{ display: none !important; }
-.obs{ min-height: calc(100vh - var(--topbar-h) - 3rem); display: grid; place-items: center; align-content: center; padding: 1.5rem; }
+.obs{ min-height: calc(100vh - var(--topbar-h)); display: grid; place-items: center; align-content: start; padding: 1.5rem 1.5rem 3rem; }
+
+/* ---------- ESCENA DEL OBSERVATORIO (T21, guía §8.1) ----------
+   Sensación de mirar el techo abierto de un observatorio enorme: vigas
+   metálicas estáticas en los bordes y cristales curvos que dan profundidad.
+   Todo decorativo y sin animación (barato de pintar).                      */
+.obs::before, .obs::after {
+  content: ''; position: fixed; pointer-events: none; z-index: 0;
+}
+/* Cúpula: cristales curvos + oscurecimiento hacia los bordes */
+.obs::before {
+  inset: var(--topbar-h) 0 0 0;
+  background:
+    radial-gradient(120% 85% at 50% 118%, rgba(150,190,235,.07), transparent 60%),
+    radial-gradient(90% 60% at 50% -18%, rgba(180,205,240,.06), transparent 62%),
+    radial-gradient(140% 100% at 50% 50%, transparent 55%, rgba(4,5,9,.55) 100%);
+}
+/* Vigas metálicas: dos arcos laterales y los montantes verticales */
+.obs::after {
+  inset: var(--topbar-h) 0 0 0;
+  background:
+    /* montantes verticales */
+    linear-gradient(90deg, rgba(150,160,175,.22) 0 2px, transparent 2px) 8vw 0/100% 100% no-repeat,
+    linear-gradient(90deg, rgba(150,160,175,.22) 0 2px, transparent 2px) 92vw 0/100% 100% no-repeat,
+    /* traviesas horizontales */
+    linear-gradient(180deg, transparent 0 14%, rgba(150,160,175,.13) 14% calc(14% + 2px), transparent calc(14% + 2px)),
+    linear-gradient(180deg, transparent 0 62%, rgba(150,160,175,.10) 62% calc(62% + 2px), transparent calc(62% + 2px));
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 40%, transparent 34%, #000 68%);
+  mask-image: radial-gradient(120% 90% at 50% 40%, transparent 34%, #000 68%);
+}
 .halo{ background: radial-gradient(circle, rgba(159,232,112,.16) 34%, rgba(159,232,112,.05) 50%, transparent 64%) !important; }
 .wip{
   min-height: calc(100vh - var(--topbar-h) - 3rem);

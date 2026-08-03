@@ -30,7 +30,7 @@
 | [T18](T18-dial-3d-campanas.md) | Dial 3D de campañas en el Observatorio | 3 | T07 | ✅ |
 | [T19](T19-nota-de-campana.md) | Nota de campaña bajo el planeta + logo en topbar | 3 | T07 | ✅ |
 | [T20](T20-pines-regiones-planeta.md) | Pines de regiones sobre el planeta | 3 | T18 | ⬜ |
-| [T21](T21-escena-observatorio.md) | Escena del Observatorio (vigas y cristales) | 3 | — | ⬜ |
+| [T21](T21-escena-observatorio.md) | Escena del Observatorio (vigas y cristales) | 3 | — | ✅ |
 | — | **FASE 4 · Salas completas** | | | |
 | [T22](T22-escena-capilla.md) | Escena de la Capilla | 4 | T01 | ⬜ |
 | [T23](T23-libro-deidades.md) | Libro de deidades sobre el atril | 4 | T09, T10, T11, T22 | ⬜ |
