@@ -35,6 +35,6 @@ La sala debe sentirse ordenada, práctica y propia de una cartoteca o sala de ma
 
 ## Criterios de hecho
 
-- [ ] Composición lista con hueco central para el visor (T27).
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Composición lista con hueco central para el visor (T27).
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
