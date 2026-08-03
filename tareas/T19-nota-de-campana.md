@@ -44,6 +44,6 @@ isla `src/components/NotaCampana.jsx` · `src/pages/index.astro` · `src/compone
 
 ## Criterios de hecho
 
-- [ ] Cambiar de campaña en el dial cambia título/colores/logo/descripción.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Cambiar de campaña en el dial cambia título/colores/logo/descripción.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
