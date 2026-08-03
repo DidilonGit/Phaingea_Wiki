@@ -59,7 +59,7 @@ El jugador podrá consultar desde la propia Galería cuáles de sus imágenes si
 
 ## Criterios de hecho
 
-- [ ] Los límites (título, ≥1 tag, ≤3 tags nuevos, ≤5 pendientes) se aplican.
-- [ ] La pendiente no aparece en la exposición pública.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Los límites (título, ≥1 tag, ≤3 tags nuevos, ≤5 pendientes) se aplican.
+- [x] La pendiente no aparece en la exposición pública.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

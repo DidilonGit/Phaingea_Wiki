@@ -51,6 +51,6 @@ Ejemplos de tags:
 
 ## Criterios de hecho
 
-- [ ] Dos tags activos → solo imágenes con ambos.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Dos tags activos → solo imágenes con ambos.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

@@ -38,6 +38,6 @@ El título será visible tanto en la vista normal como en la ampliada.
 
 ## Criterios de hecho
 
-- [ ] Todo lo listado visible en la ampliación.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Todo lo listado visible en la ampliación.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

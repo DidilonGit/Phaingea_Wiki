@@ -61,6 +61,6 @@ nuevo `src/lib/db/galeria.js` · `database.rules.json`
 
 ## Criterios de hecho
 
-- [ ] Subir una imagen de prueba vía helper y leerla; tags registrados.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Subir una imagen de prueba vía helper y leerla; tags registrados.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

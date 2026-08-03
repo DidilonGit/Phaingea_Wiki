@@ -52,7 +52,7 @@ La paginación se aplicará sobre los resultados del filtro actual.
 
 ## Criterios de hecho
 
-- [ ] Con >16 imágenes aprobadas hay varias páginas circulares.
-- [ ] Marcos y espaciado de exposición.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Con >16 imágenes aprobadas hay varias páginas circulares.
+- [x] Marcos y espaciado de exposición.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

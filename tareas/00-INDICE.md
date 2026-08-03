@@ -49,12 +49,12 @@
 | [T36](T36-diario-personaje.md) | Diario del personaje (markdown → libro de 8 páginas) | 4 | T09, T15, T33 | ✅ |
 | [T37](T37-comentarios-personaje.md) | Comentarios de personaje | 4 | T14, T33 | ✅ |
 | [T38](T38-leyendas.md) | Leyendas (Podios en Base de Phaingea) | 4 | T34 | ✅ |
-| [T39](T39-modelo-galeria.md) | Modelo de imágenes de Galería + almacenamiento | 4 | T07 | ⬜ |
-| [T40](T40-composicion-museo.md) | Composición de museo + paginación circular | 4 | T39 | ⬜ |
-| [T41](T41-filtros-tags-and.md) | Filtros por tags (multi-selección AND) | 4 | T40 | ⬜ |
-| [T42](T42-vista-ampliada-galeria.md) | Vista ampliada de imagen | 4 | T40 | ⬜ |
-| [T43](T43-subida-imagenes.md) | Subida de imágenes con aprobación y límite de pendientes | 4 | T12, T39, T40 | ⬜ |
-| [T44](T44-moderacion-galeria.md) | Moderación de la Galería | 4 | T16, T43 | ⬜ |
+| [T39](T39-modelo-galeria.md) | Modelo de imágenes de Galería + almacenamiento | 4 | T07 | ✅ |
+| [T40](T40-composicion-museo.md) | Composición de museo + paginación circular | 4 | T39 | ✅ |
+| [T41](T41-filtros-tags-and.md) | Filtros por tags (multi-selección AND) | 4 | T40 | ✅ |
+| [T42](T42-vista-ampliada-galeria.md) | Vista ampliada de imagen | 4 | T40 | ✅ |
+| [T43](T43-subida-imagenes.md) | Subida de imágenes con aprobación y límite de pendientes | 4 | T12, T39, T40 | ✅ |
+| [T44](T44-moderacion-galeria.md) | Moderación de la Galería | 4 | T16, T43 | ✅ |
 | [T45](T45-modelo-sesiones-xp.md) | Modelo de sesiones + recálculo de XP | 4 | T15, T32 | ✅ |
 | [T46](T46-libro-sesiones.md) | Libro de sesiones con índice interno | 4 | T09, T45 | ✅ |
 | [T47](T47-crear-editar-sesion.md) | Crear y editar sesiones (máster) | 4 | T16, T45, T46 | ✅ |

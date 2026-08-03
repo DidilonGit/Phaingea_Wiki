@@ -43,7 +43,7 @@ Cuando un jugador envíe una propuesta, las personas capaces de aprobarla recibi
 
 ## Criterios de hecho
 
-- [ ] Aprobar hace pública la imagen al instante (tiempo real).
-- [ ] Jugador no ve el panel.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Aprobar hace pública la imagen al instante (tiempo real).
+- [x] Jugador no ve el panel.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
