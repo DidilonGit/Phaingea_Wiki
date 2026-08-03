@@ -44,7 +44,20 @@ const bookmarks = [
 ---
 
 <header class="topbar" style={`--wood: url("${woodUrl}")`}>
-  <div class="brand">PHAINGEA</div>
+  <div class="marca">
+    <span class="brand">PHAINGEA</span>
+    <!-- Logo de la campaña activa (guía §8.5). Placeholder de Base de Phaingea
+         hasta que exista el store de campañas: T07 conecta el store y T19 pinta
+         el logo real. Para actualizarlo: escribir en #logoCampana (img o
+         inicial) y el title/aria-label con el nombre de la campaña. -->
+    <span
+      id="logoCampana"
+      class="logo-campana"
+      title="Base de Phaingea"
+      aria-label="Campaña activa: Base de Phaingea"
+      data-campana="base-phaingea"
+    >B</span>
+  </div>
   <nav class="bookmarks" aria-label="Categorías">
     {
       bookmarks.map((b) => (
@@ -91,13 +104,47 @@ const bookmarks = [
     border-bottom: 2px solid #1c120a;
     box-shadow: var(--shadow-soft);
   }
+  /* marca = PHAINGEA + logo de la campaña activa (guía §8.5) */
+  .marca {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    align-self: center;
+    flex: none;
+  }
   .brand {
     font-family: var(--font-title);
     font-weight: 700;
     letter-spacing: 0.25em;
     color: var(--gold);
     text-shadow: 0 1px 2px #000;
-    align-self: center;
+    white-space: nowrap;
+  }
+  /* Placeholder de planeta: círculo con brillo y aro dorado. Cuando T19 ponga
+     una imagen dentro, esta la recorta en círculo. */
+  .logo-campana {
+    width: 28px;
+    height: 28px;
+    flex: none;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    color: var(--paper);
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.35), transparent 45%),
+      linear-gradient(140deg, #5b6a8a, #2b3350 70%);
+    box-shadow:
+      0 0 0 1.5px rgba(201, 164, 90, 0.75),
+      0 2px 6px rgba(0, 0, 0, 0.55);
+  }
+  .logo-campana :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .bookmarks {
     display: flex;

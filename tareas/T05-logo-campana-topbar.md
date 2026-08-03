@@ -42,6 +42,6 @@ El logo de la campaña también aparecerá en la barra superior, junto al texto 
 
 ## Criterios de hecho
 
-- [ ] Logo placeholder visible junto a PHAINGEA sin romper el layout con 10 banderines.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Logo placeholder visible junto a PHAINGEA sin romper el layout con 10 banderines.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

@@ -11,7 +11,7 @@
 | [T02](T02-banderin-moderacion.md) | Banderín y sala Moderación (solo máster/owner) | 0 | T01 | ✅ |
 | [T03](T03-perfil-desde-avatar.md) | Perfil como ventana desde el avatar (fuera del navbar) | 0 | T01 | ✅ |
 | [T04](T04-estrellas-colores-y-alineacion.md) | Estrellas con colores + contenido alineado arriba | 0 | — | ✅ |
-| [T05](T05-logo-campana-topbar.md) | Hueco del logo de campaña en la topbar | 0 | T01 | ⬜ |
+| [T05](T05-logo-campana-topbar.md) | Hueco del logo de campaña en la topbar | 0 | T01 | ✅ |
 | — | **FASE 1 · Datos base (campañas)** | | | |
 | [T06](T06-modelo-campanas.md) | Modelo /campanas en RTDB + seed Base de Phaingea + reglas | 1 | — | ⬜ |
 | [T07](T07-store-campana-activa.md) | Store de campaña activa + rol por campaña | 1 | T06 | ⬜ |
