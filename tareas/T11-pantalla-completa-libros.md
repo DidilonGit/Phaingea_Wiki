@@ -41,7 +41,7 @@ Se vuelve al tamaño normal pulsando la X o haciendo clic fuera del libro.
 
 ## Criterios de hecho
 
-- [ ] Comportamiento idéntico al fragmento de la guía.
-- [ ] Funciona en el demo de T09.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Comportamiento idéntico al fragmento de la guía.
+- [x] Funciona en el demo de T09.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

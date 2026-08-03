@@ -43,7 +43,16 @@ export default function Libro({
   const [girando, setGirando] = useState(null); // 'adelante' | 'atras' | null
   const [irA, setIrA] = useState('');
   const [busqueda, setBusqueda] = useState('');
+  const [fs, setFs] = useState(false); // pantalla completa (T11, guía §9.3)
   const contRef = useRef(null);
+
+  // Esc cierra la pantalla completa.
+  useEffect(() => {
+    if (!fs) return;
+    const onEsc = (e) => e.key === 'Escape' && setFs(false);
+    window.addEventListener('keydown', onEsc);
+    return () => window.removeEventListener('keydown', onEsc);
+  }, [fs]);
 
   const total = paginas.length;
   const tituloDe = (i) => titulosPaginas[i] || `Página ${i + 1}`;
@@ -113,7 +122,17 @@ export default function Libro({
   }
 
   return (
-    <div className="libro-wrap" ref={contRef}>
+    <div className={`libro-wrap ${fs ? 'fs' : ''}`} ref={contRef}>
+      {/* fondo oscurecido y borroso de la pantalla completa (clic fuera cierra) */}
+      {fs && <div className="fs-fondo" onClick={() => setFs(false)} aria-hidden="true" />}
+
+      {/* icono de ampliar, FUERA del libro (guía §9.3) */}
+      {!fs && (
+        <button className="btn-ampliar" onClick={() => setFs(true)} aria-label="Pantalla completa">
+          ⛶<span className="tip-ampliar">Pantalla completa</span>
+        </button>
+      )}
+
       <div className={`libro cubierta-${cubierta} ${girando ? 'girando-' + girando : ''} ${vista === 'portada' ? 'cerrado' : 'abierto'}`}>
         {/* esquinas decorativas de la cubierta (guía §27.2) */}
         <span className="esquina a" aria-hidden="true" />
@@ -196,6 +215,11 @@ export default function Libro({
           )}
         </div>
       </div>
+
+      {/* X de cierre: fuera del libro, esquina inferior derecha del conjunto */}
+      {fs && (
+        <button className="fs-cerrar" onClick={() => setFs(false)} aria-label="Salir de pantalla completa">✕</button>
+      )}
 
       <style>{css}</style>
     </div>
@@ -301,4 +325,39 @@ const css = `
 .br-pag { color: var(--gold); font-size: .62rem; letter-spacing: .06em; }
 .br-ctx { color: var(--parchment); font-size: .78rem; font-family: var(--font-body); }
 .sin-resultados { color: var(--stone); font-size: .7rem; text-align: center; margin: .4rem 0; }
+
+/* ---- pantalla completa (T11, guía §9.3) ---- */
+.btn-ampliar {
+  position: relative; justify-self: end;
+  width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1rem;
+  border: 1px solid rgba(201,164,90,.5); background: rgba(14,17,22,.7); color: var(--gold);
+}
+.btn-ampliar:hover { background: rgba(201,164,90,.18); }
+.tip-ampliar {
+  position: absolute; right: 0; bottom: calc(100% + 6px);
+  background: linear-gradient(#3a2415, #241609); color: var(--paper);
+  border: 1px solid rgba(201,164,90,.5); border-radius: 6px;
+  font-family: ui-monospace, monospace; font-size: .62rem; letter-spacing: .1em;
+  text-transform: uppercase; padding: .25rem .5rem; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .15s ease;
+}
+.btn-ampliar:hover .tip-ampliar { opacity: 1; }
+.libro-wrap.fs {
+  position: fixed; inset: 0; z-index: 140;
+  display: grid; place-content: center; gap: .7rem; justify-items: center;
+}
+.fs-fondo {
+  position: fixed; inset: 0; z-index: -1;
+  background: rgba(5, 6, 10, .72);
+  backdrop-filter: blur(5px);
+}
+.libro-wrap.fs .libro { width: min(92vw, calc(76vh * 4 / 3)); }
+.libro-wrap.fs .libro.cerrado { width: min(80vw, calc(72vh * 3 / 4)); }
+.fs-cerrar {
+  justify-self: end;
+  width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-weight: 700;
+  background: linear-gradient(180deg, #f2dc94, #c9a45a 55%, #87692f);
+  border: 1px solid #1c120a; color: #241a12;
+  box-shadow: 0 4px 10px rgba(0,0,0,.5);
+}
 `;
