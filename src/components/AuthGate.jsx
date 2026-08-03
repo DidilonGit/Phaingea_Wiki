@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useStore } from '@nanostores/react';
 import { $user, guardarSesion, cerrarSesion, leerSesion } from '../stores/user.js';
 import { login, registrar } from '../lib/auth.js';
+import PerfilModal from './PerfilModal.jsx';
 
 // Puerta de acceso: mientras no hay sesión, muestra un overlay de login/registro
 // que cubre la web. Con sesión, muestra una chapita de usuario (arriba dcha) con "Salir".
@@ -12,6 +13,7 @@ export default function AuthGate() {
   const [pass, setPass] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [perfilAbierto, setPerfilAbierto] = useState(false);
   const cardRef = useRef(null);
   const backdropRef = useRef(null);
 
@@ -95,17 +97,27 @@ export default function AuthGate() {
     backgroundBlendMode: 'normal, multiply',
   };
 
-  // --- logueado: chapita de usuario ---
+  // --- logueado: avatar (abre el Perfil, guía §19) + salir ---
   if (user) {
+    const inicial = (user.nombre || '?').charAt(0).toUpperCase();
     return (
-      <div style={chip.wrap}>
-        <span style={chip.dot} />
-        <span style={chip.name}>{user.nombre}</span>
-        <span style={chip.rol}>{user.rol}</span>
-        <button style={chip.salir} onClick={cerrarSesion} title="Cerrar sesión">
-          Salir
-        </button>
-      </div>
+      <>
+        <div style={chip.wrap}>
+          <button
+            style={chip.avatarBtn}
+            onClick={() => setPerfilAbierto(true)}
+            title="Abrir perfil"
+            aria-label="Abrir perfil"
+          >
+            <span style={chip.avatar}>{inicial}</span>
+            <span style={chip.name}>{user.nombre}</span>
+          </button>
+          <button style={chip.salir} onClick={cerrarSesion} title="Cerrar sesión">
+            Salir
+          </button>
+        </div>
+        <PerfilModal abierto={perfilAbierto} onCerrar={() => setPerfilAbierto(false)} />
+      </>
     );
   }
 
@@ -205,17 +217,26 @@ const ov = {
 const chip = {
   wrap: {
     position: 'fixed', top: '0.5rem', right: '0.7rem', zIndex: 120,
-    display: 'flex', alignItems: 'center', gap: '0.5rem',
+    display: 'flex', alignItems: 'center', gap: '0.45rem',
     background: 'rgba(14,17,22,.8)', border: '1px solid rgba(201,164,90,.45)',
-    borderRadius: '999px', padding: '0.25rem 0.35rem 0.25rem 0.7rem',
+    borderRadius: '999px', padding: '0.22rem 0.35rem 0.22rem 0.28rem',
     fontFamily: 'ui-monospace, monospace', fontSize: '0.72rem', color: 'var(--paper)',
     boxShadow: '0 4px 14px rgba(0,0,0,.4)',
   },
-  dot: { width: '8px', height: '8px', borderRadius: '50%', background: '#7fae6f' },
-  name: { color: 'var(--paper)' },
-  rol: {
-    color: 'var(--gold)', textTransform: 'uppercase', fontSize: '0.6rem', letterSpacing: '0.1em',
+  avatarBtn: {
+    display: 'flex', alignItems: 'center', gap: '0.45rem',
+    background: 'none', border: 0, cursor: 'pointer', padding: 0,
+    color: 'var(--paper)',
   },
+  avatar: {
+    width: '26px', height: '26px', borderRadius: '50%',
+    display: 'grid', placeItems: 'center', flex: 'none',
+    // color por defecto; el usuario lo elegirá en T64
+    background: 'linear-gradient(135deg, var(--stone), #5c554b)',
+    fontFamily: 'var(--font-title)', fontSize: '0.9rem', color: 'var(--paper)',
+    border: '1px solid rgba(201,164,90,.5)',
+  },
+  name: { color: 'var(--paper)', fontFamily: 'ui-monospace, monospace', fontSize: '0.72rem' },
   salir: {
     background: 'rgba(201,164,90,.15)', border: '1px solid rgba(201,164,90,.4)',
     color: 'var(--gold)', borderRadius: '999px', padding: '0.2rem 0.6rem', cursor: 'pointer',

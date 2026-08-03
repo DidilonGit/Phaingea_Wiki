@@ -56,8 +56,8 @@ Cuando se cambia de campaña, la pestaña de personaje cambia al personaje corre
 
 ## Criterios de hecho
 
-- [ ] El avatar abre la ventana; X y clic fuera la cierran.
-- [ ] Las 3 pestañas conmutan.
-- [ ] Perfil ya no existe como sala del navbar.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] El avatar abre la ventana; X y clic fuera la cierran.
+- [x] Las 3 pestañas conmutan.
+- [x] Perfil ya no existe como sala del navbar.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
