@@ -58,8 +58,8 @@ No habrá respuestas anidadas ni conversaciones en forma de hilo.
 
 ## Criterios de hecho
 
-- [ ] Reaccionar/quitar reacción funciona con dos cuentas.
-- [ ] Un comentario pendiente no lo ve un jugador normal y sí un máster, que puede aprobarlo.
-- [ ] Eliminar pide doble confirmación.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Reaccionar/quitar reacción funciona con dos cuentas.
+- [x] Un comentario pendiente no lo ve un jugador normal y sí un máster, que puede aprobarlo.
+- [x] Eliminar pide doble confirmación.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

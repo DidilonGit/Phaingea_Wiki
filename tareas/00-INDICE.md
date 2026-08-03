@@ -21,8 +21,8 @@
 | [T10](T10-buscador-libro.md) | Buscador dentro del Libro | 2 | T09 | ✅ |
 | [T11](T11-pantalla-completa-libros.md) | Pantalla completa reutilizable de libros | 2 | T09 | ✅ |
 | [T12](T12-modal-comun.md) | Modal común + doble confirmación destructiva | 2 | — | ✅ |
-| [T13](T13-comentarios-v1.md) | Sistema de comentarios v1 (hilo por target) | 2 | T07 | ⬜ |
-| [T14](T14-comentarios-v2.md) | Comentarios v2: reacciones, aprobación y moderación | 2 | T12, T13 | ⬜ |
+| [T13](T13-comentarios-v1.md) | Sistema de comentarios v1 (hilo por target) | 2 | T07 | ✅ |
+| [T14](T14-comentarios-v2.md) | Comentarios v2: reacciones, aprobación y moderación | 2 | T12, T13 | ✅ |
 | [T15](T15-sistema-xp.md) | Sistema de experiencia y niveles (Pathfinder 1e) | 2 | — | ✅ |
 | [T16](T16-boton-moderacion-contextual.md) | Botón de moderación contextual | 2 | T12, T17 | ✅ |
 | [T17](T17-permisos.md) | Permisos por campaña/categoría + banderines bloqueados | 2 | T07 | ✅ |
@@ -34,7 +34,7 @@
 | — | **FASE 4 · Salas completas** | | | |
 | [T22](T22-escena-capilla.md) | Escena de la Capilla | 4 | T01 | ✅ |
 | [T23](T23-libro-deidades.md) | Libro de deidades sobre el atril | 4 | T09, T10, T11, T22 | ⬜ |
-| [T24](T24-comentarios-capilla.md) | Comentarios generales de la Capilla | 4 | T13, T14, T22 | ⬜ |
+| [T24](T24-comentarios-capilla.md) | Comentarios generales de la Capilla | 4 | T13, T14, T22 | ✅ |
 | [T25](T25-escena-cartografia.md) | Escena de Cartografía (marco y ganchos) | 4 | T01 | ✅ |
 | [T26](T26-modelo-lugares.md) | Modelo de lugares en RTDB (jerarquía) | 4 | T07 | ⬜ |
 | [T27](T27-visor-de-mapa.md) | Visor de mapa (pan, zoom, pines, entrar a lugares) | 4 | T25, T26 | ⬜ |

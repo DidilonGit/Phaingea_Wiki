@@ -8,8 +8,9 @@
 // CÓMO EDITAR:
 //  · Colores de las vidrieras -> variables --vid-a / --vid-b de .capilla.
 //  · El libro sobre el atril llega en T23 (hueco .atril-hueco).
-//  · Los comentarios generales llegan en T24.
-const COMENTARIOS = [1, 2];
+//  · Comentarios: hilo GENERAL de la sala, no dependen de la página del libro
+//    (guía §9.4).
+import Comentarios from '../Comentarios.jsx';
 ---
 
 <section class="view capilla" data-view="capilla" hidden aria-label="Capilla">
@@ -39,19 +40,7 @@ const COMENTARIOS = [1, 2];
       <div class="atril-columna" aria-hidden="true"></div>
     </div>
 
-    <div class="comments">
-      <h3>Comentarios</h3>
-      {COMENTARIOS.map(() => (
-        <div class="comment">
-          <p class="meta"><b>WIP</b></p>
-          <p>WIP</p>
-        </div>
-      ))}
-      <form class="comment-form" onsubmit="return false;">
-        <input type="text" placeholder="Deja tu comentario en la capilla…" aria-label="Escribir comentario" />
-        <button class="btn" type="submit">Comentar</button>
-      </form>
-    </div>
+    <Comentarios client:load tipo="capilla" refId="general" />
   </div>
 </section>
 

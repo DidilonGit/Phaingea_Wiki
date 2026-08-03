@@ -29,6 +29,6 @@ Estos comentarios no dependerán de la página del libro que esté abierta.
 
 ## Criterios de hecho
 
-- [ ] Comentar funciona y el hilo cambia con la campaña.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Comentar funciona y el hilo cambia con la campaña.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

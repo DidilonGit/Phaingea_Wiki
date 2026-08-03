@@ -47,7 +47,7 @@ nuevo `src/components/Comentarios.jsx` · nuevo `src/lib/db/comentarios.js` · `
 
 ## Criterios de hecho
 
-- [ ] Dos cuentas ven los comentarios en tiempo real; cada una edita solo el suyo.
-- [ ] El hilo cambia al cambiar campaña.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Dos cuentas ven los comentarios en tiempo real; cada una edita solo el suyo.
+- [x] El hilo cambia al cambiar campaña.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
