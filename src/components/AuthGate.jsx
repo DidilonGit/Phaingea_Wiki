@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useStore } from '@nanostores/react';
 import { $user, guardarSesion, cerrarSesion, leerSesion } from '../stores/user.js';
+import { iniciarCampanas } from '../stores/campaign.js';
 import { login, registrar } from '../lib/auth.js';
 import PerfilModal from './PerfilModal.jsx';
 
@@ -16,6 +17,11 @@ export default function AuthGate() {
   const [perfilAbierto, setPerfilAbierto] = useState(false);
   const cardRef = useRef(null);
   const backdropRef = useRef(null);
+
+  // Arrancar la carga de campañas (AuthGate es la isla siempre montada).
+  useEffect(() => {
+    iniciarCampanas();
+  }, []);
 
   // Auto-login desde la sesión + animación de ENTRADA del overlay.
   useEffect(() => {

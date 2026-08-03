@@ -307,3 +307,29 @@ const bookmarks = [
     });
   })();
 </script>
+
+<script is:inline>
+  // Logo de la campaña activa (guía §8.5): escucha 'phaingea:campana' que
+  // emite src/stores/campaign.js al cambiar de campaña. Muestra logoUrl si
+  // existe; si no, la inicial del nombre sobre los colores de su planeta.
+  (function () {
+    window.addEventListener('phaingea:campana', function (e) {
+      var c = e.detail;
+      var el = document.getElementById('logoCampana');
+      if (!c || !el) return;
+      el.setAttribute('title', c.nombre);
+      el.setAttribute('aria-label', 'Campaña activa: ' + c.nombre);
+      el.setAttribute('data-campana', c.id);
+      if (c.logoUrl) {
+        el.innerHTML = '<img src="' + c.logoUrl + '" alt="">';
+        el.style.background = '';
+      } else {
+        var p = c.planeta || {};
+        el.textContent = (c.nombre || '?').charAt(0).toUpperCase();
+        el.style.background =
+          'radial-gradient(circle at 32% 28%, rgba(255,255,255,.35), transparent 45%), ' +
+          'linear-gradient(140deg, ' + (p.colorA || '#5b6a8a') + ', ' + (p.colorB || '#2b3350') + ' 70%)';
+      }
+    });
+  })();
+</script>

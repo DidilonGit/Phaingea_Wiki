@@ -43,6 +43,6 @@ nuevo `src/stores/campaign.js` · `src/components/TopBar.astro` (conectar logo) 
 
 ## Criterios de hecho
 
-- [ ] Cambiar campaña (por consola o botón provisional) actualiza el logo y persiste tras recargar.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Cambiar campaña (por consola o botón provisional) actualiza el logo y persiste tras recargar.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
