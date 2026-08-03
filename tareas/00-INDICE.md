@@ -17,7 +17,7 @@
 | [T07](T07-store-campana-activa.md) | Store de campaña activa + rol por campaña | 1 | T06 | ✅ |
 | [T08](T08-gestion-campanas-moderacion.md) | Gestión mínima de campañas desde Moderación | 1 | T02, T06 | ✅ |
 | — | **FASE 2 · Sistemas compartidos** | | | |
-| [T09](T09-componente-libro.md) | Componente Libro (flipbook con índice) | 2 | — | ⬜ |
+| [T09](T09-componente-libro.md) | Componente Libro (flipbook con índice) | 2 | — | ✅ |
 | [T10](T10-buscador-libro.md) | Buscador dentro del Libro | 2 | T09 | ⬜ |
 | [T11](T11-pantalla-completa-libros.md) | Pantalla completa reutilizable de libros | 2 | T09 | ⬜ |
 | [T12](T12-modal-comun.md) | Modal común + doble confirmación destructiva | 2 | — | ⬜ |

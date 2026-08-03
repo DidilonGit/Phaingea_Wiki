@@ -18,3 +18,7 @@ Thumbs.db
 # logs
 npm-debug.log*
 *.log
+
+# demos locales (no se despliegan)
+src/pages/demo-libro.astro
+src/components/DemoLibro.jsx

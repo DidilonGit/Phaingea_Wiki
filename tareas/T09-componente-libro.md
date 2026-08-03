@@ -83,7 +83,7 @@ nuevo `src/components/Libro.jsx` (+ CSS módulo o bloque en `views.css`)
 
 ## Criterios de hecho
 
-- [ ] Demo con ≥6 páginas navegable con animación, índice y volver-al-índice.
-- [ ] API documentada en cabecera del archivo.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Demo con ≥6 páginas navegable con animación, índice y volver-al-índice.
+- [x] API documentada en cabecera del archivo.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
