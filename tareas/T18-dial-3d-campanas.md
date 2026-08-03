@@ -44,7 +44,7 @@ Al seleccionar un planeta, este pasa a convertirse en la campaña activa.
 
 ## Criterios de hecho
 
-- [ ] Con ≥3 campañas en RTDB el dial gira, oculta planetas tras el central y selecciona campaña.
-- [ ] Base queda fija arriba.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Con ≥3 campañas en RTDB el dial gira, oculta planetas tras el central y selecciona campaña.
+- [x] Base queda fija arriba.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
