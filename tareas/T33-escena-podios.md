@@ -66,6 +66,6 @@ La navegación será circular:
 
 ## Criterios de hecho
 
-- [ ] Navegar entre los personajes seed circularmente con su info correcta.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Navegar entre los personajes seed circularmente con su info correcta.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

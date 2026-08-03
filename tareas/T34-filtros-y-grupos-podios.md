@@ -65,6 +65,6 @@ Cuando se selecciona un grupo, sus personajes aparecen juntos dentro de una comp
 
 ## Criterios de hecho
 
-- [ ] Filtrar por Fallecido muestra solo esos; seleccionar un grupo muestra la composición conjunta.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Filtrar por Fallecido muestra solo esos; seleccionar un grupo muestra la composición conjunta.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

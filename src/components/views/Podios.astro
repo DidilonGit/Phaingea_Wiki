@@ -1,38 +1,19 @@
 ---
-// Vista Podios (personajes de la campaña). Estructura de fichas con contenido
-// PLACEHOLDER (WIP) hasta conectar los personajes reales por campaña (la escena
-// de podio real llega en T33). Se mantiene lo estructural (estados:
-// activo/fallecido/delegado); los datos inventados van como "WIP".
-// Sin título de sala: el banderín activo ya indica dónde estás (guía §3).
-const fichas = [
-  { estado: 'activo' },
-  { estado: 'delegado' },
-  { estado: 'activo' },
-  { estado: 'fallecido' },
-  { estado: 'delegado' },
-  { estado: 'fallecido' },
-];
-const rotulo = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+// Vista PODIOS (guía §11) — LEYENDAS en Base de Phaingea (§12).
+// Toda la sala vive en la isla PodiosView: filtros, grupos, navegación
+// circular, podio con focos, diario y comentarios. Sin título de sala (§3).
+//
+// CÓMO EDITAR:
+//  · Datos -> /personajes/{campanaId} (src/lib/db/personajes.js).
+//  · Interfaz -> src/components/PodiosView.jsx.
+import PodiosView from '../PodiosView.jsx';
 ---
 
 <section class="view" data-view="podios" hidden aria-label="Podios">
   <div class="room">
     <header class="room-head">
-      <p class="room-sub">Fichas de los héroes de cada campaña.</p>
+      <p class="room-sub">Los héroes de la campaña, uno a uno sobre el podio.</p>
     </header>
-
-    <div class="grid">
-      {fichas.map((p) => (
-        <article class="char">
-          <div class="avatar" aria-hidden="true">?</div>
-          <div class="body">
-            <div class="name">WIP</div>
-            <div class="sub mono">WIP</div>
-            <span class={`badge ${p.estado}`}>{rotulo(p.estado)}</span>
-            <p class="mono" style="font-size:0.72rem;color:#6a5f4c;margin-top:0.55rem;">Jugador: WIP</p>
-          </div>
-        </article>
-      ))}
-    </div>
+    <PodiosView client:load />
   </div>
 </section>

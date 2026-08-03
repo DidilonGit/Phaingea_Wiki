@@ -38,6 +38,6 @@ El propietario puede publicar en su propio personaje sin aprobación.
 
 ## Criterios de hecho
 
-- [ ] Comentario de tercero queda pendiente hasta aprobarse; el del propietario sale directo.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Comentario de tercero queda pendiente hasta aprobarse; el del propietario sale directo.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

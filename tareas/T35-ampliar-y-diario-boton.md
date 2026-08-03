@@ -43,6 +43,6 @@ Si se abre el diario de otro personaje, sustituye al que estuviera abierto.
 
 ## Criterios de hecho
 
-- [ ] Ambos botones según guía.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Ambos botones según guía.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

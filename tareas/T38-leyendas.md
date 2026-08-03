@@ -57,6 +57,6 @@ Cada leyenda podrá tener:
 
 ## Criterios de hecho
 
-- [ ] En Base se ven grupos de leyendas; en campaña normal, Podios normal.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] En Base se ven grupos de leyendas; en campaña normal, Podios normal.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

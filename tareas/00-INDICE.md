@@ -42,13 +42,13 @@
 | [T29](T29-compas-y-pano.md) | Herramientas Compás (dibujo) y Paño (borrado) | 4 | T27 | ✅ |
 | [T30](T30-info-lugar-y-lista.md) | Información del lugar + lista de lugares | 4 | T27 | ✅ |
 | [T31](T31-comentarios-por-lugar.md) | Comentarios por lugar | 4 | T13, T27 | ✅ |
-| [T32](T32-modelo-personajes.md) | Modelo de personajes en RTDB | 4 | T07, T15 | ⬜ |
-| [T33](T33-escena-podios.md) | Escena de Podios (podio, info, navegación circular) | 4 | T32 | ⬜ |
-| [T34](T34-filtros-y-grupos-podios.md) | Filtros por estado y grupos en Podios | 4 | T33 | ⬜ |
-| [T35](T35-ampliar-y-diario-boton.md) | Botones del podio: Ampliar y Mostrar diario | 4 | T33 | ⬜ |
-| [T36](T36-diario-personaje.md) | Diario del personaje (markdown → libro de 8 páginas) | 4 | T09, T15, T33 | ⬜ |
-| [T37](T37-comentarios-personaje.md) | Comentarios de personaje | 4 | T14, T33 | ⬜ |
-| [T38](T38-leyendas.md) | Leyendas (Podios en Base de Phaingea) | 4 | T34 | ⬜ |
+| [T32](T32-modelo-personajes.md) | Modelo de personajes en RTDB | 4 | T07, T15 | ✅ |
+| [T33](T33-escena-podios.md) | Escena de Podios (podio, info, navegación circular) | 4 | T32 | ✅ |
+| [T34](T34-filtros-y-grupos-podios.md) | Filtros por estado y grupos en Podios | 4 | T33 | ✅ |
+| [T35](T35-ampliar-y-diario-boton.md) | Botones del podio: Ampliar y Mostrar diario | 4 | T33 | ✅ |
+| [T36](T36-diario-personaje.md) | Diario del personaje (markdown → libro de 8 páginas) | 4 | T09, T15, T33 | ✅ |
+| [T37](T37-comentarios-personaje.md) | Comentarios de personaje | 4 | T14, T33 | ✅ |
+| [T38](T38-leyendas.md) | Leyendas (Podios en Base de Phaingea) | 4 | T34 | ✅ |
 | [T39](T39-modelo-galeria.md) | Modelo de imágenes de Galería + almacenamiento | 4 | T07 | ⬜ |
 | [T40](T40-composicion-museo.md) | Composición de museo + paginación circular | 4 | T39 | ⬜ |
 | [T41](T41-filtros-tags-and.md) | Filtros por tags (multi-selección AND) | 4 | T40 | ⬜ |

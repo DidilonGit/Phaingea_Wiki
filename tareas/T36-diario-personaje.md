@@ -52,6 +52,6 @@ nuevo `src/components/DiarioLibro.jsx` (usa Libro) · parser md (usar `marked` o
 
 ## Criterios de hecho
 
-- [ ] Diario largo repartido en páginas; `===salto===` fuerza salto; barra XP visible.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Diario largo repartido en páginas; `===salto===` fuerza salto; barra XP visible.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

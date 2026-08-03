@@ -57,6 +57,6 @@ nuevo `src/lib/db/personajes.js` · `database.rules.json`
 
 ## Criterios de hecho
 
-- [ ] Personajes de prueba en RTDB; restricción 1-activo funciona.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Personajes de prueba en RTDB; restricción 1-activo funciona.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
