@@ -42,6 +42,6 @@ nuevo `src/lib/sonidos.js` · `public/sounds/` · integraciones puntuales
 
 ## Criterios de hecho
 
-- [ ] Con el toggle apagado no suena nada; encendido, sonidos discretos.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Con el toggle apagado no suena nada; encendido, sonidos discretos.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

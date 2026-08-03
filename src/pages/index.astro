@@ -1119,7 +1119,14 @@ arrancar();
       }
       window.dispatchEvent(new Event('resize'));
     }
-    bms.forEach(function(b){ b.addEventListener('click', function(){ activar(b.dataset.view); }); });
+    bms.forEach(function(b){ b.addEventListener('click', function(){
+      // sonido discreto de madera al cambiar de sala (guia 29)
+      try {
+        var prefs = JSON.parse(localStorage.getItem('phaingea_prefs') || '{}');
+        if (prefs.sonidos !== false && window.__phaingeaSonar) window.__phaingeaSonar('madera');
+      } catch(e) {}
+      activar(b.dataset.view);
+    }); });
     activar('inicio');
   }
   bind();

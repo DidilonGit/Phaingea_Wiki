@@ -52,6 +52,6 @@ global (CSS/media queries)
 
 ## Criterios de hecho
 
-- [ ] Recorrido completo en viewport móvil sin elementos inaccesibles ni layout roto.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Recorrido completo en viewport móvil sin elementos inaccesibles ni layout roto.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

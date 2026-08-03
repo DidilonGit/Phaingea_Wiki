@@ -3,6 +3,7 @@ import { useStore } from '@nanostores/react';
 import { $campaign } from '../stores/campaign.js';
 import { $user } from '../stores/user.js';
 import { suscribirNotificaciones, archivarNotificacion } from '../lib/db/notificaciones.js';
+import { sonar } from '../lib/sonidos.js';
 
 // ============================================================================
 // BUZÓN (guía §18) — rincón de correspondencia.
@@ -62,6 +63,7 @@ export default function BuzonView() {
   const colorB = campana?.colorContorno || '#c9a45a';
 
   async function archivar(n) {
+    sonar('archivar');
     setVolando(n.id);
     setAbierta(null);
     setTimeout(async () => {
@@ -94,7 +96,7 @@ export default function BuzonView() {
                   key={n.id}
                   className={`carta ${volando === n.id ? 'volando' : ''}`}
                   style={{ transform: `translateX(${desp}px) rotate(${ang}deg)`, zIndex: 10 + i }}
-                  onClick={() => setAbierta(n)}
+                  onClick={() => { sonar('carta'); setAbierta(n); }}
                   title={n.asunto}
                 >
                   <span className="sello" />

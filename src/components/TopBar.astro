@@ -267,6 +267,33 @@ const bookmarks = [
   /* (el banderín de Moderación arranca oculto vía style inline; lo muestra el
      script de gating solo para máster/owner/admin) */
 
+  /* ---- móvil (guía §30): la barra puede simplificar la distribución de los
+     banderines. En pantallas estrechas pasan a una tira deslizable en una
+     sola fila, en vez de partirse en varias. También se deja hueco al avatar
+     y al aviso del buzón, que van fijos arriba a la derecha. ---- */
+  @media (max-width: 860px) {
+    .topbar {
+      gap: 0.7rem;
+      padding-right: 0.6rem;
+    }
+    .brand {
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+    }
+    .bookmarks {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: visible;
+      scrollbar-width: none;
+      padding-right: 8.5rem; /* el avatar y el sobre no tapan el último */
+    }
+    .bookmarks::-webkit-scrollbar { display: none; }
+  }
+  @media (max-width: 520px) {
+    .marca { gap: 0.35rem; }
+    .brand { display: none; } /* con el logo de campaña basta */
+  }
+
   /* Sin acceso a la categoría: apagado, grisáceo y no interactuable (guía §3) */
   .bm.bloqueado {
     filter: grayscale(1) brightness(0.55);

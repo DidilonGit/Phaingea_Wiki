@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { APP_VERSION } from '../lib/version.js';
 import { getPref, aplicarPrefs } from '../lib/prefs.js';
+import '../lib/sonidos.js'; // registra window.__phaingeaSonar
 
 // Auto-recarga: si la versión desplegada (/version.json) no coincide con la
 // versión cargada en esta pestaña, recarga para traer la última.

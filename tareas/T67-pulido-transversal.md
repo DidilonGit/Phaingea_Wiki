@@ -119,6 +119,6 @@ global
 
 ## Criterios de hecho
 
-- [ ] Checklist §31 marcada punto a punto (dejar la lista en el commit o en este archivo).
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Checklist §31 marcada punto a punto (dejar la lista en el commit o en este archivo).
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

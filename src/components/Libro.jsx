@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { sonar } from '../lib/sonidos.js';
 
 // Extrae el texto plano de un nodo React (para el buscador, T10).
 function extraerTexto(nodo) {
@@ -79,6 +80,7 @@ export default function Libro({
   // animación se cambia el contenido y se completa el giro.
   function navegar(destino, dir = 'adelante') {
     if (girando) return;
+    sonar(vista === 'portada' ? 'libro' : 'pagina');
     setGirando(dir);
     setTimeout(() => {
       setVista(destino);

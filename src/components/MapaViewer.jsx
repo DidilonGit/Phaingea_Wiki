@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useStore } from '@nanostores/react';
-import { $campaign } from '../stores/campaign.js';
+import { $campaign, $campaigns } from '../stores/campaign.js';
 import { $user } from '../stores/user.js';
 import { puedeGestionar } from '../lib/permisos.js';
 import { aHtml } from '../lib/markdown.js';
@@ -36,6 +36,7 @@ const ZOOM_MAX = 6;
 
 export default function MapaViewer() {
   const campana = useStore($campaign);
+  const campanas = useStore($campaigns);
   const user = useStore($user);
   const [lugares, setLugares] = useState([]);
   const [activoId, setActivoId] = useState(null);
@@ -55,14 +56,19 @@ export default function MapaViewer() {
 
   useEffect(() => setMontado(true), []);
 
-  // Lugares de la campaña en tiempo real.
+  // Origen de los lugares: la campaña o aquella de la que hereda (§7).
+  const origenId = campana?.categorias?.cartografia?.heredaDe || campana?.id;
+  const origen = campanas.find((c) => c.id === origenId);
+  const heredado = !!origenId && origenId !== campana?.id;
+
+  // Lugares (del origen) en tiempo real.
   useEffect(() => {
-    if (!campana?.id) return;
-    return suscribirLugares(campana.id, (l) => {
+    if (!origenId) return;
+    return suscribirLugares(origenId, (l) => {
       setLugares(l);
       setActivoId((prev) => (prev && l.some((x) => x.id === prev) ? prev : lugarPredeterminado(l)?.id || null));
     });
-  }, [campana?.id]);
+  }, [origenId]);
 
   // El Observatorio puede pedir abrir un lugar concreto (T20, §8.4).
   useEffect(() => {
@@ -76,7 +82,7 @@ export default function MapaViewer() {
   const porId = Object.fromEntries(lugares.map((l) => [l.id, l]));
 
   // --- dibujos temporales por lugar (se recuperan al volver) ---
-  const claveDibujo = campana?.id && activoId ? `phaingea_dibujo_${campana.id}_${activoId}` : null;
+  const claveDibujo = origenId && activoId ? `phaingea_dibujo_${origenId}_${activoId}` : null;
 
   useEffect(() => {
     const cv = lienzoRef.current;
@@ -333,6 +339,11 @@ export default function MapaViewer() {
           </p>
         )}
         <h3 className="nombre-lugar">{activo?.nombre || 'Sin lugares todavía'}</h3>
+        {heredado && (
+          <p className="mono aviso-herencia-carto">
+            Mapas heredados de «{origen?.nombre || origenId}» · solo lectura
+          </p>
+        )}
 
         {activo && (
           <>
@@ -425,6 +436,7 @@ const css = `
   background: rgba(201,164,90,.15); border: 1px solid rgba(201,164,90,.4); color: var(--gold); font-size: .7rem; }
 
 .info-lugar { margin-top: 1.2rem; }
+.aviso-herencia-carto { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone); margin: -.2rem 0 .5rem; }
 .migas { font-size: .66rem; color: var(--stone); margin: 0 0 .2rem; }
 .migas button { background: none; border: 0; cursor: pointer; color: var(--stone); font: inherit; padding: 0; }
 .migas button:hover { color: var(--gold); text-decoration: underline; }

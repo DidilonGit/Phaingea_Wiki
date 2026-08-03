@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { useStore } from '@nanostores/react';
 import { $user, guardarSesion, cerrarSesion, leerSesion } from '../stores/user.js';
-import { iniciarCampanas } from '../stores/campaign.js';
+import { iniciarCampanas, $campaign } from '../stores/campaign.js';
+import { suscribirPersonajes } from '../lib/db/personajes.js';
 import { login, registrar } from '../lib/auth.js';
 import PerfilModal from './PerfilModal.jsx';
 
@@ -15,12 +16,31 @@ export default function AuthGate() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [perfilAbierto, setPerfilAbierto] = useState(false);
+  const [personajeActivo, setPersonajeActivo] = useState(null);
   const cardRef = useRef(null);
   const backdropRef = useRef(null);
 
   // Arrancar la carga de campañas (AuthGate es la isla siempre montada).
   useEffect(() => {
     iniciarCampanas();
+  }, []);
+
+  // Personaje activo del usuario en la campaña actual: la guía (§31) pide que
+  // se vea con claridad en todo momento, igual que la campaña.
+  useEffect(() => {
+    let off = null;
+    const enlazar = (c) => {
+      if (off) { off(); off = null; }
+      setPersonajeActivo(null);
+      const u = $user.get();
+      if (!c?.id || !u?.nombre) return;
+      off = suscribirPersonajes(c.id, (lista) =>
+        setPersonajeActivo(lista.find((p) => p.propietario === u.nombre && p.estado === 'activo') || null)
+      );
+    };
+    enlazar($campaign.get());
+    const quitar = $campaign.subscribe(enlazar);
+    return () => { quitar(); if (off) off(); };
   }, []);
 
   // Auto-login desde la sesión + animación de ENTRADA del overlay.
@@ -117,6 +137,7 @@ export default function AuthGate() {
           >
             <span style={{ ...chip.avatar, ...(user.colorAvatar ? { background: user.colorAvatar } : {}) }}>{inicial}</span>
             <span style={chip.name}>{user.nombreVisible || user.nombre}</span>
+            {personajeActivo && <span style={chip.personaje} title={`Personaje activo: ${personajeActivo.nombre}`}>· {personajeActivo.nombre}</span>}
           </button>
           <button style={chip.salir} onClick={cerrarSesion} title="Cerrar sesión">
             Salir
@@ -243,6 +264,7 @@ const chip = {
     border: '1px solid rgba(201,164,90,.5)',
   },
   name: { color: 'var(--paper)', fontFamily: 'ui-monospace, monospace', fontSize: '0.72rem' },
+  personaje: { color: 'var(--gold)', fontFamily: 'var(--font-body)', fontSize: '0.72rem', maxWidth: '11ch', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   salir: {
     background: 'rgba(201,164,90,.15)', border: '1px solid rgba(201,164,90,.4)',
     color: 'var(--gold)', borderRadius: '999px', padding: '0.2rem 0.6rem', cursor: 'pointer',
