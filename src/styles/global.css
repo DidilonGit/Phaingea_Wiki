@@ -27,8 +27,9 @@ a:hover {
   color: var(--gold-soft);
 }
 
-/* Contenedor de escena bajo la barra superior */
-.room {
+/* Contenedor de escena bajo la barra superior.
+   Sin padding propio: cada sala (.room de views.css) pone el suyo. Así el
+   contenido arranca arriba y no se suman dos paddings (guía §2.3). */
+.escena {
   min-height: calc(100vh - var(--topbar-h));
-  padding: 2rem;
 }

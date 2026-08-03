@@ -29,21 +29,45 @@ export function StarsCanvas({
     let stars = [];
     let count = 0;
 
-    // --- textura de estrella cacheada (gradiente radial) ---
-    const canvas2 = document.createElement('canvas');
-    const ctx2 = canvas2.getContext('2d');
-    canvas2.width = 100;
-    canvas2.height = 100;
-    const half = canvas2.width / 2;
-    const gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
-    gradient2.addColorStop(0.025, '#fff');
-    gradient2.addColorStop(0.1, `hsl(${hue}, 61%, 33%)`);
-    gradient2.addColorStop(0.25, `hsl(${hue}, 64%, 6%)`);
-    gradient2.addColorStop(1, 'transparent');
-    ctx2.fillStyle = gradient2;
-    ctx2.beginPath();
-    ctx2.arc(half, half, half, 0, Math.PI * 2);
-    ctx2.fill();
+    // --- texturas de estrella cacheadas (una por tono) ---
+    // La guía pide estrellas con color además del blanco: mayoría blanco-azuladas
+    // y una minoría doradas, rojizas y violetas. `peso` = probabilidad relativa.
+    const PALETA = [
+      { hue, sat: 61, peso: 70 }, // blanco-azulado (tono base)
+      { hue: 45, sat: 70, peso: 12 }, // dorado
+      { hue: 12, sat: 65, peso: 8 }, // rojizo
+      { hue: 285, sat: 60, peso: 6 }, // violeta
+      { hue: 175, sat: 55, peso: 4 }, // turquesa
+    ];
+
+    function crearSprite({ hue: h, sat }) {
+      const c = document.createElement('canvas');
+      c.width = c.height = 100;
+      const x = c.getContext('2d');
+      const half = c.width / 2;
+      const g = x.createRadialGradient(half, half, 0, half, half, half);
+      g.addColorStop(0.025, '#fff'); // núcleo siempre blanco
+      g.addColorStop(0.1, `hsl(${h}, ${sat}%, 45%)`); // halo de color
+      g.addColorStop(0.25, `hsl(${h}, ${sat}%, 8%)`);
+      g.addColorStop(1, 'transparent');
+      x.fillStyle = g;
+      x.beginPath();
+      x.arc(half, half, half, 0, Math.PI * 2);
+      x.fill();
+      return c;
+    }
+
+    const sprites = PALETA.map(crearSprite);
+    // Ruleta de pesos: índice de sprite para cada estrella nueva.
+    const pesoTotal = PALETA.reduce((s, p) => s + p.peso, 0);
+    function spriteAleatorio() {
+      let r = Math.random() * pesoTotal;
+      for (let i = 0; i < PALETA.length; i++) {
+        r -= PALETA[i].peso;
+        if (r <= 0) return i;
+      }
+      return 0;
+    }
 
     const random = (min, max) => {
       if (max === undefined) {
@@ -69,6 +93,7 @@ export function StarsCanvas({
         this.timePassed = random(0, maxStars);
         this.speed = (random(this.orbitRadius) / 50000) * speedMultiplier;
         this.alpha = (random(2, 10) / 10) * brightness;
+        this.sprite = sprites[spriteAleatorio()]; // tono de esta estrella
         count++;
         stars[count] = this;
       }
@@ -85,12 +110,19 @@ export function StarsCanvas({
         }
 
         ctx.globalAlpha = this.alpha;
-        ctx.drawImage(canvas2, x - this.radius / 2, y - this.radius / 2, this.radius, this.radius);
+        ctx.drawImage(this.sprite, x - this.radius / 2, y - this.radius / 2, this.radius, this.radius);
         this.timePassed += this.speed;
       }
     }
 
-    for (let i = 0; i < maxStars; i++) new Star();
+    // Las órbitas se calculan a partir del tamaño del lienzo, así que si este
+    // cambia (o montamos con el viewport aún sin medir) hay que regenerarlas.
+    function generarEstrellas() {
+      stars = [];
+      count = 0;
+      for (let i = 0; i < maxStars; i++) new Star();
+    }
+    generarEstrellas();
 
     const animate = () => {
       if (paused) return;
@@ -110,14 +142,18 @@ export function StarsCanvas({
 
     animationRef.current = requestAnimationFrame(animate);
 
+    let tRedim;
     const handleResize = () => {
       w = canvas.width = window.innerWidth;
       h = canvas.height = window.innerHeight;
+      clearTimeout(tRedim);
+      tRedim = setTimeout(generarEstrellas, 150); // reparte las órbitas al tamaño nuevo
     };
 
     window.addEventListener('resize', handleResize);
     return () => {
       cancelAnimationFrame(animationRef.current);
+      clearTimeout(tRedim);
       window.removeEventListener('resize', handleResize);
     };
   }, [transparent, maxStars, hue, brightness, speedMultiplier, twinkleIntensity, paused]);

@@ -8,14 +8,15 @@
 .view[hidden] { display: none !important; }
 
 /* ---- contenedor de sala ---- */
+/* El contenido arranca arriba (guía §2.3): así no hay scroll de más y, al
+   cerrarse un componente, lo de abajo sube de forma natural. */
 .room {
   max-width: 1080px;
   margin: 0 auto;
-  padding: 2.4rem clamp(1rem, 4vw, 3rem) 4rem;
-  min-height: calc(100vh - var(--topbar-h));
+  padding: 1.5rem clamp(1rem, 4vw, 3rem) 3rem;
   color: var(--paper);
 }
-.room-head { text-align: center; margin-bottom: 2.4rem; }
+.room-head { text-align: center; margin-bottom: 1.6rem; }
 .room-kicker {
   font-family: ui-monospace, 'Courier New', monospace;
   font-size: 0.66rem; letter-spacing: 0.34em; text-transform: uppercase;
@@ -178,8 +179,8 @@
 
 /* ---- estado vacío (sin datos aún) ---- */
 .empty {
-  display: grid; place-content: center; justify-items: center; text-align: center;
-  gap: 0.6rem; min-height: 42vh; color: var(--stone);
+  display: grid; align-content: start; justify-items: center; text-align: center;
+  gap: 0.6rem; padding-top: 2rem; color: var(--stone);
 }
 .empty .ico { font-size: 2.6rem; opacity: 0.55; line-height: 1; }
 .empty p { font-family: var(--font-body); font-size: 1rem; max-width: 32ch; }

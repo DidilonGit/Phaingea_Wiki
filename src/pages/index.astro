@@ -91,17 +91,8 @@ import Moderacion from '../components/views/Moderacion.astro';
 }
 
 /* ---------- escena principal ---------- */
-.escena{
-  position: relative; z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr; justify-items: center;
-  gap: clamp(1rem, 4vw, 4rem);
-  align-items: center;
-  max-width: 1560px;
-  margin: 0 auto;
-  min-height: 100vh;
-  padding: 2rem clamp(1.2rem, 4vw, 4rem) 8.5rem;
-}
+/* (La regla .escena del prototipo se retiró: colisionaba con el contenedor de
+   salas del layout, que define su propio .escena en global.css.) */
 
 /* ---------- panel izquierdo ---------- */
 .panel-izq{ display: none; }

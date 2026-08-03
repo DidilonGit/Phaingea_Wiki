@@ -40,7 +40,7 @@ Esto evita scroll innecesario en pantallas pequeñas y hace que, cuando un compo
 
 ## Criterios de hecho
 
-- [ ] Se aprecian estrellas de al menos 3 tonos distintos.
-- [ ] Las salas no dejan grandes huecos superiores.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Se aprecian estrellas de al menos 3 tonos distintos.
+- [x] Las salas no dejan grandes huecos superiores.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
