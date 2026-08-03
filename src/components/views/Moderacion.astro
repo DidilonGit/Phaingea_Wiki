@@ -1,0 +1,40 @@
+---
+// Vista Moderación (sala de gestión). Solo llega aquí quien ve su banderín
+// (gating por rol en TopBar.astro: máster/owner/admin). PLACEHOLDER: los
+// paneles reales llegan en T08 (campañas), T60 (panel completo) y T61
+// (solicitudes/registros). Sin título de sala (guía §3).
+const PANELES = [
+  ['Gestión de campañas', 'Crear, editar, ordenar y cambiar el estado de las campañas. Llega en T08/T60.'],
+  ['Jugadores y roles', 'Participantes por campaña y asignación de másteres. Llega en T60.'],
+  ['Solicitudes pendientes', 'Propuestas de contenido por aprobar. Llega en T61.'],
+  ['Registros importantes', 'Las acciones relevantes de cada campaña. Llega en T61.'],
+];
+---
+
+<section class="view" data-view="moderacion" hidden aria-label="Moderación">
+  <div class="room">
+    <header class="room-head">
+      <p class="room-kicker">Sala de gestión</p>
+      <p class="room-sub">Administración de la web y de las campañas. Los másteres ven solo lo suyo; el owner, todo.</p>
+    </header>
+
+    <div class="grid">
+      {PANELES.map(([titulo, desc]) => (
+        <article class="panel">
+          <h3 class="mod-titulo">{titulo}</h3>
+          <p class="muted">{desc}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .mod-titulo {
+    font-family: var(--font-title);
+    color: var(--gold-soft);
+    letter-spacing: 0.04em;
+    margin: 0 0 0.4rem;
+    font-size: 1.1rem;
+  }
+</style>

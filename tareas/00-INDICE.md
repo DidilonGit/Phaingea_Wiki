@@ -8,7 +8,7 @@
 |---|---|---|---|---|
 | — | **FASE 0 · Reorganización** | | | |
 | [T01](T01-renombrar-categorias.md) | Renombrar categorías y banderines a los definitivos | 0 | — | ✅ |
-| [T02](T02-banderin-moderacion.md) | Banderín y sala Moderación (solo máster/owner) | 0 | T01 | ⬜ |
+| [T02](T02-banderin-moderacion.md) | Banderín y sala Moderación (solo máster/owner) | 0 | T01 | ✅ |
 | [T03](T03-perfil-desde-avatar.md) | Perfil como ventana desde el avatar (fuera del navbar) | 0 | T01 | ⬜ |
 | [T04](T04-estrellas-colores-y-alineacion.md) | Estrellas con colores + contenido alineado arriba | 0 | — | ⬜ |
 | [T05](T05-logo-campana-topbar.md) | Hueco del logo de campaña en la topbar | 0 | T01 | ⬜ |

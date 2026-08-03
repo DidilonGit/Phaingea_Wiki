@@ -3,6 +3,14 @@ import { atom } from 'nanostores';
 
 export const $user = atom(null); // { nombre, rol } | null
 
+// Notifica los cambios de sesión a los scripts NO-React (p.ej. el gating del
+// banderín de Moderación en TopBar.astro escucha 'phaingea:user').
+if (typeof window !== 'undefined') {
+  $user.subscribe((u) => {
+    window.dispatchEvent(new CustomEvent('phaingea:user', { detail: u }));
+  });
+}
+
 const KEY = 'phaingea_session';
 
 export function guardarSesion(user) {

@@ -72,7 +72,7 @@ La categoría incluirá:
 
 ## Criterios de hecho
 
-- [ ] Con cuenta `Jowy` (admin) el banderín se ve y abre la sala.
-- [ ] Con cuenta `Didac` (jugador) no se ve o aparece gris y no interactivo.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Con cuenta `Jowy` (admin) el banderín se ve y abre la sala.
+- [x] Con cuenta `Didac` (jugador) no se ve o aparece gris y no interactivo.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
