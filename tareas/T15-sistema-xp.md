@@ -68,7 +68,7 @@ nuevo `src/lib/xp.js` · nuevo `src/components/BarraXP.jsx`
 
 ## Criterios de hecho
 
-- [ ] Comprobación manual con valores conocidos (media: nivel 2 = 2.000 XP; rápida: nivel 2 = 1.300 XP).
-- [ ] La barra pinta bien 766/1300 con parte extra.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Comprobación manual con valores conocidos (media: nivel 2 = 2.000 XP; rápida: nivel 2 = 1.300 XP).
+- [x] La barra pinta bien 766/1300 con parte extra.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
