@@ -49,6 +49,6 @@ La ausencia de una herramienta terminada no debe impedir que su botella, nombre 
 
 ## Criterios de hecho
 
-- [ ] Botellas actuales + huecos visibles; nombres al hover.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Botellas actuales + huecos visibles; nombres al hover.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

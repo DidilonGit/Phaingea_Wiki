@@ -46,6 +46,6 @@ La animación debe ser:
 
 ## Criterios de hecho
 
-- [ ] La secuencia completa se ve al seleccionar cualquier botella y el contenido queda usable.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] La secuencia completa se ve al seleccionar cualquier botella y el contenido queda usable.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

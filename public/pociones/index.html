@@ -52,6 +52,14 @@ a:hover { color: oklch(0.82 0.14 80); }
     </div>
   </sc-for>
 
+  <!-- Huecos reservados para herramientas futuras (guía §17.1) -->
+  <sc-for list="{{ huecos }}" as="h" hint-placeholder-count="2">
+    <div title="{{ h.titulo }}" style="{{ h.wrapStyle }}">
+      <div style="{{ h.marcoStyle }}"></div>
+      <div style="{{ h.textoStyle }}">Próximamente</div>
+    </div>
+  </sc-for>
+
   <div style="{{ cauldronGroupStyle }}">
     <div style="position:relative;width:840px;height:840px;border-radius:50%;background:radial-gradient(circle at 30% 26%, oklch(0.5 0.015 250), oklch(0.32 0.012 250) 34%, oklch(0.19 0.01 250) 64%, oklch(0.1 0.008 250) 100%);box-shadow:0 40px 76px oklch(0 0 0 / 0.6), inset 0 10px 18px oklch(0.58 0.02 250 / 0.35), inset 0 0 0 3px oklch(0.62 0.015 250 / 0.35), inset 0 -30px 60px oklch(0 0 0 / 0.5);">
       <div style="position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 210deg, oklch(0.55 0.015 250 / 0.3), transparent 25%, transparent 65%, oklch(0.55 0.015 250 / 0.22));mix-blend-mode:overlay;pointer-events:none;"></div>
@@ -221,6 +229,13 @@ const HOME = [
   { x: 1620, y: 660, r: -4 },
   { x: 1620, y: 900, r: 3 }
 ];
+// Huecos reservados para herramientas futuras (guía §17.1): soportes vacíos que
+// dejan claro que la sala puede crecer. Para añadir una herramienta nueva:
+// mover uno de estos huecos a HOME y añadir su entrada en TOOLS.
+const HOME_LIBRE = [
+  { x: 300, y: 1130, r: -2 },
+  { x: 1620, y: 1130, r: 2 }
+];
 // las botellas de la izquierda se inclinan hacia la derecha y viceversa; ambas convergen con su apertura
 // exactamente en el centro del caldero (960,540) una vez inclinadas
 const POUR = {
@@ -389,6 +404,14 @@ class Component extends DCLogic {
       return { ...t, wrapStyle, bobStyle, showStaticCork, bodyStyle, labelStyle, iconChar: t.iconChar || '', iconStyle: t.iconStyle || 'width:0;height:0;', liquidGrad: `linear-gradient(180deg, ${t.color}, oklch(0.2 0.03 60))`, glow: t.glow, onClick: () => this.handleBottleClick(i), onMouseEnter: () => this.setState({ hoverIdx: i }), onMouseLeave: () => this.setState({ hoverIdx: null }) };
     });
 
+    // Huecos reservados: soportes vacíos con su rótulo (guía §17.1).
+    const huecos = HOME_LIBRE.map((h) => ({
+      titulo: 'Hueco reservado para una herramienta futura',
+      wrapStyle: `position:absolute;left:${h.x}px;top:${h.y}px;transform:translate(-50%,-100%) rotate(${h.r}deg);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0.42;pointer-events:none;z-index:4;`,
+      marcoStyle: `width:96px;height:150px;border:2px dashed oklch(0.62 0.05 80 / 0.55);border-radius:8px;background:linear-gradient(160deg, oklch(0.8 0.01 220 / 0.05), oklch(0.6 0.02 220 / 0.08));`,
+      textoStyle: `font-family:Cinzel,serif;font-size:17px;letter-spacing:0.08em;color:oklch(0.75 0.06 82);text-shadow:0 0 8px oklch(0.7 0.1 82 / 0.4);`,
+    }));
+
     const cauldronGroupStyle = `position:absolute;left:${CAULDRON_CENTER.x}px;top:${CAULDRON_CENTER.y}px;transform-origin:50% 50%;transform:translate(-50%,-50%) scale(${closing ? 0.97 : 1});transition:transform 0.5s ${EASE};`;
 
     // spout: while upright (moving/uncork) use rot 0, while tilted use the active bottle's side-specific pour angle
@@ -437,7 +460,7 @@ class Component extends DCLogic {
     const dice = parseDice(s.diceExpr);
 
     return {
-      scale: s.scale, bottles, cauldronGroupStyle, showCork, showSmoke, showStream: showStreamActual, mistStyle, corkPosStyle, smokePosStyle,
+      scale: s.scale, bottles, huecos, cauldronGroupStyle, showCork, showSmoke, showStream: showStreamActual, mistStyle, corkPosStyle, smokePosStyle,
       showWaves, phaseIsStable, waveColor: activeTool ? activeTool.color : '#fff', waveDelays: ['0s', '0.18s', '0.36s'],
       glowColor: activeTool ? activeTool.glow : 'transparent',
       baseLiquidGrad: 'radial-gradient(circle at 38% 30%, oklch(0.97 0 0 / 0.22), oklch(0.9 0 0 / 0.1) 55%, transparent 100%)',

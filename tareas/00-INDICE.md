@@ -63,8 +63,8 @@
 | [T50](T50-taller-escena-libro.md) | Taller: escena y libro de reglas | 4 | T01, T09, T10, T11 | ⬜ |
 | [T51](T51-panel-tips.md) | Panel de tips del Taller | 4 | T16, T50 | ⬜ |
 | [T52](T52-mascota-taller.md) | Mascota del Taller | 4 | T51 | ⬜ |
-| [T53](T53-animacion-verter-pocion.md) | Animación de verter poción en el caldero | 4 | — | ⬜ |
-| [T54](T54-estructura-botellas.md) | Estructura de botellas y huecos reservados | 4 | T53 | ⬜ |
+| [T53](T53-animacion-verter-pocion.md) | Animación de verter poción en el caldero | 4 | — | ✅ |
+| [T54](T54-estructura-botellas.md) | Estructura de botellas y huecos reservados | 4 | T53 | ✅ |
 | [T55](T55-modelo-notificaciones.md) | Modelo de notificaciones + helper notificar() | 4 | T07 | ⬜ |
 | [T56](T56-escena-buzon.md) | Escena del Buzón (sobre y abanico de cartas) | 4 | T55 | ⬜ |
 | [T57](T57-carta-y-archivar.md) | Carta: lectura y archivado | 4 | T56 | ⬜ |
