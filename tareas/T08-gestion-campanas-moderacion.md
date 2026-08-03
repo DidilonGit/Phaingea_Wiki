@@ -53,8 +53,8 @@ La categoría incluirá:
 
 ## Criterios de hecho
 
-- [ ] Crear una campaña de prueba desde la web y verla en RTDB.
-- [ ] Editar y cambiar estado funciona.
-- [ ] Un jugador no puede ni ver los formularios.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Crear una campaña de prueba desde la web y verla en RTDB.
+- [x] Editar y cambiar estado funciona.
+- [x] Un jugador no puede ni ver los formularios.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

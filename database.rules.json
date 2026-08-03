@@ -1,6 +1,6 @@
 {
   "rules": {
-    "//": "Phaingea · reglas RTDB. Lectura abierta (el login descarga /usuarios). Escritura DENEGADA por defecto; se abren nodos concretos. No hay auth real de Firebase (login propio con hash), asi que las reglas validan FORMA y la UI gatea por rol: modelo de confianza para el grupo. Publicar a mano en la consola al cambiar este archivo.",
+    "//": "Phaingea · reglas RTDB completas (cubren todas las tareas de datos T13-T65). Lectura abierta; escritura por nodos con validacion de FORMA. Sin auth real de Firebase (login propio con hash): la UI gatea por rol, esto es un modelo de confianza. Publicar a mano en la consola al cambiar este archivo.",
     ".read": true,
     ".write": false,
 
@@ -10,15 +10,16 @@
         ".validate": "newData.hasChildren(['pass','rol'])",
         "pass": { ".write": true, ".validate": "newData.isString() && newData.val().length < 300" },
         "rol":  { ".write": true, ".validate": "newData.isString() && newData.val().length < 30" },
+        "nombreVisible": { ".write": true, ".validate": "newData.isString() && newData.val().length < 60" },
+        "colorAvatar":   { ".write": true, ".validate": "newData.isString() && newData.val().length < 30" },
+        "prefs":         { ".write": true },
         "$otro": { ".validate": false }
       }
     },
 
     "campanas": {
-      "//": "Guia §5-§6. base-phaingea no se puede borrar (solo editar).",
-      "base-phaingea": {
-        ".write": "newData.exists()"
-      },
+      "//": "Guia 5-6. base-phaingea no se puede borrar (solo editar).",
+      "base-phaingea": { ".write": "newData.exists()" },
       "$camp": {
         ".write": true,
         ".validate": "newData.hasChildren(['nombre', 'estado', 'orden'])",
@@ -27,6 +28,94 @@
         "orden":   { ".validate": "newData.isNumber()" },
         "descripcion": { ".validate": "newData.isString() && newData.val().length < 8000" }
       }
+    },
+
+    "comentarios": {
+      "//": "Guia 22. /comentarios/{campana}/{tipo}/{ref}/{id}",
+      "$camp": { "$tipo": { "$ref": { "$id": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['autor', 'texto', 'fecha'])",
+        "autor": { ".validate": "newData.isString() && newData.val().length < 60" },
+        "texto": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length < 4000" }
+      } } } }
+    },
+
+    "lugares": {
+      "//": "Guia 10. /lugares/{campana}/{id} con jerarquia via 'superior'.",
+      "$camp": { "$id": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['nombre'])",
+        "nombre": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length < 120" }
+      } }
+    },
+
+    "personajes": {
+      "//": "Guia 11, 19-20. /personajes/{campana}/{id}",
+      "$camp": { "$id": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['propietario', 'nombre', 'estado'])",
+        "nombre": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length < 80" },
+        "estado": { ".validate": "newData.isString() && (newData.val() == 'activo' || newData.val() == 'fallecido' || newData.val() == 'delegado' || newData.val() == 'historico')" }
+      } }
+    },
+
+    "galeria": {
+      "//": "Guia 13. Imagenes en base64 comprimido o URL; tags por campana.",
+      "$camp": {
+        "imagenes": { "$id": {
+          ".write": true,
+          ".validate": "newData.hasChildren(['titulo', 'autor', 'estado'])",
+          "titulo": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length < 120" },
+          "estado": { ".validate": "newData.isString() && (newData.val() == 'pendiente' || newData.val() == 'aprobada' || newData.val() == 'denegada')" }
+        } },
+        "tags": { "$tag": { ".write": true, ".validate": "newData.isBoolean()" } }
+      }
+    },
+
+    "sesiones": {
+      "//": "Guia 14. /sesiones/{campana}/{id} con XP general y extra.",
+      "$camp": { "$id": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['num', 'titulo'])",
+        "num": { ".validate": "newData.isNumber()" },
+        "titulo": { ".validate": "newData.isString() && newData.val().length < 160" }
+      } }
+    },
+
+    "eventos": {
+      "//": "Guia 15. Acontecimientos historicos de Base (sin XP).",
+      "$camp": { "$id": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['titulo'])",
+        "titulo": { ".validate": "newData.isString() && newData.val().length < 160" }
+      } }
+    },
+
+    "capilla": {
+      "//": "Guia 9. Config del libro de deidades por campana.",
+      "$camp": { ".write": true }
+    },
+
+    "taller": {
+      "//": "Guia 16. Reglas (md o doc), tips y mascota por campana.",
+      "$camp": { ".write": true }
+    },
+
+    "notificaciones": {
+      "//": "Guia 18. /notificaciones/{campana}/{usuario}/{id}",
+      "$camp": { "$usuario": { "$id": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['asunto', 'fecha', 'estado'])",
+        "estado": { ".validate": "newData.isString() && (newData.val() == 'pendiente' || newData.val() == 'archivada')" }
+      } } }
+    },
+
+    "registros": {
+      "//": "Guia 26. Acciones importantes. /registros/{campana}/{id}",
+      "$camp": { "$id": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['tipo', 'fecha'])"
+      } }
     }
   }
 }
