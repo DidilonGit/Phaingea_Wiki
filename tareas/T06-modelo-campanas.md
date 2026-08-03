@@ -80,8 +80,8 @@ nuevo `src/lib/db/campanas.js` · `database.rules.json`
 
 ## Criterios de hecho
 
-- [ ] `/campanas/base-phaingea` existe en RTDB.
-- [ ] Los helpers leen/escriben.
-- [ ] Reglas publicadas sin romper el login.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] `/campanas/base-phaingea` existe en RTDB.
+- [x] Los helpers leen/escriben.
+- [x] Reglas publicadas sin romper el login.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

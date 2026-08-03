@@ -13,7 +13,7 @@
 | [T04](T04-estrellas-colores-y-alineacion.md) | Estrellas con colores + contenido alineado arriba | 0 | — | ✅ |
 | [T05](T05-logo-campana-topbar.md) | Hueco del logo de campaña en la topbar | 0 | T01 | ✅ |
 | — | **FASE 1 · Datos base (campañas)** | | | |
-| [T06](T06-modelo-campanas.md) | Modelo /campanas en RTDB + seed Base de Phaingea + reglas | 1 | — | ⬜ |
+| [T06](T06-modelo-campanas.md) | Modelo /campanas en RTDB + seed Base de Phaingea + reglas | 1 | — | ✅ |
 | [T07](T07-store-campana-activa.md) | Store de campaña activa + rol por campaña | 1 | T06 | ⬜ |
 | [T08](T08-gestion-campanas-moderacion.md) | Gestión mínima de campañas desde Moderación | 1 | T02, T06 | ⬜ |
 | — | **FASE 2 · Sistemas compartidos** | | | |

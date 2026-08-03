@@ -1,6 +1,6 @@
 {
   "rules": {
-    "//": "Phaingea · reglas RTDB. Lectura abierta (el login descarga /usuarios). Escritura DENEGADA por defecto; solo se abre /usuarios (crear cuenta / cambiar pass·rol). Los nodos de datos reales (campanas, personajes, sesiones...) se anadiran aqui cuando se conecten. Login = puerta de UX de confianza, no barrera criptografica.",
+    "//": "Phaingea · reglas RTDB. Lectura abierta (el login descarga /usuarios). Escritura DENEGADA por defecto; se abren nodos concretos. No hay auth real de Firebase (login propio con hash), asi que las reglas validan FORMA y la UI gatea por rol: modelo de confianza para el grupo. Publicar a mano en la consola al cambiar este archivo.",
     ".read": true,
     ".write": false,
 
@@ -11,6 +11,21 @@
         "pass": { ".write": true, ".validate": "newData.isString() && newData.val().length < 300" },
         "rol":  { ".write": true, ".validate": "newData.isString() && newData.val().length < 30" },
         "$otro": { ".validate": false }
+      }
+    },
+
+    "campanas": {
+      "//": "Guia §5-§6. base-phaingea no se puede borrar (solo editar).",
+      "base-phaingea": {
+        ".write": "newData.exists()"
+      },
+      "$camp": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['nombre', 'estado', 'orden'])",
+        "nombre":  { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length < 80" },
+        "estado":  { ".validate": "newData.isString() && (newData.val() == 'activa' || newData.val() == 'finalizada' || newData.val() == 'archivada' || newData.val() == 'privada')" },
+        "orden":   { ".validate": "newData.isNumber()" },
+        "descripcion": { ".validate": "newData.isString() && newData.val().length < 8000" }
       }
     }
   }
