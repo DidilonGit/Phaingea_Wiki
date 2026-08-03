@@ -1,21 +1,42 @@
 ---
-// Vista Capilla (deidades y contenido religioso). Estructura con contenido
-// PLACEHOLDER (WIP): un libro sobre el atril + comentarios generales.
-// Sin título de sala: el banderín activo ya indica dónde estás (guía §3).
+// Vista CAPILLA (guía §9): sala religiosa vista de frente, como ante un atril
+// desde el que se va a predicar. Mármol blanco, forma ovalada con profundidad,
+// atril elevado en el centro con su columna, dos vidrieras laterales
+// translúcidas que dejan ver las estrellas y luz de color entrando desde los
+// lados. Sin título de sala (guía §3).
+//
+// CÓMO EDITAR:
+//  · Colores de las vidrieras -> variables --vid-a / --vid-b de .capilla.
+//  · El libro sobre el atril llega en T23 (hueco .atril-hueco).
+//  · Los comentarios generales llegan en T24.
 const COMENTARIOS = [1, 2];
 ---
 
-<section class="view" data-view="capilla" hidden aria-label="Capilla">
+<section class="view capilla" data-view="capilla" hidden aria-label="Capilla">
+  <!-- decorado de la sala -->
+  <div class="capilla-sala" aria-hidden="true">
+    <div class="vidriera izq"></div>
+    <div class="vidriera der"></div>
+    <div class="luz izq"></div>
+    <div class="luz der"></div>
+    <div class="suelo"></div>
+  </div>
+
   <div class="room">
     <header class="room-head">
       <p class="room-sub">El panteón de Phaingea, custodiado en la penumbra de la capilla.</p>
     </header>
 
-    <div class="atril">
-      <article class="book book-leather-green" role="button" tabindex="0" aria-label="Abrir libro de deidades">
-        <span class="book-title">WIP</span>
-        <span class="book-sub">WIP</span>
-      </article>
+    <!-- atril elevado con su columna; el libro se coloca encima (T23) -->
+    <div class="atril-conjunto">
+      <div class="atril-hueco">
+        <article class="book book-leather-green" role="button" tabindex="0" aria-label="Libro de deidades">
+          <span class="book-title">WIP</span>
+          <span class="book-sub">WIP</span>
+        </article>
+      </div>
+      <div class="atril-tabla" aria-hidden="true"></div>
+      <div class="atril-columna" aria-hidden="true"></div>
     </div>
 
     <div class="comments">
@@ -33,3 +54,97 @@ const COMENTARIOS = [1, 2];
     </div>
   </div>
 </section>
+
+<style>
+  .capilla {
+    --marmol-a: #f2efe8;
+    --marmol-b: #cfc9bd;
+    --vid-a: #6f8fd0; /* luz fría izquierda */
+    --vid-b: #d08a6f; /* luz cálida derecha */
+    position: relative;
+  }
+
+  /* ---- la sala: óvalo de mármol con profundidad ---- */
+  .capilla-sala {
+    position: fixed;
+    inset: var(--topbar-h) 0 0 0;
+    z-index: 0;
+    pointer-events: none;
+    /* bóveda ovalada: el mármol se abre en el centro para dejar ver el fondo */
+    background:
+      radial-gradient(75% 95% at 50% 12%, rgba(255, 255, 255, 0.1), transparent 60%),
+      radial-gradient(105% 120% at 50% 105%, var(--marmol-a) 8%, var(--marmol-b) 38%, rgba(60, 58, 54, 0.65) 62%, transparent 78%);
+  }
+
+  /* ---- vidrieras laterales (cristal parcialmente transparente) ---- */
+  .vidriera {
+    position: absolute;
+    top: 6%;
+    width: min(15vw, 190px);
+    height: 62%;
+    border-radius: 50% 50% 6px 6px / 42% 42% 6px 6px;
+    border: 2px solid rgba(120, 110, 95, 0.5);
+    opacity: 0.5;
+    background:
+      repeating-linear-gradient(28deg, rgba(255, 255, 255, 0.16) 0 10px, transparent 10px 20px),
+      linear-gradient(160deg, var(--vid-a), transparent 55%, var(--vid-b));
+    box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.25);
+  }
+  .vidriera.izq { left: 6%; }
+  .vidriera.der { right: 6%; }
+
+  /* ---- luz de color entrando desde los laterales ---- */
+  .luz {
+    position: absolute;
+    top: 8%;
+    width: 42vw;
+    height: 78%;
+    filter: blur(28px);
+    opacity: 0.35;
+  }
+  .luz.izq {
+    left: 4%;
+    background: linear-gradient(105deg, var(--vid-a), transparent 62%);
+  }
+  .luz.der {
+    right: 4%;
+    background: linear-gradient(255deg, var(--vid-b), transparent 62%);
+  }
+
+  /* ---- suelo pulido ---- */
+  .suelo {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 26%;
+    background: linear-gradient(180deg, transparent, rgba(240, 236, 228, 0.16));
+  }
+
+  /* ---- atril elevado + columna ---- */
+  .atril-conjunto {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    margin-top: 0.5rem;
+  }
+  .atril-hueco { position: relative; z-index: 2; }
+  .atril-tabla {
+    width: min(340px, 82vw);
+    height: 16px;
+    margin-top: -6px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #6b4a2c, #38240f);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    transform: perspective(300px) rotateX(48deg);
+  }
+  .atril-columna {
+    width: 46px;
+    height: clamp(70px, 12vh, 130px);
+    border-radius: 0 0 8px 8px;
+    background: linear-gradient(90deg, #b9b2a4, #efece4 35%, #a49c8d);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+  }
+
+  /* el contenido va por encima del decorado */
+  .capilla .room { position: relative; z-index: 1; }
+</style>

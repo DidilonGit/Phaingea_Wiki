@@ -32,7 +32,7 @@
 | [T20](T20-pines-regiones-planeta.md) | Pines de regiones sobre el planeta | 3 | T18 | ⬜ |
 | [T21](T21-escena-observatorio.md) | Escena del Observatorio (vigas y cristales) | 3 | — | ✅ |
 | — | **FASE 4 · Salas completas** | | | |
-| [T22](T22-escena-capilla.md) | Escena de la Capilla | 4 | T01 | ⬜ |
+| [T22](T22-escena-capilla.md) | Escena de la Capilla | 4 | T01 | ✅ |
 | [T23](T23-libro-deidades.md) | Libro de deidades sobre el atril | 4 | T09, T10, T11, T22 | ⬜ |
 | [T24](T24-comentarios-capilla.md) | Comentarios generales de la Capilla | 4 | T13, T14, T22 | ⬜ |
 | [T25](T25-escena-cartografia.md) | Escena de Cartografía (marco y ganchos) | 4 | T01 | ⬜ |

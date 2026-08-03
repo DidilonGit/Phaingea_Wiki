@@ -49,7 +49,7 @@ La escena debe sentirse reservada, limpia y solemne.
 
 ## Criterios de hecho
 
-- [ ] Escena solemne y legible; las estrellas se ven tras las vidrieras.
-- [ ] Hueco del atril listo para el libro.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Escena solemne y legible; las estrellas se ven tras las vidrieras.
+- [x] Hueco del atril listo para el libro.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
