@@ -24,7 +24,7 @@
 | [T13](T13-comentarios-v1.md) | Sistema de comentarios v1 (hilo por target) | 2 | T07 | ⬜ |
 | [T14](T14-comentarios-v2.md) | Comentarios v2: reacciones, aprobación y moderación | 2 | T12, T13 | ⬜ |
 | [T15](T15-sistema-xp.md) | Sistema de experiencia y niveles (Pathfinder 1e) | 2 | — | ✅ |
-| [T16](T16-boton-moderacion-contextual.md) | Botón de moderación contextual | 2 | T12, T17 | ⬜ |
+| [T16](T16-boton-moderacion-contextual.md) | Botón de moderación contextual | 2 | T12, T17 | ✅ |
 | [T17](T17-permisos.md) | Permisos por campaña/categoría + banderines bloqueados | 2 | T07 | ✅ |
 | — | **FASE 3 · Observatorio** | | | |
 | [T18](T18-dial-3d-campanas.md) | Dial 3D de campañas en el Observatorio | 3 | T07 | ⬜ |

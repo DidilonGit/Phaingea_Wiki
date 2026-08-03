@@ -50,6 +50,6 @@ nuevo `src/components/BotonMod.jsx`
 
 ## Criterios de hecho
 
-- [ ] Demo en una sala: visible como admin, invisible como jugador.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Demo en una sala: visible como admin, invisible como jugador.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
