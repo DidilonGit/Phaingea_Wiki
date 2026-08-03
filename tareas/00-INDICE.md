@@ -60,7 +60,7 @@
 | [T47](T47-crear-editar-sesion.md) | Crear y editar sesiones (máster) | 4 | T16, T45, T46 | ⬜ |
 | [T48](T48-comentarios-sesion.md) | Comentarios de sesión (uno por jugador) | 4 | T13, T46 | ⬜ |
 | [T49](T49-eventos-base.md) | Eventos (Sesiones en Base de Phaingea) | 4 | T46 | ⬜ |
-| [T50](T50-taller-escena-libro.md) | Taller: escena y libro de reglas | 4 | T01, T09, T10, T11 | ⬜ |
+| [T50](T50-taller-escena-libro.md) | Taller: escena y libro de reglas | 4 | T01, T09, T10, T11 | ✅ |
 | [T51](T51-panel-tips.md) | Panel de tips del Taller | 4 | T16, T50 | ⬜ |
 | [T52](T52-mascota-taller.md) | Mascota del Taller | 4 | T51 | ⬜ |
 | [T53](T53-animacion-verter-pocion.md) | Animación de verter poción en el caldero | 4 | — | ✅ |

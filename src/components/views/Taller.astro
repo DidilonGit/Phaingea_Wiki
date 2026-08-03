@@ -1,39 +1,182 @@
 ---
-// Vista Taller (reglas propias, homebrew, consejos). Estructura con contenido
-// PLACEHOLDER (WIP): tomo del reglamento + secciones (la escena de taller real
-// llega en T50). Sin título de sala: el banderín ya indica dónde estás (§3).
-const SECCIONES = [1, 2, 3, 4];
+// Vista TALLER (guía §16): reglas propias, homebrew, consejos y notas. La sala
+// se siente como un taller algo caótico, oscuro y creativo — pero el texto
+// siempre legible. Sin título de sala (guía §3).
+//
+// CÓMO EDITAR:
+//  · Contenido del libro -> nodo /taller/{campanaId}.reglasMd (markdown).
+//    La marca ===salto=== fuerza un cambio de página.
+//  · Decorado -> bloque .taller-sala (papeles, tablón, herramientas).
+//  · Panel de tips: T51. Mascota en su jaula: T52 (hueco .jaula-hueco).
+import TallerLibro from '../TallerLibro.jsx';
 ---
 
-<section class="view" data-view="taller" hidden aria-label="Taller">
+<section class="view taller" data-view="taller" hidden aria-label="Taller">
+  <!-- decorado de la sala -->
+  <div class="taller-sala" aria-hidden="true">
+    <div class="tablon">
+      <span class="nota-clavada a"></span>
+      <span class="nota-clavada b"></span>
+      <span class="nota-clavada c"></span>
+    </div>
+    <div class="estante">
+      <span class="herr h1"></span>
+      <span class="herr h2"></span>
+      <span class="herr h3"></span>
+    </div>
+    <div class="papeles"></div>
+  </div>
+
   <div class="room">
     <header class="room-head">
       <p class="room-sub">El reglamento de la mesa, con sus mañas y costumbres.</p>
     </header>
 
-    <div class="atril">
-      <article class="book book-leather-black" aria-label="Tomo del reglamento">
-        <span class="book-title">WIP</span>
-        <span class="book-sub">WIP</span>
-      </article>
-    </div>
+    <div class="taller-mesa">
+      <TallerLibro client:load />
 
-    <div class="stack reglas-secciones">
-      {SECCIONES.map(() => (
-        <section class="panel">
-          <h3 class="regla-titulo">WIP</h3>
-          <p class="regla-texto">WIP</p>
-        </section>
-      ))}
+      <!-- hueco de la jaula con la mascota (T52) -->
+      <div class="jaula-hueco">
+        <div class="jaula" aria-hidden="true">
+          <span class="barrote"></span><span class="barrote"></span>
+          <span class="barrote"></span><span class="barrote"></span>
+          <span class="jaula-base"></span>
+        </div>
+        <p class="mono muted center" style="font-size:0.6rem;margin-top:0.4rem;">WIP</p>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .reglas-secciones { max-width: 720px; margin: 2rem auto 0; }
-  .regla-titulo {
-    font-family: var(--font-title); color: var(--gold-soft);
-    letter-spacing: 0.04em; margin: 0 0 0.4rem; font-size: 1.2rem;
+  .taller { position: relative; }
+
+  /* ---- decorado: taller oscuro y creativo ---- */
+  .taller-sala {
+    position: fixed;
+    inset: var(--topbar-h) 0 0 0;
+    z-index: 0;
+    pointer-events: none;
+    /* penumbra cálida con una luz de trabajo arriba a la izquierda */
+    background:
+      radial-gradient(60% 45% at 18% 6%, rgba(230, 190, 120, 0.16), transparent 62%),
+      radial-gradient(120% 110% at 50% 45%, transparent 45%, rgba(8, 6, 4, 0.62) 100%),
+      linear-gradient(180deg, rgba(38, 28, 18, 0.55), rgba(18, 13, 8, 0.75));
   }
-  .regla-texto { font-family: var(--font-body); color: var(--paper); line-height: 1.6; margin: 0; }
+  /* tablón con notas clavadas (izquierda) */
+  .tablon {
+    position: absolute;
+    left: 3%;
+    top: 8%;
+    width: min(16vw, 200px);
+    height: min(26vh, 230px);
+    border-radius: 4px;
+    background: linear-gradient(160deg, #7a5a34, #4a3620);
+    box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.35), 0 10px 26px rgba(0, 0, 0, 0.5);
+    opacity: 0.5;
+  }
+  .nota-clavada {
+    position: absolute;
+    width: 42%;
+    height: 30%;
+    background: linear-gradient(160deg, #efe3c6, #d3bf93);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+  }
+  .nota-clavada.a { left: 8%; top: 10%; transform: rotate(-4deg); }
+  .nota-clavada.b { right: 8%; top: 18%; transform: rotate(5deg); }
+  .nota-clavada.c { left: 22%; bottom: 10%; transform: rotate(2deg); }
+
+  /* estante con herramientas (derecha) */
+  .estante {
+    position: absolute;
+    right: 4%;
+    top: 12%;
+    width: min(14vw, 170px);
+    height: 10px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #6b4a2c, #33210f);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    opacity: 0.55;
+  }
+  .herr {
+    position: absolute;
+    bottom: 100%;
+    width: 8px;
+    background: linear-gradient(180deg, #9aa0a8, #5c6168);
+    border-radius: 2px 2px 0 0;
+  }
+  .herr.h1 { left: 18%; height: 46px; }
+  .herr.h2 { left: 46%; height: 62px; width: 12px; }
+  .herr.h3 { left: 74%; height: 38px; }
+
+  /* papeles sueltos por el suelo */
+  .papeles {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 22%;
+    opacity: 0.16;
+    background:
+      radial-gradient(24px 8px at 20% 60%, #efe3c6, transparent 70%),
+      radial-gradient(30px 9px at 62% 78%, #efe3c6, transparent 70%),
+      radial-gradient(20px 7px at 84% 52%, #efe3c6, transparent 70%);
+  }
+
+  /* ---- mesa de trabajo: libro + jaula ---- */
+  .taller .room { position: relative; z-index: 1; }
+  .taller-mesa {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: clamp(0.8rem, 3vw, 2.4rem);
+  }
+
+  /* jaula de la mascota (se llena en T52) */
+  .jaula-hueco { padding-top: 1rem; }
+  .jaula {
+    position: relative;
+    width: 92px;
+    height: 108px;
+    border: 2px solid #8b8378;
+    border-radius: 46px 46px 6px 6px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.25));
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.5);
+  }
+  .barrote {
+    position: absolute;
+    top: 12px;
+    bottom: 8px;
+    width: 2px;
+    background: rgba(180, 175, 165, 0.55);
+  }
+  .barrote:nth-child(1) { left: 22%; }
+  .barrote:nth-child(2) { left: 40%; }
+  .barrote:nth-child(3) { left: 58%; }
+  .barrote:nth-child(4) { left: 76%; }
+  .jaula-base {
+    position: absolute;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    height: 10px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #6b4a2c, #33210f);
+  }
+
+  /* el texto del libro, siempre legible pese a la penumbra */
+  .taller :global(.pagina-md) { color: var(--ink); }
+  .taller :global(.pagina-md h3),
+  .taller :global(.pagina-md h4) { font-family: var(--font-title); color: #5a3d26; margin: 0 0 0.5rem; }
+  .taller :global(.pagina-md p) { margin: 0 0 0.6rem; line-height: 1.55; }
+  .taller :global(.pagina-md ul),
+  .taller :global(.pagina-md ol) { margin: 0 0 0.6rem 1.1rem; }
+  .taller :global(.pagina-md blockquote) {
+    margin: 0 0 0.6rem;
+    padding-left: 0.7rem;
+    border-left: 3px solid rgba(90, 61, 38, 0.4);
+    font-style: italic;
+  }
+
+  @media (max-width: 720px) {
+    .taller-mesa { grid-template-columns: 1fr; justify-items: center; }
+  }
 </style>

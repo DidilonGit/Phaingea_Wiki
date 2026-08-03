@@ -66,6 +66,6 @@ El libro tendrá:
 
 ## Criterios de hecho
 
-- [ ] Libro de reglas navegable con contenido WIP.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Libro de reglas navegable con contenido WIP.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
