@@ -5,6 +5,7 @@ import RoomLayout from '../layouts/RoomLayout.astro';
 import StarsCanvas from '../components/StarsCanvas.jsx';
 import DialCampanas from '../components/DialCampanas.jsx';
 import NotaCampana from '../components/NotaCampana.jsx';
+import PinesPlaneta from '../components/PinesPlaneta.jsx';
 import Capilla from '../components/views/Capilla.astro';
 import Cartografia from '../components/views/Cartografia.astro';
 import Podios from '../components/views/Podios.astro';
@@ -26,6 +27,7 @@ import Moderacion from '../components/views/Moderacion.astro';
       <canvas id="globo" aria-label="Globo de puntos del mundo. Arrastra para girarlo."></canvas>
       <div class="sombra" aria-hidden="true"></div>
       <div id="capaMarcadores"></div>
+      <PinesPlaneta client:load />
       <DialCampanas client:load />
       <p id="cargando" role="status">calibrando lentes…</p>
       <div id="tarjeta" role="dialog" aria-modal="false" aria-labelledby="tarjetaTitulo" hidden>

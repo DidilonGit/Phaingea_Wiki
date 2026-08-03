@@ -11,6 +11,7 @@
 //  · Comentarios: hilo GENERAL de la sala, no dependen de la página del libro
 //    (guía §9.4).
 import Comentarios from '../Comentarios.jsx';
+import CapillaLibro from '../CapillaLibro.jsx';
 ---
 
 <section class="view capilla" data-view="capilla" hidden aria-label="Capilla">
@@ -31,10 +32,7 @@ import Comentarios from '../Comentarios.jsx';
     <!-- atril elevado con su columna; el libro se coloca encima (T23) -->
     <div class="atril-conjunto">
       <div class="atril-hueco">
-        <article class="book book-leather-green" role="button" tabindex="0" aria-label="Libro de deidades">
-          <span class="book-title">WIP</span>
-          <span class="book-sub">WIP</span>
-        </article>
+        <CapillaLibro client:load />
       </div>
       <div class="atril-tabla" aria-hidden="true"></div>
       <div class="atril-columna" aria-hidden="true"></div>

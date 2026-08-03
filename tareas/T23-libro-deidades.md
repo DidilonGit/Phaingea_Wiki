@@ -53,7 +53,7 @@ El libro tendrá:
 
 ## Criterios de hecho
 
-- [ ] Libro navegable sobre el atril con fullscreen.
-- [ ] Indicador de herencia visible cuando corresponde.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Libro navegable sobre el atril con fullscreen.
+- [x] Indicador de herencia visible cuando corresponde.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

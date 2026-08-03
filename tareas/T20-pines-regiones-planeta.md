@@ -40,7 +40,7 @@ Ese botón cambia a la sala de Cartografía y abre directamente el lugar selecci
 
 ## Criterios de hecho
 
-- [ ] Pin → popup → botón lleva a Cartografía con el lugar activo.
-- [ ] Al cambiar campaña cambian los pines.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Pin → popup → botón lleva a Cartografía con el lugar activo.
+- [x] Al cambiar campaña cambian los pines.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
