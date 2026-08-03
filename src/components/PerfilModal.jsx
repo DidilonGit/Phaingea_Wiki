@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { $user } from '../stores/user.js';
+import { leerPrefs, guardarPrefs, aplicarPrefs } from '../lib/prefs.js';
 
 // Ventana de Perfil (guía §19.1-19.2): se abre desde el avatar de la esquina
 // superior derecha. Casi a pantalla completa con marco de madera; la sala
@@ -10,15 +11,49 @@ import { $user } from '../stores/user.js';
 export default function PerfilModal({ abierto, onCerrar }) {
   const user = useStore($user);
   const [tab, setTab] = useState('personaje');
+  // Ajustes personales (T65): se editan en borrador y se aplican al Guardar.
+  const [prefs, setPrefs] = useState(PREFS_VACIAS);
+  const [sucio, setSucio] = useState(false);
+  const [aviso, setAviso] = useState('');
+
+  // Cargar las preferencias guardadas cada vez que se abre.
+  useEffect(() => {
+    if (!abierto) return;
+    setPrefs(leerPrefs());
+    setSucio(false);
+    setAviso('');
+  }, [abierto]);
 
   useEffect(() => {
     if (!abierto) return;
     const onKey = (e) => {
-      if (e.key === 'Escape') onCerrar();
+      if (e.key === 'Escape') cerrarConAviso();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [abierto, onCerrar]);
+  }, [abierto, sucio]);
+
+  function tocar(clave, valor) {
+    setPrefs((p) => ({ ...p, [clave]: valor }));
+    setSucio(true);
+    setAviso('');
+  }
+
+  function guardar() {
+    guardarPrefs(prefs);
+    setSucio(false);
+    onCerrar();
+  }
+
+  // Cerrar sin guardar: avisa una vez si hay cambios pendientes (guía §31).
+  function cerrarConAviso() {
+    if (sucio && !aviso) {
+      setAviso('Tienes cambios sin guardar. Pulsa otra vez para cerrar sin guardar.');
+      return;
+    }
+    aplicarPrefs(); // deshacer previsualizaciones
+    onCerrar();
+  }
 
   if (!abierto || !user) return null;
 
@@ -40,10 +75,10 @@ export default function PerfilModal({ abierto, onCerrar }) {
   return (
     <>
       {/* fondo: la sala sigue visible, oscurecida y desenfocada */}
-      <div style={st.backdrop} onClick={onCerrar} aria-hidden="true" />
+      <div style={st.backdrop} onClick={cerrarConAviso} aria-hidden="true" />
 
       <div role="dialog" aria-modal="true" aria-label="Perfil" style={{ ...st.marco, ...marcoMadera }}>
-        <button style={st.cerrar} onClick={onCerrar} aria-label="Cerrar perfil">✕</button>
+        <button style={st.cerrar} onClick={cerrarConAviso} aria-label="Cerrar perfil">✕</button>
 
         <div style={st.interior}>
           {/* pestañas */}
@@ -87,17 +122,45 @@ export default function PerfilModal({ abierto, onCerrar }) {
 
             {tab === 'ajustes' && (
               <div className="stack" style={{ maxWidth: '480px', margin: '0 auto' }}>
-                <label style={st.check}><input type="checkbox" defaultChecked style={st.checkbox} /> Sonidos</label>
-                <label style={st.check}><input type="checkbox" defaultChecked style={st.checkbox} /> Recargar al publicar nueva versión</label>
-                <label style={st.check}><input type="checkbox" style={st.checkbox} /> Modo pergamino de alto contraste</label>
-                <p className="mono muted" style={{ fontSize: '0.7rem' }}>Las preferencias se guardarán de verdad más adelante.</p>
+                <label style={st.check}>
+                  <input
+                    type="checkbox"
+                    style={st.checkbox}
+                    checked={!!prefs.sonidos}
+                    onChange={(e) => tocar('sonidos', e.target.checked)}
+                  />
+                  Sonidos
+                </label>
+                <label style={st.check}>
+                  <input
+                    type="checkbox"
+                    style={st.checkbox}
+                    checked={!!prefs.autoRecarga}
+                    onChange={(e) => tocar('autoRecarga', e.target.checked)}
+                  />
+                  Recargar al publicar nueva versión
+                </label>
+                <label style={st.check}>
+                  <input
+                    type="checkbox"
+                    style={st.checkbox}
+                    checked={!!prefs.altoContraste}
+                    onChange={(e) => tocar('altoContraste', e.target.checked)}
+                  />
+                  Modo pergamino de alto contraste
+                </label>
+                <p className="mono muted" style={{ fontSize: '0.7rem' }}>
+                  Se guardan en este dispositivo al pulsar Guardar.
+                </p>
               </div>
             )}
           </div>
 
           {/* pie */}
           <div style={st.pie}>
-            <button style={st.guardar} onClick={onCerrar}>Guardar</button>
+            {aviso && <span style={st.aviso}>{aviso}</span>}
+            {sucio && !aviso && <span style={st.sucio}>cambios sin guardar</span>}
+            <button style={st.guardar} onClick={guardar}>Guardar</button>
           </div>
         </div>
       </div>
@@ -105,7 +168,17 @@ export default function PerfilModal({ abierto, onCerrar }) {
   );
 }
 
+const PREFS_VACIAS = { sonidos: true, autoRecarga: true, altoContraste: false };
+
 const st = {
+  aviso: {
+    marginRight: 'auto', color: '#f0c98c', fontSize: '0.78rem',
+    fontFamily: 'var(--font-body)',
+  },
+  sucio: {
+    marginRight: 'auto', color: 'var(--stone)', fontSize: '0.72rem',
+    fontFamily: 'ui-monospace, monospace',
+  },
   backdrop: {
     position: 'fixed', inset: 0, zIndex: 150,
     background: 'rgba(6, 7, 12, 0.55)',

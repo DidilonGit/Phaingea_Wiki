@@ -33,3 +33,15 @@ a:hover {
 .escena {
   min-height: calc(100vh - var(--topbar-h));
 }
+
+/* Modo pergamino de alto contraste (Perfil → Ajustes, T65): sube el contraste
+   del texto sobre los fondos oscuros sin romper la ambientación. */
+.alto-contraste {
+  --paper: #fffaf0;
+  --parchment: #f3e7cd;
+  --stone: #b6ae9f;
+  --gold: #e2bc6a;
+  --gold-soft: #f0d79c;
+}
+.alto-contraste .room-sub,
+.alto-contraste .muted { color: #c9c0ae; }

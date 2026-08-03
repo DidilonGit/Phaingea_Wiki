@@ -75,7 +75,7 @@
 | [T62](T62-herencia-contenido.md) | Herencia de contenido (Capilla y Cartografía) | 4 | T06, T23, T27 | ⬜ |
 | [T63](T63-perfil-personaje.md) | Perfil: pestaña de personaje (con privacidad) | 4 | T03, T32 | ⬜ |
 | [T64](T64-perfil-jugador.md) | Perfil: pestaña de jugador (inicial + color) | 4 | T03 | ⬜ |
-| [T65](T65-perfil-ajustes.md) | Perfil: pestaña de ajustes + Guardar | 4 | T03 | ⬜ |
+| [T65](T65-perfil-ajustes.md) | Perfil: pestaña de ajustes + Guardar | 4 | T03 | ✅ |
 | — | **FASE 5 · Transversales finales** | | | |
 | [T66](T66-sonidos.md) | Sonidos discretos y desactivables | 5 | T65 | ⬜ |
 | [T67](T67-pulido-transversal.md) | Pulido transversal (checklist de experiencia) | 5 | — | ⬜ |

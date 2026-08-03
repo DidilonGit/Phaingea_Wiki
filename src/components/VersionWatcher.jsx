@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { APP_VERSION } from '../lib/version.js';
+import { getPref, aplicarPrefs } from '../lib/prefs.js';
 
 // Auto-recarga: si la versión desplegada (/version.json) no coincide con la
 // versión cargada en esta pestaña, recarga para traer la última.
 // En local (APP_VERSION === 'dev') no hace nada, para no molestar durante el desarrollo.
 export default function VersionWatcher() {
   useEffect(() => {
+    aplicarPrefs(); // aplicar preferencias visuales al cargar (p. ej. contraste)
     if (APP_VERSION === 'dev') return;
 
     const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -19,6 +21,8 @@ export default function VersionWatcher() {
         if (!res.ok) return;
         const { version } = await res.json();
         if (version && version !== APP_VERSION) {
+          // Respetar la preferencia del usuario (Perfil → Ajustes, T65).
+          if (getPref('autoRecarga') === false) return;
           reloading = true;
           window.location.reload();
         }

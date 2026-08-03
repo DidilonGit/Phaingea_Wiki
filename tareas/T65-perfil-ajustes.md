@@ -50,6 +50,6 @@ La imagen de perfil general será una inicial sobre un fondo de color escogido p
 
 ## Criterios de hecho
 
-- [ ] Las prefs sobreviven a recargar.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Las prefs sobreviven a recargar.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).
