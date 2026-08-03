@@ -54,7 +54,7 @@ La categoría incluirá:
 
 ## Criterios de hecho
 
-- [ ] Un máster ve/gestiona solo su campaña; owner todo.
-- [ ] Eliminar campaña exige doble confirmación.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Un máster ve/gestiona solo su campaña; owner todo.
+- [x] Eliminar campaña exige doble confirmación.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

@@ -50,6 +50,6 @@ Los registros se consultarán desde Moderación.
 
 ## Criterios de hecho
 
-- [ ] Las acciones clave dejan registro visible en Moderación.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Las acciones clave dejan registro visible en Moderación.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

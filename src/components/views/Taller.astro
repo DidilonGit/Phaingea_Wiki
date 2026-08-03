@@ -9,6 +9,7 @@
 //  · Decorado -> bloque .taller-sala (papeles, tablón, herramientas).
 //  · Panel de tips: T51. Mascota en su jaula: T52 (hueco .jaula-hueco).
 import TallerLibro from '../TallerLibro.jsx';
+import TallerTips from '../TallerTips.jsx';
 ---
 
 <section class="view taller" data-view="taller" hidden aria-label="Taller">
@@ -35,16 +36,20 @@ import TallerLibro from '../TallerLibro.jsx';
     <div class="taller-mesa">
       <TallerLibro client:load />
 
-      <!-- hueco de la jaula con la mascota (T52) -->
+      <!-- jaula con la mascota del taller (§16.4) -->
       <div class="jaula-hueco">
-        <div class="jaula" aria-hidden="true">
+        <div class="jaula">
           <span class="barrote"></span><span class="barrote"></span>
           <span class="barrote"></span><span class="barrote"></span>
           <span class="jaula-base"></span>
+          <div class="jaula-dentro">
+            <TallerTips client:load soloMascota />
+          </div>
         </div>
-        <p class="mono muted center" style="font-size:0.6rem;margin-top:0.4rem;">WIP</p>
       </div>
     </div>
+
+    <TallerTips client:load />
   </div>
 </section>
 
@@ -152,6 +157,13 @@ import TallerLibro from '../TallerLibro.jsx';
   .barrote:nth-child(2) { left: 40%; }
   .barrote:nth-child(3) { left: 58%; }
   .barrote:nth-child(4) { left: 76%; }
+  .jaula-dentro {
+    position: absolute;
+    inset: 26px 8px 12px;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+  }
   .jaula-base {
     position: absolute;
     left: -6px;

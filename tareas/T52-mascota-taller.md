@@ -44,6 +44,6 @@ isla del Taller
 
 ## Criterios de hecho
 
-- [ ] La mascota se mueve sola de vez en cuando y suelta tips al clic.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] La mascota se mueve sola de vez en cuando y suelta tips al clic.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

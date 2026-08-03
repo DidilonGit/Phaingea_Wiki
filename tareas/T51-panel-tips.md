@@ -46,6 +46,6 @@ isla del Taller · `/taller/{campanaId}/tips`
 
 ## Criterios de hecho
 
-- [ ] El máster crea un tip y aparece ordenado; un jugador solo los lee.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] El máster crea un tip y aparece ordenado; un jugador solo los lee.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

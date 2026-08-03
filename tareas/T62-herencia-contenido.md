@@ -49,6 +49,6 @@ La interfaz debe indicar claramente cuándo un contenido es heredado y de dónde
 
 ## Criterios de hecho
 
-- [ ] Campaña nueva muestra la Capilla de Base con su indicador; sustituir y reactivar funciona.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Campaña nueva muestra la Capilla de Base con su indicador; sustituir y reactivar funciona.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

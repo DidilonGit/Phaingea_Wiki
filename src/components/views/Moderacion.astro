@@ -4,12 +4,8 @@
 // paneles llegan en T60 (jugadores/roles) y T61 (solicitudes/registros).
 // Sin título de sala (guía §3).
 import ModCampanas from '../mod/ModCampanas.jsx';
+import ModPanel from '../mod/ModPanel.jsx';
 
-const PENDIENTES = [
-  ['Jugadores y roles', 'Participantes por campaña y asignación de másteres. Llega en T60.'],
-  ['Solicitudes pendientes', 'Propuestas de contenido por aprobar. Llega en T61.'],
-  ['Registros importantes', 'Las acciones relevantes de cada campaña. Llega en T61.'],
-];
 ---
 
 <section class="view" data-view="moderacion" hidden aria-label="Moderación">
@@ -26,14 +22,7 @@ const PENDIENTES = [
       <ModCampanas client:load />
     </article>
 
-    <div class="grid">
-      {PENDIENTES.map(([titulo, desc]) => (
-        <article class="panel">
-          <h3 class="mod-titulo">{titulo}</h3>
-          <p class="muted">{desc}</p>
-        </article>
-      ))}
-    </div>
+    <ModPanel client:load />
   </div>
 </section>
 
