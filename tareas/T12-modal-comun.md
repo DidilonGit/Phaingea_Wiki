@@ -43,6 +43,6 @@ nuevo `src/components/Modal.jsx` (+ `confirmarDoble()`)
 
 ## Criterios de hecho
 
-- [ ] Demo de modal normal y de flujo destructivo con doble confirmación.
-- [ ] Build OK.
-- [ ] Commit como Jowy05 + push (deploy verde).
+- [x] Demo de modal normal y de flujo destructivo con doble confirmación.
+- [x] Build OK.
+- [x] Commit como Jowy05 + push (deploy verde).

@@ -20,7 +20,7 @@
 | [T09](T09-componente-libro.md) | Componente Libro (flipbook con índice) | 2 | — | ✅ |
 | [T10](T10-buscador-libro.md) | Buscador dentro del Libro | 2 | T09 | ✅ |
 | [T11](T11-pantalla-completa-libros.md) | Pantalla completa reutilizable de libros | 2 | T09 | ✅ |
-| [T12](T12-modal-comun.md) | Modal común + doble confirmación destructiva | 2 | — | ⬜ |
+| [T12](T12-modal-comun.md) | Modal común + doble confirmación destructiva | 2 | — | ✅ |
 | [T13](T13-comentarios-v1.md) | Sistema de comentarios v1 (hilo por target) | 2 | T07 | ⬜ |
 | [T14](T14-comentarios-v2.md) | Comentarios v2: reacciones, aprobación y moderación | 2 | T12, T13 | ⬜ |
 | [T15](T15-sistema-xp.md) | Sistema de experiencia y niveles (Pathfinder 1e) | 2 | — | ⬜ |

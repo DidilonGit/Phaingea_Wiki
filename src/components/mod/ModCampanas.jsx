@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { $user, esOwner } from '../../stores/user.js';
 import { $campaigns } from '../../stores/campaign.js';
@@ -21,6 +21,12 @@ export default function ModCampanas() {
   const [form, setForm] = useState({});
   const [confirmando, setConfirmando] = useState(null); // id pendiente de 2ª confirmación
   const [error, setError] = useState('');
+  // En el servidor no hay sesión: si pintáramos ya, el HTML no coincidiría con
+  // el del cliente (error de hidratación). Esperamos al montaje.
+  const [montado, setMontado] = useState(false);
+  useEffect(() => setMontado(true), []);
+
+  if (!montado) return null;
 
   if (!esOwner(user)) {
     return <p className="muted">Solo el owner puede gestionar campañas (los másteres podrán administrar las suyas más adelante).</p>;
