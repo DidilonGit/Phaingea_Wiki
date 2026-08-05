@@ -52,10 +52,12 @@ export default function CapillaLibro() {
 
   if (docPaginas.length) {
     // Documento maquetado: cada página es su imagen, tal cual (guía §27.1).
+    // El índice muestra el título que el máster le haya puesto a cada página.
+    const nombres = Array.isArray(datos?.paginasTitulos) ? datos.paginasTitulos : [];
     paginas = docPaginas.slice(1).map((url, i) => (
-      <img key={i} src={url} alt={`Página ${i + 2}`} className="pagina-doc" loading="lazy" />
+      <img key={i} src={url} alt={nombres[i + 1] || `Página ${i + 2}`} className="pagina-doc" loading="lazy" />
     ));
-    titulos = docPaginas.slice(1).map((_, i) => `Página ${i + 2}`);
+    titulos = docPaginas.slice(1).map((_, i) => nombres[i + 1] || `Página ${i + 2}`);
   } else if (datos?.deidadesMd) {
     const html = paginar(datos.deidadesMd);
     paginas = html.map((h, i) => <div key={i} className="pagina-md" dangerouslySetInnerHTML={{ __html: h }} />);

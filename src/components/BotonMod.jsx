@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Modal from './Modal.jsx';
 
 // ============================================================================
@@ -18,6 +19,13 @@ import Modal from './Modal.jsx';
 //   </div>
 //
 // El contenedor padre debe tener `position: relative`.
+//
+// MODERACIÓN DE LA SALA ENTERA: con `sala`, el botón NO se coloca donde esté
+// escrito, sino en la ranura `.room-mod` de su vista (arriba a la derecha del
+// contenido). Así está siempre en el mismo sitio en todas las categorías y no
+// lo tapa nada. La ranura la pone cada vista en su `.room` (ver views.css).
+//
+//   <BotonMod sala visible={esGestor} titulo="Contenido de la categoría">…
 // ============================================================================
 
 export default function BotonMod({
@@ -26,29 +34,45 @@ export default function BotonMod({
   destructivo = false,
   children,
   esquina = 'derecha', // 'derecha' | 'izquierda'
+  sala = false, // true: se coloca en la ranura de la sala
+  etiqueta = 'Moderar categoría', // texto del botón de sala
 }) {
   const [abierto, setAbierto] = useState(false);
+  const [ranura, setRanura] = useState(null);
+  const anclaRef = useRef(null);
+
+  // Busca la ranura de la vista en la que vive este botón.
+  useEffect(() => {
+    if (!sala || !visible) return;
+    const vista = anclaRef.current?.closest('.view');
+    setRanura(vista?.querySelector('.room-mod') || null);
+  }, [sala, visible]);
 
   if (!visible) return null; // sin permiso: ni existe en el DOM
 
+  const boton = sala ? (
+    <button className="btn-mod sala" onClick={() => setAbierto(true)} title={titulo}>
+      <IconoPluma />
+      <span>{etiqueta}</span>
+    </button>
+  ) : (
+    <button
+      className="btn-mod"
+      style={esquina === 'izquierda' ? { left: '0.5rem' } : { right: '0.5rem' }}
+      onClick={() => setAbierto(true)}
+      title={titulo}
+      aria-label={titulo}
+    >
+      <IconoPluma />
+      <span className="btn-mod-tip">{titulo}</span>
+    </button>
+  );
+
   return (
     <>
-      <button
-        className="btn-mod"
-        style={esquina === 'izquierda' ? { left: '0.5rem' } : { right: '0.5rem' }}
-        onClick={() => setAbierto(true)}
-        title={titulo}
-        aria-label={titulo}
-      >
-        {/* pluma/engranaje discreto */}
-        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
-          <path
-            d="M20.7 5.6 18.4 3.3a1 1 0 0 0-1.4 0l-1.7 1.7 3.7 3.7 1.7-1.7a1 1 0 0 0 0-1.4ZM3 17.2V21h3.8L17.9 9.9l-3.7-3.7L3 17.2Z"
-            fill="currentColor"
-          />
-        </svg>
-        <span className="btn-mod-tip">{titulo}</span>
-      </button>
+      {/* ancla invisible: sirve para localizar la vista y su ranura */}
+      {sala && <span ref={anclaRef} hidden />}
+      {sala ? (ranura ? createPortal(boton, ranura) : null) : boton}
 
       <Modal abierto={abierto} onCerrar={() => setAbierto(false)} titulo={titulo} destructivo={destructivo}>
         {children}
@@ -56,6 +80,17 @@ export default function BotonMod({
 
       <style>{css}</style>
     </>
+  );
+}
+
+function IconoPluma() {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+      <path
+        d="M20.7 5.6 18.4 3.3a1 1 0 0 0-1.4 0l-1.7 1.7 3.7 3.7 1.7-1.7a1 1 0 0 0 0-1.4ZM3 17.2V21h3.8L17.9 9.9l-3.7-3.7L3 17.2Z"
+        fill="currentColor"
+      />
+    </svg>
   );
 }
 
@@ -78,4 +113,12 @@ const css = `
   opacity: 0; pointer-events: none; transition: opacity .15s ease;
 }
 .btn-mod:hover .btn-mod-tip { opacity: 1; }
+
+/* variante de SALA: pastilla con texto, siempre visible y en la ranura fija */
+.btn-mod.sala {
+  position: static; width: auto; height: 30px; padding: 0 .7rem; gap: .4rem;
+  grid-auto-flow: column; opacity: 1;
+  font-family: ui-monospace, monospace; font-size: .62rem;
+  letter-spacing: .12em; text-transform: uppercase;
+}
 `;

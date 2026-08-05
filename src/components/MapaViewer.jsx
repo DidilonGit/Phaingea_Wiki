@@ -52,10 +52,12 @@ export default function MapaViewer() {
 
   const lienzoRef = useRef(null);
   const marcoRef = useRef(null);
+  const herramientaRef = useRef(null); // la herramienta en mano, para la rueda
   const arrastre = useRef(null);
   const trazo = useRef(null);
 
   useEffect(() => setMontado(true), []);
+  herramientaRef.current = herramienta;
 
   // Origen de los lugares: la campaña o aquella de la que hereda (§7).
   const origenId = campana?.categorias?.cartografia?.heredaDe || campana?.id;
@@ -194,11 +196,21 @@ export default function MapaViewer() {
     arrastre.current = null;
   }
 
-  function onWheel(e) {
-    if (herramienta) return;
-    e.preventDefault();
-    setVista((v) => ({ ...v, z: Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, v.z * (e.deltaY > 0 ? 0.9 : 1.1))) }));
-  }
+  // La rueda SOLO hace zoom: dentro del mapa la página no se mueve. React
+  // registra `wheel` como pasivo, así que hay que engancharlo a mano para
+  // poder cancelar el scroll (§10.3).
+  const huecoRef = useRef(null);
+  useEffect(() => {
+    const hueco = huecoRef.current;
+    if (!hueco) return;
+    const rueda = (e) => {
+      e.preventDefault(); // nada de bajar la página mientras se hace zoom
+      if (herramientaRef.current) return; // con herramienta en mano no hay zoom
+      setVista((v) => ({ ...v, z: Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, v.z * (e.deltaY > 0 ? 0.9 : 1.1))) }));
+    };
+    hueco.addEventListener('wheel', rueda, { passive: false });
+    return () => hueco.removeEventListener('wheel', rueda);
+  }, [montado]); // el hueco no existe hasta que el componente se pinta
 
   function entrarEn(id) {
     setActivoId(id);
@@ -271,7 +283,7 @@ export default function MapaViewer() {
           onPointerMove={onMove}
           onPointerUp={onUp}
           onPointerLeave={() => setLupaPos(null)}
-          onWheel={onWheel}
+          ref={huecoRef}
         >
           <div
             className="mapa-lienzo"
@@ -426,9 +438,21 @@ const css = `
 .mapa-lienzo img { max-width: 100%; max-height: 100%; user-select: none; }
 .mapa-vacio { color: var(--stone); font-size: .8rem; letter-spacing: .08em; }
 .capa-dibujo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.pin { position: absolute; transform: translate(-50%,-50%); display: flex; align-items: center; gap: .35rem; background: none; border: 0; cursor: pointer; }
-.pin b { width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f4dfa6, var(--gold)); box-shadow: 0 0 0 3px rgba(201,164,90,.22), 0 2px 6px rgba(0,0,0,.55); }
-.pin em { font-family: var(--font-title); font-style: normal; font-size: .8rem; color: var(--paper); text-shadow: 0 1px 3px rgba(0,0,0,.8); white-space: nowrap; }
+/* Pin: solo el punto. El nombre aparece al pasar por encima (o al enfocarlo
+   con el teclado) sobre una placa oscura, para que se lea bien sobre el
+   pergamino claro del mapa (§10.3). */
+.pin { position: absolute; transform: translate(-50%,-50%); display: flex; align-items: center; background: none; border: 0; cursor: pointer; padding: 4px; }
+.pin b { width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f4dfa6, var(--gold)); box-shadow: 0 0 0 3px rgba(201,164,90,.22), 0 2px 6px rgba(0,0,0,.55); transition: transform .15s var(--ease); }
+.pin:hover b, .pin:focus-visible b { transform: scale(1.25); }
+.pin em {
+  position: absolute; left: 50%; top: calc(100% + 2px); transform: translateX(-50%);
+  font-family: var(--font-title); font-style: normal; font-size: .78rem; white-space: nowrap;
+  color: var(--paper); background: rgba(18,13,8,.88);
+  border: 1px solid rgba(201,164,90,.6); border-radius: 5px; padding: .1rem .4rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,.5);
+  opacity: 0; pointer-events: none; transition: opacity .15s ease;
+}
+.pin:hover em, .pin:focus-visible em { opacity: 1; }
 .lente { position: absolute; width: 160px; height: 160px; border-radius: 50%; transform: translate(-50%,-50%);
   border: 3px solid #b9a27a; box-shadow: 0 8px 24px rgba(0,0,0,.6), inset 0 0 30px rgba(255,255,255,.15); pointer-events: none; background-repeat: no-repeat; }
 .ficha-pin { position: absolute; right: 24px; bottom: 24px; width: min(260px, 70%); z-index: 6;

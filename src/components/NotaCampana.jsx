@@ -84,7 +84,7 @@ const css = `
 .nota {
   position: relative;
   width: min(680px, 92vw);
-  margin: 1.4rem auto 0;
+  margin: .2rem auto 0; /* pegada al globo: la nota queda bien alta (§8.5) */
   padding: 1.3rem 1.6rem 1.5rem;
   color: #3a2a16;
   background:

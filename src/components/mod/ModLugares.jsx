@@ -96,7 +96,7 @@ export default function ModLugares({ campanaId, autor, visible }) {
   const otros = ordenAlfabetico(lugares.filter((l) => l.id !== sel));
 
   return (
-    <BotonMod visible={visible} titulo="Lugares de la campaña">
+    <BotonMod sala visible={visible} titulo="Lugares de la campaña" etiqueta="Moderar categoría">
       <div className="mod-lugares">
             <aside className="lista">
               <button className="btn" onClick={nuevo}>+ Nuevo lugar</button>

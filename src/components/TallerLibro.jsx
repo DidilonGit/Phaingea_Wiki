@@ -36,11 +36,13 @@ export default function TallerLibro() {
   let paginas, titulos;
 
   if (docPaginas.length) {
-    // La primera página del documento hace de portada del libro.
+    // La primera página del documento hace de portada del libro. En el índice
+    // sale el título que el máster le haya puesto a cada página.
+    const nombres = Array.isArray(datos?.paginasTitulos) ? datos.paginasTitulos : [];
     paginas = docPaginas.slice(1).map((url, i) => (
-      <img key={i} src={url} alt={`Página ${i + 2}`} className="pagina-doc" loading="lazy" />
+      <img key={i} src={url} alt={nombres[i + 1] || `Página ${i + 2}`} className="pagina-doc" loading="lazy" />
     ));
-    titulos = docPaginas.slice(1).map((_, i) => `Página ${i + 2}`);
+    titulos = docPaginas.slice(1).map((_, i) => nombres[i + 1] || `Página ${i + 2}`);
   } else {
     const paginasHtml = paginar(datos?.reglasMd || '');
     paginas = paginasHtml.map((html, i) => (
@@ -50,7 +52,11 @@ export default function TallerLibro() {
   }
 
   if (paginas.length === 0) {
+    // Sin contenido todavía: el máster tiene que poder entrar a añadirlo, así
+    // que el botón de moderación va también en este caso.
     return (
+      <>
+      <ModDocumento nodo="taller" campanaId={campana?.id} campoMd="reglasMd" visible={puedeGestionar(user, campana)} />
       <Libro
         titulo={campana?.nombre ? `Reglas de ${campana.nombre}` : 'Reglas'}
         sub="WIP"
@@ -65,6 +71,7 @@ export default function TallerLibro() {
         ]}
         titulosPaginas={['WIP']}
       />
+      </>
     );
   }
 

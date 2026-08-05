@@ -17,7 +17,6 @@ import { suscribirPersonajes, ordenAlfabetico } from '../lib/db/personajes.js';
 import Libro from './Libro.jsx';
 import Modal, { useDobleConfirmacion } from './Modal.jsx';
 import Comentarios from './Comentarios.jsx';
-import BotonMod from './BotonMod.jsx';
 import { notificar, participantesDe, registrar } from '../lib/db/notificaciones.js';
 
 // ============================================================================

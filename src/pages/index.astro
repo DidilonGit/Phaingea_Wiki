@@ -38,13 +38,6 @@ import Moderacion from '../components/views/Moderacion.astro';
         <button class="cerrar" id="tarjetaCerrar" type="button" aria-label="Cerrar tarjeta">✕</button>
       </div>
     </div>
-    <div class="controles">
-      <button class="btn-icono" id="btnPausa" type="button" aria-label="Pausar rotación" aria-pressed="false">
-        <svg class="ic-pausa" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 1h3v12h-3zM8.5 1h3v12h-3z"/></svg>
-        <svg class="ic-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1l10 6-10 6z"/></svg>
-      </button>
-      <p class="pista">arrastra · ← → giran · doble clic centra</p>
-    </div>
     <NotaCampana client:load />
   </section>
 
@@ -255,32 +248,6 @@ h1{ line-height: 1; }
 }
 .marcador:focus-visible{ outline-offset: 0; border-radius: 50%; }
 
-/* ---------- controles ---------- */
-.controles{
-  margin-top: 1.6rem;
-  display: flex; align-items: center; gap: .9rem;
-  white-space: nowrap;
-}
-.btn-icono{
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  border: 1px solid rgba(176,141,87,.5);
-  background: rgba(14,17,22,.78);
-  color: var(--hueso);
-  display: grid; place-items: center;
-  cursor: pointer;
-  transition: transform .18s ease;
-}
-.btn-icono:hover{ border-color: var(--ambar); color: var(--ambar); transform: scale(1.07); }
-.btn-icono svg{ width: 14px; height: 14px; fill: currentColor; }
-.btn-icono .ic-play{ display: none; }
-.btn-icono[aria-pressed="true"] .ic-play{ display: block; }
-.btn-icono[aria-pressed="true"] .ic-pausa{ display: none; }
-.pista{
-  font-family: var(--fs-mono); font-size: .64rem;
-  letter-spacing: .12em; color: var(--mut);
-}
-
 
 /* ---------- dock de secciones ---------- */
 .dock{
@@ -452,8 +419,6 @@ noscript p{
   }
   .obs{ order: -1; min-height: auto; padding: .6rem 0 1.4rem; }
   .globo-wrap{ width: min(88vw, 58vh); }
-  .controles{ margin-top: 1.1rem; }
-  .pista{ display: none; }
   .panel-izq{ max-width: none; }
   .grande{ font-size: clamp(2.8rem, 13vw, 4.2rem); }
   #ficha article{ grid-template-columns: 1fr; }
@@ -469,7 +434,10 @@ noscript p{
 /* --- integración SPA + observatorio --- */
 .view{ position: relative; z-index: 1; }
 .view[hidden]{ display: none !important; }
-.obs{ min-height: calc(100vh - var(--topbar-h)); display: grid; place-items: center; align-content: start; padding: 1.5rem 1.5rem 3rem; }
+/* El observatorio cabe de una vez: globo + nota de campaña, sin scroll. El
+   globo se ajusta a lo que sobra tras descontar la nota (~13rem). */
+.obs{ min-height: calc(100vh - var(--topbar-h)); display: grid; place-items: center; align-content: start; padding: .6rem 1.5rem 1.5rem; }
+.obs .globo-wrap{ width: min(66vmin, 620px, calc(100vh - var(--topbar-h) - 13rem)); }
 
 /* ---------- ESCENA DEL OBSERVATORIO (T21, guía §8.1) ----------
    Sensación de mirar el techo abierto de un observatorio enorme: vigas
@@ -1031,12 +999,6 @@ addEventListener('keydown', e => {
     e.preventDefault();
   }
 });
-const btnPausa = $('#btnPausa');
-btnPausa.addEventListener('click', () => {
-  st.pausado = !st.pausado;
-  btnPausa.setAttribute('aria-pressed', String(st.pausado));
-  btnPausa.setAttribute('aria-label', st.pausado ? 'Reanudar rotación' : 'Pausar rotación');
-});
 
 /* ============================================================
    DOCK — pastillas de latón (Bestiario abre la ficha)
@@ -1084,7 +1046,6 @@ async function arrancar(){
 
   if (RM){
     pintar(0);                                      // una sola vista, fija
-    btnPausa.style.display = 'none';
   } else {
     tPrev = performance.now();
     rafId = requestAnimationFrame(frame);

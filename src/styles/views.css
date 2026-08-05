@@ -16,6 +16,16 @@
   padding: 1.5rem clamp(1rem, 4vw, 3rem) 3rem;
   color: var(--paper);
 }
+/* Ranura de MODERACIÓN DE LA SALA (guía §24): SIEMPRE arriba a la derecha del
+   contenido, el mismo sitio en todas las categorías y sin nada que la tape.
+   Cada vista lleva su `<div class="room-mod">`; el botón se coloca dentro
+   mediante `<BotonMod sala>`. Si la sala no tiene moderación, no ocupa nada. */
+.room-mod {
+  display: flex; justify-content: flex-end; gap: 0.4rem;
+  position: relative; z-index: 9; margin-bottom: 0.5rem; min-height: 30px;
+}
+.room-mod:empty { display: none; }
+
 .room-head { text-align: center; margin-bottom: 1.6rem; }
 .room-kicker {
   font-family: ui-monospace, 'Courier New', monospace;

@@ -12,7 +12,9 @@ import { MARCA_SALTO } from '../../lib/markdown.js';
 //   · DOCUMENTO MAQUETADO -> sube las páginas como imágenes (se respeta su
 //     diseño tal cual) o pega las URLs de las páginas.
 //   · TEXTO PROPIO -> markdown, con ===salto=== para forzar página.
-// También edita el título y el subtítulo de la portada.
+// También edita el título y el subtítulo de la portada, y el TÍTULO DE CADA
+// PÁGINA (`paginasTitulos`, en paralelo a `paginasUrl`), que es lo que sale en
+// el índice del libro. Si una página no tiene título, el índice pone su número.
 //
 //   <ModDocumento nodo="capilla" campanaId="…" campoMd="deidadesMd" />
 // ============================================================================
@@ -34,6 +36,8 @@ export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
   }, [nodo, campanaId]);
 
   const paginas = Array.isArray(datos.paginasUrl) ? datos.paginasUrl : [];
+  // Títulos en paralelo a las páginas (para el índice del libro).
+  const titulos = paginas.map((_, i) => (Array.isArray(datos.paginasTitulos) ? datos.paginasTitulos[i] : '') || '');
 
   async function guardar(cambios) {
     await update(ref(db, `${nodo}/${campanaId}`), cambios);
@@ -51,7 +55,10 @@ export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
         const { dataUrl } = await comprimirImagen(f, { maxLado: 1400, maxBytes: 260 * 1024 });
         nuevas.push(dataUrl);
       }
-      await guardar({ paginasUrl: [...paginas, ...nuevas] });
+      await guardar({
+        paginasUrl: [...paginas, ...nuevas],
+        paginasTitulos: [...titulos, ...nuevas.map(() => '')],
+      });
     } catch (e) {
       setAviso('No se pudo subir: ' + e.message);
     } finally {
@@ -60,20 +67,32 @@ export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
   }
 
   async function quitarPagina(i) {
-    const resto = paginas.filter((_, j) => j !== i);
-    await guardar({ paginasUrl: resto });
+    await guardar({
+      paginasUrl: paginas.filter((_, j) => j !== i),
+      paginasTitulos: titulos.filter((_, j) => j !== i),
+    });
   }
 
   async function moverPagina(i, dir) {
     const j = i + dir;
     if (j < 0 || j >= paginas.length) return;
-    const copia = [...paginas];
-    [copia[i], copia[j]] = [copia[j], copia[i]];
-    await guardar({ paginasUrl: copia });
+    const url = [...paginas];
+    const tit = [...titulos];
+    [url[i], url[j]] = [url[j], url[i]];
+    [tit[i], tit[j]] = [tit[j], tit[i]];
+    await guardar({ paginasUrl: url, paginasTitulos: tit });
+  }
+
+  /** Renombra una página (lo que se ve en el índice del libro). */
+  async function tituloPagina(i, texto) {
+    if (titulos[i] === texto) return;
+    const tit = [...titulos];
+    tit[i] = texto;
+    await guardar({ paginasTitulos: tit });
   }
 
   return (
-    <BotonMod visible={visible} titulo="Contenido de la categoría">
+    <BotonMod sala visible={visible} titulo="Contenido de la categoría" etiqueta="Moderar categoría">
       <div className="stack">
             <label className="lbl">Título de la portada
               <input
@@ -103,7 +122,8 @@ export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
               <>
                 <p className="mono muted" style={{ fontSize: '.68rem' }}>
                   Cada imagen es una página y se muestra tal cual, respetando su diseño. Si tienes un PDF,
-                  exporta sus páginas a imagen y súbelas ordenadas.
+                  exporta sus páginas a imagen y súbelas ordenadas. La <b>primera página es la portada</b> y
+                  el <b>título de cada página</b> es lo que aparece en el índice del libro.
                 </p>
                 <div style={{ display: 'flex', gap: '.5rem', flexWrap: 'wrap' }}>
                   <button className="btn" onClick={() => inputRef.current?.click()} disabled={subiendo}>
@@ -129,7 +149,14 @@ export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
                     {paginas.map((url, i) => (
                       <div key={i} className="mini-pagina">
                         <img src={url} alt={`Página ${i + 1}`} />
-                        <span className="mono num">{i + 1}</span>
+                        <span className="mono num">{i === 0 ? 'portada' : i + 1}</span>
+                        <input
+                          className="mini-titulo"
+                          defaultValue={titulos[i]}
+                          placeholder={i === 0 ? 'Portada' : `Página ${i + 1}`}
+                          title="Título en el índice"
+                          onBlur={(e) => tituloPagina(i, e.target.value.trim())}
+                        />
                         <div className="mini-acciones mono">
                           <button onClick={() => moverPagina(i, -1)} title="Antes">↑</button>
                           <button onClick={() => moverPagina(i, 1)} title="Después">↓</button>
@@ -166,7 +193,14 @@ export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
 }
 
 const css = `
-.rejilla-paginas { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: .5rem; max-height: 300px; overflow-y: auto; }
+.rejilla-paginas { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: .5rem; max-height: 330px; overflow-y: auto; }
+.mini-titulo {
+  width: 100%; border: 0; border-top: 1px solid rgba(201,164,90,.25);
+  background: rgba(0,0,0,.35); color: var(--paper);
+  font-family: var(--font-body); font-size: .68rem; padding: .18rem .3rem; text-align: center;
+}
+.mini-titulo::placeholder { color: rgba(232,223,200,.35); }
+.mini-titulo:focus { outline: 1px solid rgba(201,164,90,.6); }
 .mini-pagina { position: relative; border: 2px solid #3a2a18; border-radius: 3px; overflow: hidden; background: #201812; }
 .mini-pagina img { width: 100%; display: block; }
 .mini-pagina .num {
