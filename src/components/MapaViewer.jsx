@@ -283,11 +283,15 @@ export default function MapaViewer() {
 
   ajustarRef.current = ajustar; // el listener de la rueda usa siempre el actual
 
+  /**
+   * Entra en un lugar: pasa a ser el lugar activo y se abre su información,
+   * que es lo que se quiere ver al pulsar su pin (§10.3, §10.5).
+   */
   function entrarEn(id) {
     setActivoId(id);
     setResaltado(null);
     setVista({ x: 0, y: 0, z: 1 });
-    setInfoAbierta(false);
+    setInfoAbierta(true);
   }
 
   if (!montado) return null;
@@ -388,12 +392,18 @@ export default function MapaViewer() {
               <button
                 key={id}
                 className={`pin ${id === activoId ? 'actual' : ''} ${id === resaltado ? 'resaltado' : ''}`}
-                style={{ left: `${p.x}%`, top: `${p.y}%` }}
+                style={{
+                  left: `${p.x}%`,
+                  top: `${p.y}%`,
+                  // contra-escala: el pin y su nombre se ven siempre del mismo
+                  // tamaño, por mucho que se acerque el mapa
+                  transform: `translate(-50%, -50%) scale(${1 / vista.z})`,
+                }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  entrarEn(id); // pulsar el pin te lleva a ese lugar (§10.3)
+                  entrarEn(id); // pulsar el pin abre ese lugar y su información
                 }}
-                title={porId[id]?.nombre || 'Lugar'}
+                aria-label={`Abrir ${porId[id]?.nombre || 'lugar'}`}
               >
                 <b />
                 <em>{porId[id]?.nombre || '—'}</em>
@@ -529,7 +539,7 @@ const css = `
 /* Pin: solo el punto. El nombre aparece al pasar por encima (o al enfocarlo
    con el teclado) sobre una placa oscura, para que se lea bien sobre el
    pergamino claro del mapa (§10.3). */
-.pin { position: absolute; transform: translate(-50%,-50%); display: flex; align-items: center; background: none; border: 0; cursor: pointer; padding: 4px; }
+.pin { position: absolute; display: flex; align-items: center; background: none; border: 0; cursor: pointer; padding: 4px; }
 /* marrón oscuro: se lee sobre el pergamino claro del mapa */
 .pin b { width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #6b452a, #2e1c0e 70%); box-shadow: 0 0 0 3px rgba(46,28,14,.18), 0 2px 5px rgba(0,0,0,.45); transition: transform .15s var(--ease); }
 .pin:hover b, .pin:focus-visible b { transform: scale(1.25); }
