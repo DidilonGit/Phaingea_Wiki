@@ -5,6 +5,9 @@ import { db } from '../lib/firebase.js';
 import { ref, onValue } from 'firebase/database';
 import { paginar, tituloDePagina } from '../lib/markdown.js';
 import Libro from './Libro.jsx';
+import ModDocumento from './mod/ModDocumento.jsx';
+import { $user } from '../stores/user.js';
+import { puedeGestionar } from '../lib/permisos.js';
 
 // ============================================================================
 // LIBRO DE DEIDADES (guía §9.2) sobre el atril de la Capilla.
@@ -21,6 +24,7 @@ import Libro from './Libro.jsx';
 export default function CapillaLibro() {
   const campana = useStore($campaign);
   const campanas = useStore($campaigns);
+  const user = useStore($user);
   const [datos, setDatos] = useState(null);
   const [montado, setMontado] = useState(false);
 
@@ -63,8 +67,15 @@ export default function CapillaLibro() {
     titulos = ['WIP'];
   }
 
+  const esGestor = puedeGestionar(user, campana);
+
   return (
     <div className="capilla-libro">
+      {/* el máster edita el contenido de ESTA categoría (guía §24) */}
+      <ModDocumento nodo="capilla" campanaId={campana?.id} campoMd="deidadesMd" visible={esGestor && !heredado} />
+      {esGestor && heredado && (
+        <p className="mono aviso-herencia">Para editarlo, quita la herencia desde Moderación.</p>
+      )}
       <Libro
         titulo={datos?.titulo || 'Panteón de Phaingea'}
         sub={heredado ? `Heredado de ${origen?.nombre || 'otra campaña'}` : datos?.subtitulo || ''}

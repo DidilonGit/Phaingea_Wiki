@@ -10,6 +10,7 @@ import { nivelDeXp } from '../lib/xp.js';
 import BarraXP from './BarraXP.jsx';
 import Libro from './Libro.jsx';
 import Comentarios from './Comentarios.jsx';
+import ModPersonajes from './mod/ModPersonajes.jsx';
 
 // ============================================================================
 // PODIOS (guía §11) — y LEYENDAS en Base de Phaingea (§12).
@@ -132,6 +133,8 @@ export default function PodiosView() {
 
       {/* ---- escena del podio ---- */}
       <div className="escena-podio">
+        {/* el máster modera al personaje visible (guía §24) */}
+        <ModPersonajes campanaId={campana?.id} personaje={actual} autor={user?.nombre} visible={esGestor} />
         <button className="flecha izq" onClick={anterior} aria-label="Personaje anterior" disabled={total < 2}>‹</button>
 
         <div className="podio-centro">

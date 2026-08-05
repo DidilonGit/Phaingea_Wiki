@@ -5,6 +5,9 @@ import { db } from '../lib/firebase.js';
 import { ref, onValue } from 'firebase/database';
 import { paginar, tituloDePagina } from '../lib/markdown.js';
 import Libro from './Libro.jsx';
+import ModDocumento from './mod/ModDocumento.jsx';
+import { $user } from '../stores/user.js';
+import { puedeGestionar } from '../lib/permisos.js';
 
 // Libro de reglas del Taller (guía §16.2). Lee /taller/{campanaId}:
 //   { reglasMd: '...markdown...' }  ó  { documentoUrl: '...' }
@@ -13,6 +16,7 @@ import Libro from './Libro.jsx';
 // rápida, paso de página y pantalla completa.
 export default function TallerLibro() {
   const campana = useStore($campaign);
+  const user = useStore($user);
   const [datos, setDatos] = useState(null);
   const [montado, setMontado] = useState(false);
 
@@ -62,12 +66,15 @@ export default function TallerLibro() {
   }
 
   return (
-    <Libro
+    <>
+      <ModDocumento nodo="taller" campanaId={campana?.id} campoMd="reglasMd" visible={puedeGestionar(user, campana)} />
+      <Libro
       titulo={datos?.titulo || (campana?.nombre ? `Reglas de ${campana.nombre}` : 'Reglas')}
       sub={datos?.subtitulo || 'Pathfinder 1e · reglas de la casa'}
       cubierta="cuero-negro"
       paginas={paginas}
       titulosPaginas={titulos}
-    />
+      />
+    </>
   );
 }

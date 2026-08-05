@@ -5,6 +5,7 @@ import { $user } from '../stores/user.js';
 import { puedeGestionar } from '../lib/permisos.js';
 import { aHtml } from '../lib/markdown.js';
 import Comentarios from './Comentarios.jsx';
+import ModLugares from './mod/ModLugares.jsx';
 import {
   suscribirLugares,
   lugarPredeterminado,
@@ -213,8 +214,12 @@ export default function MapaViewer() {
   const hermanos = activo?.superior ? ordenAlfabetico(hijosDe(lugares, activo.superior)) : [];
   const listaLugares = hijos.length ? hijos : hermanos;
 
+  const esGestor = puedeGestionar(user, campana);
+
   return (
     <div className="mapa-viewer">
+      {/* el máster gestiona los lugares de ESTA categoría (guía §24) */}
+      <ModLugares campanaId={origenId} autor={user?.nombre} visible={esGestor && !heredado} />
       {/* ---- herramientas colgadas ---- */}
       <div className="herramientas">
         {['lupa', 'compas', 'pano'].map((h) => (
