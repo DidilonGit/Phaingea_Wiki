@@ -10,6 +10,7 @@ import { comprimirImagen } from '../../lib/db/galeria.js';
 import { registrar } from '../../lib/db/notificaciones.js';
 import { useDobleConfirmacion } from '../Modal.jsx';
 import BotonMod from '../BotonMod.jsx';
+import ModPlaneta from './ModPlaneta.jsx';
 
 // ============================================================================
 // MODERACIÓN DE CARTOGRAFÍA (guía §10, §24).
@@ -21,7 +22,8 @@ import BotonMod from '../BotonMod.jsx';
 // ============================================================================
 
 export default function ModLugares({
-  campanaId,
+  campanaId, // campaña de la que salen los LUGARES (la propia o la heredada)
+  campanaPropia, // campaña activa: sus pines de planeta son suyos, se herede o no
   autor,
   visible,
   heredadoDe = '', // nombre de la campaña de la que se heredan los mapas
@@ -103,6 +105,13 @@ export default function ModLugares({
 
   return (
     <BotonMod sala visible={visible} titulo="Lugares de la campaña" etiqueta="Moderar categoría">
+      {/* Pines del planeta: siempre, porque cada campaña tiene el suyo aunque
+          el mundo y los lugares vengan heredados (§8.4). */}
+      <details className="bloque-planeta" open={!!heredadoDe}>
+        <summary>Pines del planeta del Observatorio</summary>
+        <ModPlaneta campanaId={campanaPropia || campanaId} lugares={lugares} />
+      </details>
+
       {heredadoDe ? (
         // Cartografía heredada (§7): el botón sale igual, pero aquí lo único
         // que cabe hacer es cortar la herencia para tener mapas propios.
@@ -131,7 +140,6 @@ export default function ModLugares({
                     <button className={sel === l.id ? 'sel' : ''} onClick={() => setSel(l.id)}>
                       {l.nombre}
                       {l.esPredeterminado && <span className="mono etq">inicio</span>}
-                      {l.destacado && <span className="mono etq">planeta</span>}
                     </button>
                   </li>
                 ))}
@@ -200,21 +208,10 @@ export default function ModLugares({
                     </div>
                   </div>
 
-                  {/* destacado en el planeta */}
-                  <label className="check">
-                    <input
-                      type="checkbox"
-                      checked={!!d.destacado}
-                      onChange={(e) => setD({ ...d, destacado: e.target.checked })}
-                    />
-                    Mostrar sobre el planeta del Observatorio
-                  </label>
-                  {d.destacado && (
-                    <div className="fila">
-                      <label className="lbl">Latitud <input className="inp" type="number" value={d.lat ?? 0} onChange={(e) => setD({ ...d, lat: +e.target.value })} /></label>
-                      <label className="lbl">Longitud <input className="inp" type="number" value={d.lon ?? 0} onChange={(e) => setD({ ...d, lon: +e.target.value })} /></label>
-                    </div>
-                  )}
+                  <p className="mono muted" style={{ fontSize: '.66rem' }}>
+                    Para que este lugar salga sobre el planeta, colócalo en «Pines del planeta del
+                    Observatorio», arriba: cada campaña elige los suyos.
+                  </p>
 
                   {aviso && <p style={{ color: aviso.startsWith('No') || aviso.startsWith('El') ? '#f0a29c' : '#9fd07a' }}>{aviso}</p>}
 
@@ -245,6 +242,15 @@ function BorrarLugar({ campanaId, id, alBorrar }) {
 }
 
 const css = `
+.bloque-planeta {
+  border: 1px solid rgba(201,164,90,.3); border-radius: 8px; padding: .5rem .7rem;
+  background: rgba(0,0,0,.2); margin-bottom: .9rem;
+}
+.bloque-planeta > summary {
+  cursor: pointer; font-family: ui-monospace, monospace; font-size: .66rem;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--gold);
+}
+.bloque-planeta[open] > summary { margin-bottom: .6rem; }
 .mod-lugares { display: grid; grid-template-columns: 190px minmax(0,1fr); gap: 1rem; }
 .mod-lugares .lista ul { list-style: none; margin: .6rem 0 0; padding: 0; display: grid; gap: .2rem; max-height: 320px; overflow-y: auto; }
 .mod-lugares .lista button {

@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
-import { $campaign } from '../stores/campaign.js';
-import { suscribirLugares, destacados } from '../lib/db/lugares.js';
+import { $campaign, $campaigns } from '../stores/campaign.js';
+import { suscribirLugares } from '../lib/db/lugares.js';
+import { suscribirPinesPlaneta } from '../lib/db/planeta.js';
 
 // ============================================================================
 // PINES DE REGIONES SOBRE EL PLANETA (guía §8.4).
 //
-// Muestra los lugares DESTACADOS de la campaña activa (los que tienen
-// `destacado: true` y coordenadas lat/lon) sobre el globo del Observatorio.
+// Muestra los pines que la campaña activa ha puesto en SU planeta
+// (/planeta/{campana}) sobre el globo del Observatorio. Los lugares salen de la
+// campaña de la que se hereda la cartografía, pero los pines son de cada
+// campaña: mismo mundo, distintos pines (§7, §8.4).
 // Al pulsar uno aparece un recuadro con su nombre, un resumen breve, una
 // imagen si la hay y el botón «Abrir en Cartografía», que cambia de sala y
 // abre ese lugar (evento 'phaingea:abrir-lugar', que escucha MapaViewer).
@@ -20,17 +23,28 @@ const RAD = Math.PI / 180;
 
 export default function PinesPlaneta() {
   const campana = useStore($campaign);
+  const campanas = useStore($campaigns);
   const [lugares, setLugares] = useState([]);
+  const [pines, setPines] = useState({});
   const [abierto, setAbierto] = useState(null);
   const [giro, setGiro] = useState(0);
   const [montado, setMontado] = useState(false);
 
   useEffect(() => setMontado(true), []);
 
+  // Los lugares vienen de la campaña de origen (ella misma o de la que hereda).
+  const origenId = campana?.categorias?.cartografia?.heredaDe || campana?.id;
+
+  useEffect(() => {
+    if (!origenId) return;
+    return suscribirLugares(origenId, setLugares);
+  }, [origenId]);
+
+  // Los pines del planeta son SIEMPRE de la campaña activa.
   useEffect(() => {
     if (!campana?.id) return;
     setAbierto(null);
-    return suscribirLugares(campana.id, setLugares);
+    return suscribirPinesPlaneta(campana.id, setPines);
   }, [campana?.id]);
 
   // Seguimos el giro del globo (el prototipo expone su estado en __engren).
@@ -45,7 +59,10 @@ export default function PinesPlaneta() {
 
   if (!montado) return null;
 
-  const marcados = destacados(lugares);
+  const porId = Object.fromEntries(lugares.map((l) => [l.id, l]));
+  const marcados = Object.entries(pines)
+    .filter(([id, p]) => porId[id] && typeof p?.lat === 'number' && typeof p?.lon === 'number')
+    .map(([id, p]) => ({ ...porId[id], lat: p.lat, lon: p.lon }));
   if (marcados.length === 0) return null;
 
   // Proyección ortográfica sencilla: igual que el globo de puntos.

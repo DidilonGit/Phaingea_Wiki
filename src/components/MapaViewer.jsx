@@ -239,6 +239,7 @@ export default function MapaViewer() {
       {/* el máster gestiona los lugares de ESTA categoría (guía §24) */}
       <ModLugares
         campanaId={origenId}
+        campanaPropia={campana?.id}
         autor={user?.nombre}
         visible={esGestor}
         heredadoDe={heredado ? origen?.nombre || origenId : ''}

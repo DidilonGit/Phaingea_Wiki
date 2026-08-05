@@ -40,6 +40,13 @@
       } } } }
     },
 
+    "planeta": {
+      "//": "Guia 8.4. /planeta/{campana}/{lugar} = {lat, lon}. Los pines del globo son de CADA campana, aunque la cartografia se herede.",
+      "$camp": { "$lugar": {
+        ".write": true,
+        ".validate": "!newData.exists() || (newData.hasChildren(['lat','lon']) && newData.child('lat').isNumber() && newData.child('lon').isNumber())"
+      } }
+    },
     "lugares": {
       "//": "Guia 10. /lugares/{campana}/{id} con jerarquia via 'superior'.",
       "$camp": { "$id": {

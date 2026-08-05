@@ -110,15 +110,17 @@ export default function Libro({
         const PageFlip = mod.PageFlip || mod.default?.PageFlip || mod.default;
         if (!vivo || flipRef.current || typeof PageFlip !== 'function') return;
 
-        const ancho = Math.min(el.clientWidth / 2, 460);
+        const ancho = Math.min(el.clientWidth / 2, 700);
         const flip = new PageFlip(el, {
           width: ancho,
           height: Math.round(ancho * proporcionRef.current),
           size: 'stretch',
           minWidth: 220,
-          maxWidth: 520,
+          // Topes altos a propósito: en pantalla completa el libro tiene que
+          // poder crecer hasta llenar el hueco (guía §9.3).
+          maxWidth: 900,
           minHeight: 300,
-          maxHeight: 760,
+          maxHeight: 1300,
           showCover: true,
           usePortrait: true,
           maxShadowOpacity: 0.5,
@@ -158,6 +160,19 @@ export default function Libro({
       flipRef.current = null;
     };
   }, []);
+
+  // Pantalla completa: el hueco cambia de tamaño. StPageFlip se estira solo
+  // (size: 'stretch') pero hay que avisarle de que el sitio ha cambiado.
+  useEffect(() => {
+    if (!flipRef.current) return;
+    const t = setTimeout(() => {
+      try {
+        flipRef.current?.update?.();
+      } catch (_) {}
+      window.dispatchEvent(new Event('resize')); // el propio libro se recoloca
+    }, 80);
+    return () => clearTimeout(t);
+  }, [fs]);
 
   // Si cambian las páginas (contenido cargado o nuevo), refrescar el libro.
   useEffect(() => {
@@ -202,7 +217,7 @@ export default function Libro({
   const enContenido = pagina >= OFFSET && pagina < OFFSET + total;
 
   return (
-    <div className={`libro-wrap ${fs ? 'fs' : ''}`} ref={contRef}>
+    <div className={`libro-wrap ${fs ? 'fs' : ''}`} ref={contRef} style={{ '--prop': proporcion }}>
       {fs && <div className="fs-fondo" onClick={() => setFs(false)} aria-hidden="true" />}
 
       {!fs && (
@@ -436,9 +451,14 @@ const css = `
   opacity: 0; pointer-events: none; transition: opacity .15s ease;
 }
 .btn-ampliar:hover .tip-ampliar { opacity: 1; }
-.libro-wrap.fs { position: fixed; inset: 0; z-index: 140; display: grid; place-content: center; gap: .7rem; justify-items: center; }
+.libro-wrap.fs { position: fixed; inset: 0; z-index: 140; display: grid; place-content: center; gap: .5rem; justify-items: center; padding: 1.5vh 2vw; }
 .fs-fondo { position: fixed; inset: 0; z-index: -1; background: rgba(5,6,10,.72); backdrop-filter: blur(5px); }
-.libro-wrap.fs .libro { width: min(94vw, 1000px); max-height: 86vh; }
+/* En pantalla completa manda el ALTO: el libro llena casi toda la ventana.
+   OJO: StPageFlip escribe width:100% en el propio libro, así que su tamaño se
+   controla desde AQUÍ, dando ancho a la columna. El ancho sale de la proporción
+   de la hoja (--prop = alto ÷ ancho), para que quepa entero de alto. */
+.libro-wrap.fs { grid-template-columns: min(94vw, calc(84vh / var(--prop, 1.38))); }
+.libro-wrap.fs .libro { max-height: 88vh; }
 .fs-cerrar {
   justify-self: end; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-weight: 700;
   background: linear-gradient(180deg, #f2dc94, #c9a45a 55%, #87692f);
