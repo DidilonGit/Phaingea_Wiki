@@ -399,9 +399,17 @@ export default function MapaViewer() {
                   // tamaño, por mucho que se acerque el mapa
                   transform: `translate(-50%, -50%) scale(${1 / vista.z})`,
                 }}
-                onClick={(e) => {
+                // OJO: va en pointerdown, no en click. El marco captura el
+                // puntero para poder arrastrar el mapa, y con la captura el
+                // click acaba yendo al marco en vez de al pin: por eso no
+                // pasaba nada al pulsarlo. Parando aquí el evento, ni empieza
+                // el arrastre ni se pierde la pulsación.
+                onPointerDown={(e) => {
                   e.stopPropagation();
                   entrarEn(id); // pulsar el pin abre ese lugar y su información
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') entrarEn(id);
                 }}
                 aria-label={`Abrir ${porId[id]?.nombre || 'lugar'}`}
               >
