@@ -48,6 +48,14 @@ export default function BotonMod({
     setRanura(vista?.querySelector('.room-mod') || null);
   }, [sala, visible]);
 
+  // Al cambiar de sala se cierra: si no, la ventana se queda abierta en una
+  // vista oculta y al volver aparece sola.
+  useEffect(() => {
+    const cerrar = () => setAbierto(false);
+    window.addEventListener('phaingea:vista', cerrar);
+    return () => window.removeEventListener('phaingea:vista', cerrar);
+  }, []);
+
   if (!visible) return null; // sin permiso: ni existe en el DOM
 
   const boton = sala ? (

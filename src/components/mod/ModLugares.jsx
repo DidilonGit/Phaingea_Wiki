@@ -152,6 +152,18 @@ export default function ModLugares({
                 <p className="muted">Elige un lugar de la lista o crea uno nuevo.</p>
               ) : (
                 <div className="stack">
+                  {/* Guardar y borrar, arriba del todo: el panel es largo y no
+                      hay que bajar hasta el final para conservar los cambios. */}
+                  <div className="barra-guardar">
+                    <button className="btn" onClick={guardar}>Guardar lugar</button>
+                    <BorrarLugar campanaId={campanaId} id={d.id} alBorrar={() => setSel(null)} />
+                    {aviso && (
+                      <span className="mono" style={{ color: aviso.startsWith('No') || aviso.startsWith('El') ? '#f0a29c' : '#9fd07a' }}>
+                        {aviso}
+                      </span>
+                    )}
+                  </div>
+
                   <label className="lbl">Nombre <input className="inp" {...campo('nombre')} /></label>
                   <label className="lbl">Resumen (el recuadro del pin) <input className="inp" {...campo('resumen')} /></label>
                   <label className="lbl">Información (markdown)
@@ -213,12 +225,6 @@ export default function ModLugares({
                     Observatorio», arriba: cada campaña elige los suyos.
                   </p>
 
-                  {aviso && <p style={{ color: aviso.startsWith('No') || aviso.startsWith('El') ? '#f0a29c' : '#9fd07a' }}>{aviso}</p>}
-
-                  <div className="fila">
-                    <button className="btn" onClick={guardar}>Guardar lugar</button>
-                    <BorrarLugar campanaId={campanaId} id={d.id} alBorrar={() => setSel(null)} />
-                  </div>
                 </div>
               )}
         </section>
@@ -263,6 +269,13 @@ const css = `
 .etq { font-size: .52rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold);
   border: 1px solid rgba(201,164,90,.45); border-radius: 999px; padding: 0 .3rem; }
 .detalle { min-width: 0; }
+.barra-guardar {
+  position: sticky; top: 0; z-index: 3;
+  display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+  padding: .5rem 0 .6rem; margin-bottom: .2rem;
+  background: linear-gradient(180deg, rgba(30,21,13,.98) 70%, rgba(30,21,13,0));
+}
+.barra-guardar .mono { font-size: .68rem; }
 .fila { display: flex; gap: .5rem; flex-wrap: wrap; align-items: flex-end; }
 .mini-mapa {
   position: relative; height: 190px; border-radius: 6px; overflow: hidden; display: grid; place-items: center;
