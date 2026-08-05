@@ -43,6 +43,13 @@ export default function Libro({
   paginas = [],
   titulosPaginas = [],
   alAbrirPagina,
+  // Portada propia: con un documento maquetado, su primera página ES la
+  // portada del libro (guía §27.1), en vez de la tapa de cuero genérica.
+  portada = null,
+  // Proporción de la hoja (alto ÷ ancho). Con documentos maquetados conviene
+  // pasar la del original (p. ej. 792/612 en tamaño carta) para que la página
+  // llene el libro sin bordes ni recortes.
+  proporcion = 1.38,
 }) {
   const [pagina, setPagina] = useState(0); // índice dentro del libro completo
   const [irA, setIrA] = useState('');
@@ -83,6 +90,8 @@ export default function Libro({
   const montandoRef = useRef(false);
   const paginasRef = useRef(paginas);
   paginasRef.current = paginas;
+  const proporcionRef = useRef(proporcion);
+  proporcionRef.current = proporcion;
 
   useEffect(() => {
     let vivo = true;
@@ -101,7 +110,7 @@ export default function Libro({
         const ancho = Math.min(el.clientWidth / 2, 460);
         const flip = new PageFlip(el, {
           width: ancho,
-          height: Math.round(ancho * 1.38),
+          height: Math.round(ancho * proporcionRef.current),
           size: 'stretch',
           minWidth: 220,
           maxWidth: 520,
@@ -200,16 +209,24 @@ export default function Libro({
       )}
 
       {/* El libro: cada .hoja es una página que StPageFlip anima */}
-      <div className={`libro cubierta-${cubierta}`} ref={libroRef}>
-        {/* portada */}
+      <div
+        className={`libro cubierta-${cubierta}`}
+        ref={libroRef}
+        style={{ aspectRatio: `1 / ${proporcion}` }}
+      >
+        {/* portada: la del documento si la hay, si no la tapa de cuero */}
         <div className="hoja tapa" data-density="hard">
-          <div className="tapa-interior">
-            <span className="esquina a" /><span className="esquina b" />
-            <span className="esquina c" /><span className="esquina d" />
-            <span className="portada-titulo">{titulo}</span>
-            {sub && <span className="portada-sub">{sub}</span>}
-            <span className="portada-abrir mono">ABRIR</span>
-          </div>
+          {portada ? (
+            <div className="tapa-doc">{portada}</div>
+          ) : (
+            <div className="tapa-interior">
+              <span className="esquina a" /><span className="esquina b" />
+              <span className="esquina c" /><span className="esquina d" />
+              <span className="portada-titulo">{titulo}</span>
+              {sub && <span className="portada-sub">{sub}</span>}
+              <span className="portada-abrir mono">ABRIR</span>
+            </div>
+          )}
         </div>
 
         {/* índice */}
@@ -300,9 +317,12 @@ export default function Libro({
 
 const css = `
 .libro-wrap { display: grid; justify-items: center; gap: .7rem; width: 100%; }
-.libro { width: min(560px, 92vw); height: min(72vh, 620px); margin: 0 auto; }
+.libro { width: min(560px, 92vw); max-height: 74vh; margin: 0 auto; }
 .libro .hoja { background: linear-gradient(120deg, var(--paper), var(--parchment) 85%); overflow: hidden; }
 .libro .hoja.tapa { background: none; }
+/* portada tomada del propio documento: llena la tapa de borde a borde */
+.tapa-doc { position: absolute; inset: 0; overflow: hidden; border-radius: 4px; }
+.tapa-doc img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* tapas de cuero con esquinas decorativas (guía §27.2) */
 .cubierta-cuero-rojo  .tapa-interior { --cuero: var(--leather-red);   --fondo: #241610; }
@@ -326,6 +346,16 @@ const css = `
 
 /* páginas de papel */
 .pagina { position: absolute; inset: 0; color: var(--ink); padding: 1.1rem 1.2rem 2rem; overflow-y: auto; }
+/* Documento maquetado: la imagen llena la hoja de borde a borde (sin el
+   margen de papel), tal como se ve el original. */
+.pagina:has(.pagina-doc) { padding: 0; overflow: hidden; }
+.pagina:has(.pagina-doc) .pagina-contenido { height: 100%; }
+.pagina-doc { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pagina:has(.pagina-doc) .pagina-pie {
+  background: linear-gradient(transparent, rgba(20,12,4,.55));
+  color: rgba(255,245,225,.9);
+}
+.pagina:has(.pagina-doc) .pagina-pie .lnk { color: rgba(255,235,190,.95); }
 .pagina-titulo { font-family: var(--font-title); color: #5a3d26; font-size: 1.2rem; margin: 0 0 .7rem; }
 .indice-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
 .indice-lista button {
@@ -401,7 +431,7 @@ const css = `
 .btn-ampliar:hover .tip-ampliar { opacity: 1; }
 .libro-wrap.fs { position: fixed; inset: 0; z-index: 140; display: grid; place-content: center; gap: .7rem; justify-items: center; }
 .fs-fondo { position: fixed; inset: 0; z-index: -1; background: rgba(5,6,10,.72); backdrop-filter: blur(5px); }
-.libro-wrap.fs .libro { width: min(94vw, 1000px); height: min(84vh, 820px); }
+.libro-wrap.fs .libro { width: min(94vw, 1000px); max-height: 86vh; }
 .fs-cerrar {
   justify-self: end; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-weight: 700;
   background: linear-gradient(180deg, #f2dc94, #c9a45a 55%, #87692f);

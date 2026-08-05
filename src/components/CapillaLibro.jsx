@@ -44,13 +44,18 @@ export default function CapillaLibro() {
 
   let paginas = [];
   let titulos = [];
+  const docPaginas = Array.isArray(datos?.paginasUrl) ? datos.paginasUrl : [];
+  // La primera página del documento hace de portada del libro.
+  const portadaDoc = docPaginas.length
+    ? <img src={docPaginas[0]} alt="Portada" className="pagina-doc" />
+    : null;
 
-  if (Array.isArray(datos?.paginasUrl) && datos.paginasUrl.length) {
+  if (docPaginas.length) {
     // Documento maquetado: cada página es su imagen, tal cual (guía §27.1).
-    paginas = datos.paginasUrl.map((url, i) => (
-      <img key={i} src={url} alt={`Página ${i + 1}`} className="pagina-doc" />
+    paginas = docPaginas.slice(1).map((url, i) => (
+      <img key={i} src={url} alt={`Página ${i + 2}`} className="pagina-doc" loading="lazy" />
     ));
-    titulos = datos.paginasUrl.map((_, i) => `Página ${i + 1}`);
+    titulos = docPaginas.slice(1).map((_, i) => `Página ${i + 2}`);
   } else if (datos?.deidadesMd) {
     const html = paginar(datos.deidadesMd);
     paginas = html.map((h, i) => <div key={i} className="pagina-md" dangerouslySetInnerHTML={{ __html: h }} />);
@@ -80,6 +85,8 @@ export default function CapillaLibro() {
         titulo={datos?.titulo || 'Panteón de Phaingea'}
         sub={heredado ? `Heredado de ${origen?.nombre || 'otra campaña'}` : datos?.subtitulo || ''}
         cubierta="cuero-verde"
+        portada={portadaDoc}
+        proporcion={docPaginas.length ? 792 / 612 : 1.38}
         paginas={paginas}
         titulosPaginas={titulos}
       />

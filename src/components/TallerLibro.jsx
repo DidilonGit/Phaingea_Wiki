@@ -36,10 +36,11 @@ export default function TallerLibro() {
   let paginas, titulos;
 
   if (docPaginas.length) {
-    paginas = docPaginas.map((url, i) => (
-      <img key={i} src={url} alt={`Página ${i + 1}`} className="pagina-doc" loading="lazy" />
+    // La primera página del documento hace de portada del libro.
+    paginas = docPaginas.slice(1).map((url, i) => (
+      <img key={i} src={url} alt={`Página ${i + 2}`} className="pagina-doc" loading="lazy" />
     ));
-    titulos = docPaginas.map((_, i) => `Página ${i + 1}`);
+    titulos = docPaginas.slice(1).map((_, i) => `Página ${i + 2}`);
   } else {
     const paginasHtml = paginar(datos?.reglasMd || '');
     paginas = paginasHtml.map((html, i) => (
@@ -54,6 +55,8 @@ export default function TallerLibro() {
         titulo={campana?.nombre ? `Reglas de ${campana.nombre}` : 'Reglas'}
         sub="WIP"
         cubierta="cuero-negro"
+      portada={docPaginas.length ? <img src={docPaginas[0]} alt="Portada" className="pagina-doc" /> : null}
+      proporcion={docPaginas.length ? 792 / 612 : 1.38}
         paginas={[
           <div key="wip" className="pagina-md">
             <h3>WIP</h3>
@@ -72,6 +75,8 @@ export default function TallerLibro() {
       titulo={datos?.titulo || (campana?.nombre ? `Reglas de ${campana.nombre}` : 'Reglas')}
       sub={datos?.subtitulo || 'Pathfinder 1e · reglas de la casa'}
       cubierta="cuero-negro"
+      portada={docPaginas.length ? <img src={docPaginas[0]} alt="Portada" className="pagina-doc" /> : null}
+      proporcion={docPaginas.length ? 792 / 612 : 1.38}
       paginas={paginas}
       titulosPaginas={titulos}
       />

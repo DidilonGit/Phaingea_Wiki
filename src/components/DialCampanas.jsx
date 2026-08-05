@@ -14,12 +14,14 @@ import { campanasVisibles } from '../lib/permisos.js';
 //       left% = 50 + R·sin(φ)      top% = 50 − R·cos(φ)
 //   Base de Phaingea va SIEMPRE fija en el vértice (φ=0) y no la tapa nadie.
 //
-//   Las demás campañas recorren el arco EVITANDO el vértice: viven en
-//   φ ∈ [HUECO, ARCO] ∪ [−ARCO, −HUECO]. Al girar, cuando una llegaría al
-//   vértice SALTA al otro lado en vez de esconderse detrás de Base, y cuando
-//   llega al extremo del arco reaparece por el extremo contrario.
-//   Así, por defecto, todas las campañas se ven en el dial; solo si hay más
-//   de las que caben se ocultan las MÁS ANTIGUAS (menor `orden`).
+//   Las demás campañas ocupan HUECOS repartidos por el arco, evitando el
+//   vértice (donde está Base): de izquierda a derecha, saltando el hueco
+//   central. Caben MAX_VISIBLES a la vez; si hay más campañas, las que no
+//   entran quedan fuera de la vista.
+//
+//   Las flechas de debajo deslizan la ventana: al pulsar una, desaparece la de
+//   un extremo y entra otra por el contrario, y las demás se desplazan de
+//   hueco con una transición, como un carrusel.
 //
 // INTERACCIÓN (importante)
 //   El dial NO captura el ratón sobre todo el globo: solo la banda del arco
@@ -30,29 +32,33 @@ import { campanasVisibles } from '../lib/permisos.js';
 // ============================================================================
 
 const RADIO = 47; // % del contenedor
-const PASO = 34; // separación cómoda entre campañas (grados)
-const PASO_MIN = 13; // si hay muchas, se aprietan hasta aquí (sin solaparse)
+const MAX_VISIBLES = 8; // cuántas campañas caben a la vez en el dial
+const PASO = 34; // separación cómoda entre campañas (grados) cuando hay pocas
 const ARCO = 88; // hasta dónde llega el dial a cada lado
 const HUECO = 22; // separación mínima con Base (que ocupa el vértice)
 const RECORRIDO = 2 * (ARCO - HUECO); // longitud útil del arco
 
-/** Coloca un avance `t` (0..RECORRIDO) en el arco, saltando por encima de Base. */
-function anguloDesde(t) {
-  const mitad = ARCO - HUECO;
-  const x = ((t % RECORRIDO) + RECORRIDO) % RECORRIDO;
-  // Primera mitad: baja por la derecha. Segunda: entra por la izquierda y sube.
-  return x < mitad ? HUECO + x : -ARCO + (x - mitad);
+/**
+ * Ángulo del hueco `i` de `n`, recorriendo el arco de izquierda a derecha y
+ * saltándose el vértice, que es de Base. Con pocas campañas se reparten con
+ * una separación cómoda y centradas; con las 8 ocupan el arco entero.
+ */
+function anguloDelHueco(i, n) {
+  if (n <= 1) return -PASO / 2;
+  const sep = Math.min(PASO, RECORRIDO / (n - 1));
+  const u = (RECORRIDO - sep * (n - 1)) / 2 + i * sep; // avance por el arco
+  const mitad = ARCO - HUECO; // dónde empieza el lado derecho
+  return u < mitad ? -ARCO + u : HUECO + (u - mitad);
 }
 
 export default function DialCampanas() {
   const todas = useStore($campaigns);
   const activa = useStore($campaign);
   const user = useStore($user);
-  const [offset, setOffset] = useState(0); // grados de giro del dial
+  const [inicio, setInicio] = useState(0); // primera campaña de la ventana
   const [hover, setHover] = useState(null);
   const [montado, setMontado] = useState(false);
   const arrastre = useRef(null);
-  const pasoRef = useRef(PASO); // el paso actual, para el encaje y los botones
 
   useEffect(() => setMontado(true), []);
 
@@ -60,23 +66,26 @@ export default function DialCampanas() {
   const visibles = campanasVisibles(user, todas);
   const base = visibles.find((c) => c.esBase);
 
-  // Las que giran, de más nueva a más antigua. La separación se ajusta para
-  // que quepan TODAS; solo si son tantas que ni apretándolas caben, se quedan
-  // fuera las más antiguas.
-  const otrasTodas = visibles.filter((c) => !c.esBase).sort((a, b) => (b.orden || 0) - (a.orden || 0));
-  const paso = otrasTodas.length
-    ? Math.min(PASO, Math.max(PASO_MIN, RECORRIDO / otrasTodas.length))
-    : PASO;
-  const capacidad = Math.max(1, Math.floor(RECORRIDO / paso));
-  const otras = otrasTodas.slice(0, capacidad);
-  const ocultas = otrasTodas.length - otras.length;
+  // Todas las campañas que giran, por orden de creación.
+  const otrasTodas = visibles.filter((c) => !c.esBase).sort((a, b) => (a.orden || 0) - (b.orden || 0));
+  const cuantas = Math.min(MAX_VISIBLES, otrasTodas.length);
 
-  // Al cambiar de campaña activa, girar el dial para traerla arriba del todo.
+  // Ventana de las que se ven ahora mismo (se desliza con las flechas).
+  const inicioSeguro = otrasTodas.length
+    ? ((inicio % otrasTodas.length) + otrasTodas.length) % otrasTodas.length
+    : 0;
+  const otras = Array.from(
+    { length: cuantas },
+    (_, k) => otrasTodas[(inicioSeguro + k) % otrasTodas.length]
+  );
+
+  // Si la campaña activa no está en la ventana, deslizarla hasta que se vea.
   useEffect(() => {
-    if (!activa || activa.esBase) return;
-    const i = otras.findIndex((c) => c.id === activa.id);
-    if (i >= 0) setOffset(-i * paso);
-  }, [activa?.id, otras.length]);
+    if (!activa || activa.esBase || otrasTodas.length === 0) return;
+    if (otras.some((c) => c.id === activa.id)) return;
+    const i = otrasTodas.findIndex((c) => c.id === activa.id);
+    if (i >= 0) setInicio(i);
+  }, [activa?.id, otrasTodas.length]);
 
   // Girar con las flechas del teclado (guía §30: no depender solo del hover).
   useEffect(() => {
@@ -85,38 +94,45 @@ export default function DialCampanas() {
       if (e.target.closest?.('input, textarea, select, [role="dialog"]')) return;
       const obs = document.querySelector('.view[data-view="inicio"]');
       if (!obs || obs.hidden) return; // solo en el Observatorio
-      if (e.key === 'ArrowLeft') setOffset((o) => o + pasoRef.current);
-      if (e.key === 'ArrowRight') setOffset((o) => o - pasoRef.current);
+      if (e.key === 'ArrowLeft') deslizar(-1);
+      if (e.key === 'ArrowRight') deslizar(1);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [montado]);
 
-  // --- giro con rueda y arrastre, SOLO sobre la banda del arco ---
+  /** Desliza la ventana un puesto (dir -1 = izquierda, +1 = derecha). */
+  function deslizar(dir) {
+    if (otrasTodas.length <= MAX_VISIBLES) return; // no hay nada que traer
+    setInicio((i) => i + dir);
+  }
+
+  // --- deslizar con rueda y arrastre, SOLO sobre la banda del arco ---
   function onWheel(e) {
     e.preventDefault();
-    setOffset((o) => o + (e.deltaY > 0 ? -pasoRef.current : pasoRef.current));
+    deslizar(e.deltaY > 0 ? 1 : -1);
   }
   function onDown(e) {
-    arrastre.current = { x: e.clientX, offset };
+    arrastre.current = { x: e.clientX };
     e.currentTarget.setPointerCapture?.(e.pointerId);
   }
   function onMove(e) {
-    if (!arrastre.current) return;
-    setOffset(arrastre.current.offset + (e.clientX - arrastre.current.x) * 0.25);
+    const a = arrastre.current;
+    if (!a) return;
+    const dx = e.clientX - a.x;
+    if (Math.abs(dx) > 45) {
+      deslizar(dx > 0 ? -1 : 1);
+      a.x = e.clientX;
+    }
   }
   function onUp() {
-    if (!arrastre.current) return;
     arrastre.current = null;
-    setOffset((o) => Math.round(o / pasoRef.current) * pasoRef.current); // encajar
   }
-
-  pasoRef.current = paso;
 
   if (!montado || visibles.length === 0) return null;
 
   const colocadas = otras.map((c, i) => {
-    const phi = anguloDesde(i * paso + offset);
+    const phi = anguloDelHueco(i, cuantas);
     const rad = (phi * Math.PI) / 180;
     const d = Math.cos(rad); // profundidad: 1 arriba, 0 en los extremos
     return {
@@ -178,18 +194,13 @@ export default function DialCampanas() {
         />
       ))}
 
-      {/* botones de giro */}
-      {otras.length > 1 && (
-        <>
-          <button className="dial-btn izq" onClick={() => setOffset((o) => o + paso)} aria-label="Girar a la izquierda">‹</button>
-          <button className="dial-btn der" onClick={() => setOffset((o) => o - paso)} aria-label="Girar a la derecha">›</button>
-        </>
-      )}
-
-      {ocultas > 0 && (
-        <span className="dial-ocultas mono" title="Gira el dial para alcanzarlas">
-          +{ocultas} más antigua{ocultas === 1 ? '' : 's'}
-        </span>
+      {/* flechas para deslizar la ventana de campañas */}
+      {otrasTodas.length > MAX_VISIBLES && (
+        <div className="dial-flechas">
+          <button className="dial-btn" onClick={() => deslizar(-1)} aria-label="Ver campañas anteriores">&lsaquo;</button>
+          <span className="dial-ocultas mono">{cuantas} de {otrasTodas.length}</span>
+          <button className="dial-btn" onClick={() => deslizar(1)} aria-label="Ver campañas siguientes">&rsaquo;</button>
+        </div>
       )}
 
       <style>{css}</style>
@@ -246,8 +257,11 @@ const css = `
     radial-gradient(circle at 32% 28%, rgba(255,255,255,.4), transparent 45%),
     linear-gradient(140deg, var(--pa), var(--pb) 72%);
   box-shadow: 0 2px 10px rgba(0,0,0,.6), inset 0 0 12px rgba(0,0,0,.35);
-  transition: filter .18s var(--ease), transform .25s var(--ease), top .25s var(--ease), left .25s var(--ease);
+  transition: filter .18s var(--ease), transform .35s var(--ease), top .35s var(--ease),
+              left .35s var(--ease), opacity .35s var(--ease);
+  animation: dialEntra .35s var(--ease);
 }
+@keyframes dialEntra { from { opacity: 0; transform: translate(-50%,-50%) scale(.4); } }
 .dial-planeta:hover { filter: brightness(1.18); }
 .dial-planeta.base { box-shadow: 0 0 0 2px var(--gold), 0 0 14px rgba(201,164,90,.55), 0 2px 10px rgba(0,0,0,.6); }
 .dial-planeta.activa::after {
@@ -273,17 +287,14 @@ const css = `
   font-family: ui-monospace, monospace; font-size: .62rem; letter-spacing: .08em;
   padding: .22rem .55rem; white-space: nowrap; pointer-events: none; z-index: 60;
 }
+.dial-flechas {
+  position: absolute; left: 50%; bottom: -1%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: .6rem; pointer-events: auto; z-index: 50;
+}
 .dial-btn {
-  position: absolute; top: 46%; z-index: 50; pointer-events: auto;
   width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 1.1rem;
-  background: rgba(14,17,22,.7); border: 1px solid rgba(201,164,90,.5); color: var(--gold);
+  background: rgba(14,17,22,.75); border: 1px solid rgba(201,164,90,.5); color: var(--gold);
 }
 .dial-btn:hover { background: rgba(201,164,90,.2); }
-.dial-btn.izq { left: -6%; }
-.dial-btn.der { right: -6%; }
-.dial-ocultas {
-  position: absolute; left: 50%; top: -4%; transform: translateX(-50%);
-  font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--stone); pointer-events: none;
-}
+.dial-ocultas { font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone); }
 `;
