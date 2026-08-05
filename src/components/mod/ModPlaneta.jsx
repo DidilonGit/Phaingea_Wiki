@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   suscribirPinesPlaneta,
   fijarPinPlaneta,
@@ -19,17 +19,56 @@ import { ordenAlfabetico } from '../../lib/db/lugares.js';
 // para colocarlo. El planisferio es el planeta "desenrollado": izquierda-
 // derecha es la longitud (−180 a 180) y arriba-abajo la latitud (90 a −90),
 // justo lo que usa el globo para dibujar.
+//
+// Y para no colocar a ciegas, el planisferio DIBUJA LAS TIERRAS DEL PROPIO
+// GLOBO: coge sus puntos (window.__engren.lista, vectores unitarios) y los
+// pasa a latitud/longitud. Lo que ves aquí es exactamente lo que hay en el
+// planeta del Observatorio.
 // ============================================================================
 
 export default function ModPlaneta({ campanaId, lugares }) {
   const [pines, setPines] = useState({});
   const [sel, setSel] = useState(null); // lugar que se va a colocar
   const [aviso, setAviso] = useState('');
+  const mundoRef = useRef(null);
 
   useEffect(() => {
     if (!campanaId) return;
     return suscribirPinesPlaneta(campanaId, setPines);
   }, [campanaId]);
+
+  // Dibuja las tierras del globo sobre el planisferio.
+  useEffect(() => {
+    let vivo = true;
+    const pintar = () => {
+      const cv = mundoRef.current;
+      const puntos = typeof window !== 'undefined' ? window.__engren?.lista : null;
+      if (!cv || !puntos?.length) return false;
+      const ctx = cv.getContext('2d');
+      cv.width = 720;
+      cv.height = 360;
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      for (const p of puntos) {
+        const lat = (Math.asin(Math.max(-1, Math.min(1, p.y))) * 180) / Math.PI;
+        const lon = (Math.atan2(p.x, p.z) * 180) / Math.PI;
+        const x = ((lon + 180) / 360) * cv.width;
+        const y = ((90 - lat) / 180) * cv.height;
+        ctx.fillStyle = `rgba(200, 226, 205, ${0.35 + 0.4 * (p.b ?? 0.7)})`;
+        ctx.fillRect(x, y, 2.4, 2.4);
+      }
+      return true;
+    };
+    if (!pintar()) {
+      // el globo puede tardar en generarse: se reintenta un poco
+      const t = setInterval(() => {
+        if (!vivo || pintar()) clearInterval(t);
+      }, 400);
+      return () => {
+        vivo = false;
+        clearInterval(t);
+      };
+    }
+  }, []);
 
   const lista = ordenAlfabetico(lugares || []);
   const porId = Object.fromEntries(lista.map((l) => [l.id, l]));
@@ -84,6 +123,7 @@ export default function ModPlaneta({ campanaId, lugares }) {
 
       {/* planisferio: el planeta desenrollado */}
       <div className={`planisferio ${sel ? 'colocando' : ''}`} onClick={colocar}>
+        <canvas ref={mundoRef} className="mundo" aria-hidden="true" />
         <span className="ecuador" aria-hidden="true" />
         <span className="meridiano" aria-hidden="true" />
         {puestos.map(([id, p]) => (
@@ -128,13 +168,12 @@ const css = `
 .mod-planeta { display: grid; gap: .6rem; }
 .mod-planeta .chip.puesto { border-color: var(--gold); color: var(--gold); }
 .planisferio {
-  position: relative; height: 190px; border-radius: 8px; overflow: hidden; cursor: pointer;
+  position: relative; height: 210px; border-radius: 8px; overflow: hidden; cursor: pointer;
   border: 1px solid rgba(201,164,90,.35);
-  background:
-    radial-gradient(60% 90% at 30% 30%, rgba(120,180,140,.18), transparent 60%),
-    radial-gradient(50% 80% at 72% 62%, rgba(120,180,140,.14), transparent 60%),
-    linear-gradient(180deg, #0f1620, #142033 60%, #0d1420);
+  background: linear-gradient(180deg, #0b1119, #101a29 60%, #0a1017);
 }
+/* las tierras del propio globo, para no colocar los pines a ciegas */
+.planisferio .mundo { position: absolute; inset: 0; width: 100%; height: 100%; }
 .planisferio.colocando { outline: 2px dashed var(--gold); }
 .planisferio .ecuador { position: absolute; left: 0; right: 0; top: 50%; border-top: 1px dashed rgba(201,164,90,.3); }
 .planisferio .meridiano { position: absolute; top: 0; bottom: 0; left: 50%; border-left: 1px dashed rgba(201,164,90,.3); }

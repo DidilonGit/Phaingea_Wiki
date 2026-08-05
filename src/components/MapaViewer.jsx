@@ -52,8 +52,10 @@ export default function MapaViewer() {
   const [infoAbierta, setInfoAbierta] = useState(false);
   const [montado, setMontado] = useState(false);
 
+  const [caja, setCaja] = useState({ w: 0, h: 0 }); // tamaño del mapa dentro del marco
   const lienzoRef = useRef(null);
   const marcoRef = useRef(null);
+  const imgRef = useRef(null);
   const herramientaRef = useRef(null); // la herramienta en mano, para la rueda
   const arrastre = useRef(null);
   const trazo = useRef(null);
@@ -174,12 +176,14 @@ export default function MapaViewer() {
       trazo.current.ultimo = p;
       return;
     }
-    if (!arrastre.current) return;
-    setVista((v) => ({
-      ...v,
-      x: arrastre.current.vx + (e.clientX - arrastre.current.x),
-      y: arrastre.current.vy + (e.clientY - arrastre.current.y),
-    }));
+    const a = arrastre.current;
+    if (!a) return;
+    // OJO: se calcula AQUÍ, no dentro del updater. El updater se ejecuta más
+    // tarde, cuando el arrastre puede haber terminado y `arrastre.current` ya
+    // ser null: eso reventaba el componente y el mapa desaparecía de golpe.
+    const x = a.vx + (e.clientX - a.x);
+    const y = a.vy + (e.clientY - a.y);
+    setVista((v) => ajustar({ ...v, x, y }));
   }
 
   function onUp(e) {
@@ -206,17 +210,61 @@ export default function MapaViewer() {
   // registra `wheel` como pasivo, así que hay que engancharlo a mano para
   // poder cancelar el scroll (§10.3).
   const huecoRef = useRef(null);
+  const ajustarRef = useRef((v) => v);
   useEffect(() => {
     const hueco = huecoRef.current;
     if (!hueco) return;
     const rueda = (e) => {
       e.preventDefault(); // nada de bajar la página mientras se hace zoom
       if (herramientaRef.current) return; // con herramienta en mano no hay zoom
-      setVista((v) => ({ ...v, z: Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, v.z * (e.deltaY > 0 ? 0.9 : 1.1))) }));
+      setVista((v) => ajustarRef.current({ ...v, z: Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, v.z * (e.deltaY > 0 ? 0.9 : 1.1))) }));
     };
     hueco.addEventListener('wheel', rueda, { passive: false });
     return () => hueco.removeEventListener('wheel', rueda);
   }, [montado]); // el hueco no existe hasta que el componente se pinta
+
+  /**
+   * Mide el mapa: se encaja ENTERO dentro del marco (sin recortes) y el
+   * contenedor pasa a tener exactamente su tamaño. Así los pines, que van en
+   * tanto por ciento, caen sobre el punto correcto del dibujo.
+   */
+  function medirMapa() {
+    const img = imgRef.current;
+    const hueco = huecoRef.current;
+    if (!img || !hueco || !img.naturalWidth) return;
+    const escala = Math.min(hueco.clientWidth / img.naturalWidth, hueco.clientHeight / img.naturalHeight);
+    setCaja({ w: Math.round(img.naturalWidth * escala), h: Math.round(img.naturalHeight * escala) });
+  }
+
+  useEffect(() => {
+    medirMapa();
+    const ro = new ResizeObserver(() => medirMapa());
+    if (huecoRef.current) ro.observe(huecoRef.current);
+    const alCambiarVista = () => setTimeout(medirMapa, 60);
+    window.addEventListener('phaingea:vista', alCambiarVista);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('phaingea:vista', alCambiarVista);
+    };
+  }, [montado, activoId]);
+
+  /**
+   * Mantiene el mapa dentro del marco: nunca se puede arrastrar hasta perderlo
+   * de vista. Si al alejar cabe entero, se queda centrado.
+   */
+  function ajustar(v) {
+    const hueco = huecoRef.current;
+    if (!hueco || !caja.w) return v;
+    const topeX = Math.max(0, (caja.w * v.z - hueco.clientWidth) / 2);
+    const topeY = Math.max(0, (caja.h * v.z - hueco.clientHeight) / 2);
+    return {
+      ...v,
+      x: Math.max(-topeX, Math.min(topeX, v.x)),
+      y: Math.max(-topeY, Math.min(topeY, v.y)),
+    };
+  }
+
+  ajustarRef.current = ajustar; // el listener de la rueda usa siempre el actual
 
   function entrarEn(id) {
     setActivoId(id);
@@ -300,10 +348,20 @@ export default function MapaViewer() {
         >
           <div
             className="mapa-lienzo"
-            style={{ transform: `translate(${vista.x}px, ${vista.y}px) scale(${vista.z})` }}
+            style={{
+              width: caja.w || '100%',
+              height: caja.h || '100%',
+              transform: `translate(-50%, -50%) translate(${vista.x}px, ${vista.y}px) scale(${vista.z})`,
+            }}
           >
             {fuenteMapa ? (
-              <img src={fuenteMapa.mapaUrl} alt={fuenteMapa.nombre} draggable="false" />
+              <img
+                ref={imgRef}
+                src={fuenteMapa.mapaUrl}
+                alt={fuenteMapa.nombre}
+                draggable="false"
+                onLoad={medirMapa}
+              />
             ) : (
               <div className="mapa-vacio mono">Este lugar todavía no tiene mapa.</div>
             )}
@@ -452,8 +510,11 @@ const css = `
   background: radial-gradient(120% 90% at 50% 30%, rgba(201,164,90,.12), transparent 60%), linear-gradient(160deg, rgba(74,51,32,.7), rgba(26,18,11,.92)); }
 .mapa-hueco.con-lupa { cursor: zoom-in; }
 .mapa-hueco.con-compas, .mapa-hueco.con-pano { cursor: crosshair; }
-.mapa-lienzo { position: absolute; inset: 0; transform-origin: center; display: grid; place-items: center; }
-.mapa-lienzo img { max-width: 100%; max-height: 100%; user-select: none; }
+/* El lienzo tiene EXACTAMENTE el tamaño del mapa dibujado (lo calcula
+   medirMapa), así los pines en % caen sobre el punto correcto. Se centra con
+   left/top al 50% y el translate(-50%,-50%) del propio transform. */
+.mapa-lienzo { position: absolute; left: 50%; top: 50%; transform-origin: center; }
+.mapa-lienzo img { width: 100%; height: 100%; display: block; user-select: none; }
 .mapa-vacio { color: var(--stone); font-size: .8rem; letter-spacing: .08em; }
 .capa-dibujo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 /* Pin: solo el punto. El nombre aparece al pasar por encima (o al enfocarlo

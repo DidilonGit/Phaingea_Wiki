@@ -1029,6 +1029,10 @@ document.addEventListener('visibilitychange', () => {
 window.__engren = {              // sonda mínima para depurar/verificar
   get puntos(){ return puntos.length; },
   get fallback(){ return usaFallback; },
+  // Los puntos de tierra ({x,y,z} unitarios). Los usa el planisferio de
+  // "Pines del planeta" (ModPlaneta) para dibujar el MISMO mundo que se ve
+  // sobre el globo, y así colocar los pines donde toca.
+  get lista(){ return puntos; },
   st,
 };
 async function arrancar(){

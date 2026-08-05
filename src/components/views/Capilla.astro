@@ -116,7 +116,9 @@ import CapillaLibro from '../CapillaLibro.jsx';
     justify-items: center;
     margin-top: 0.5rem;
   }
-  .atril-hueco { position: relative; z-index: 2; }
+  /* El hueco ocupa todo el ancho de la sala: si se encoge, el libro se pinta
+     a una sola página en vez de a doble. */
+  .atril-hueco { position: relative; z-index: 2; width: 100%; }
   .atril-tabla {
     width: min(340px, 82vw);
     height: 16px;

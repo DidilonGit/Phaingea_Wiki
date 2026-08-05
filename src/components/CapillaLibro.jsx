@@ -106,8 +106,11 @@ export default function CapillaLibro() {
         </p>
       )}
       <style>{`
-        .capilla-libro { display: grid; justify-items: center; gap: .5rem; }
-        .aviso-herencia { font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone); }
+        /* OJO: nada de justify-items:center aquí. Con el centrado, el libro se
+           encoge a su contenido y StPageFlip lo pinta a UNA sola página; con el
+           ancho completo sale a doble página, como el del Taller (§27). */
+        .capilla-libro { display: grid; gap: .5rem; width: 100%; }
+        .aviso-herencia { font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone); text-align: center; }
         .capilla-libro :global(.pagina-doc) { width: 100%; height: auto; display: block; }
         .capilla-libro :global(.pagina-md) { color: var(--ink); }
         .capilla-libro :global(.pagina-md h3) { font-family: var(--font-title); color: #5a3d26; margin: 0 0 .5rem; }
