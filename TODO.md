@@ -12,3 +12,5 @@ Bug: He aprobado la subida de una imagen en galeria, acto seguido el resto de im
 Pendiente: Los jugadores que participen en una campaña deben ver que estan participando en esa campaña, dejandoles rellenar los datos de su personaje en su perfil, actualmente aunque este configurado como "jugador" para la campaña, el usuario ve como si no participase.
 
 Pendiente/Bug: En las categorias con libro, se pueden borrar páginas individualmente, pero esto parece estar dando un problema al indice, ya que se ha probado borrando una página, y aunque los nombres en el indice se reajustan, clicar para que te lleve a esa página, resulta llevarte una página antes.
+
+Pendiente/Bug: El dial todavia no cumple del todo su funcionamiento, mover hacia un lado u otro del dial da como resultado que alguna campaña siempre quede separada de la cola, todos los circulos tendrían que estar una ranura al lado de la otra, sin ranuras de separación entre ellos, por defecto ordenados de cierta forma que quede cómoda para rápido acceso.
