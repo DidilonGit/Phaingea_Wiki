@@ -6,12 +6,14 @@ import { puedeGestionar } from '../lib/permisos.js';
 import { aHtml } from '../lib/markdown.js';
 import Comentarios from './Comentarios.jsx';
 import ModLugares from './mod/ModLugares.jsx';
+import { dejarDeHeredar } from '../lib/db/campanas.js';
 import {
   suscribirLugares,
   lugarPredeterminado,
   hijosDe,
   camino,
   ordenAlfabetico,
+  lugarConMapa,
 } from '../lib/db/lugares.js';
 
 // ============================================================================
@@ -81,7 +83,11 @@ export default function MapaViewer() {
   }, []);
 
   const activo = lugares.find((l) => l.id === activoId) || null;
-  const pines = activo?.pines || {};
+  // Si el lugar no tiene mapa propio, se enseña el del lugar que lo contiene
+  // (§10.6). Así entrar en una región nunca deja el marco en blanco.
+  const fuenteMapa = lugarConMapa(lugares, activoId);
+  const mapaPrestado = !!fuenteMapa && fuenteMapa.id !== activoId;
+  const pines = fuenteMapa?.pines || {};
   const porId = Object.fromEntries(lugares.map((l) => [l.id, l]));
 
   // --- dibujos temporales por lugar (se recuperan al volver) ---
@@ -231,7 +237,13 @@ export default function MapaViewer() {
   return (
     <div className="mapa-viewer">
       {/* el máster gestiona los lugares de ESTA categoría (guía §24) */}
-      <ModLugares campanaId={origenId} autor={user?.nombre} visible={esGestor && !heredado} />
+      <ModLugares
+        campanaId={origenId}
+        autor={user?.nombre}
+        visible={esGestor}
+        heredadoDe={heredado ? origen?.nombre || origenId : ''}
+        alDejarHerencia={() => dejarDeHeredar(campana?.id, 'cartografia')}
+      />
       {/* ---- herramientas colgadas ---- */}
       <div className="herramientas">
         {['lupa', 'compas', 'pano'].map((h) => (
@@ -289,17 +301,17 @@ export default function MapaViewer() {
             className="mapa-lienzo"
             style={{ transform: `translate(${vista.x}px, ${vista.y}px) scale(${vista.z})` }}
           >
-            {activo?.mapaUrl ? (
-              <img src={activo.mapaUrl} alt={activo.nombre} draggable="false" />
+            {fuenteMapa ? (
+              <img src={fuenteMapa.mapaUrl} alt={fuenteMapa.nombre} draggable="false" />
             ) : (
-              <div className="mapa-vacio mono">Imagen de mapa no disponible</div>
+              <div className="mapa-vacio mono">Este lugar todavía no tiene mapa.</div>
             )}
 
             {/* pines de los lugares contenidos */}
             {Object.entries(pines).map(([id, p]) => (
               <button
                 key={id}
-                className="pin"
+                className={`pin ${id === activoId ? 'actual' : ''}`}
                 style={{ left: `${p.x}%`, top: `${p.y}%` }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -317,13 +329,13 @@ export default function MapaViewer() {
           </div>
 
           {/* lente de la lupa */}
-          {herramienta === 'lupa' && lupaPos && activo?.mapaUrl && (
+          {herramienta === 'lupa' && lupaPos && fuenteMapa && (
             <div
               className="lente"
               style={{
                 left: lupaPos.x,
                 top: lupaPos.y,
-                backgroundImage: `url(${activo.mapaUrl})`,
+                backgroundImage: `url(${fuenteMapa.mapaUrl})`,
                 backgroundSize: `${marcoRef.current?.clientWidth * 2.2}px auto`,
                 backgroundPosition: `${-lupaPos.x * 2.2 + 80}px ${-lupaPos.y * 2.2 + 80}px`,
               }}
@@ -356,6 +368,11 @@ export default function MapaViewer() {
           </p>
         )}
         <h3 className="nombre-lugar">{activo?.nombre || 'Sin lugares todavía'}</h3>
+        {mapaPrestado && (
+          <p className="mono aviso-herencia-carto">
+            Este lugar no tiene mapa propio · se muestra el de «{fuenteMapa.nombre}»
+          </p>
+        )}
         {heredado && (
           <p className="mono aviso-herencia-carto">
             Mapas heredados de «{origen?.nombre || origenId}» · solo lectura
@@ -453,6 +470,9 @@ const css = `
   opacity: 0; pointer-events: none; transition: opacity .15s ease;
 }
 .pin:hover em, .pin:focus-visible em { opacity: 1; }
+/* el lugar en el que estás, señalado sobre el mapa prestado del que lo contiene */
+.pin.actual b { background: radial-gradient(circle at 35% 30%, #fff, #e8b45a); box-shadow: 0 0 0 4px rgba(201,164,90,.5), 0 0 12px rgba(228,183,91,.9); }
+.pin.actual em { opacity: 1; }
 .lente { position: absolute; width: 160px; height: 160px; border-radius: 50%; transform: translate(-50%,-50%);
   border: 3px solid #b9a27a; box-shadow: 0 8px 24px rgba(0,0,0,.6), inset 0 0 30px rgba(255,255,255,.15); pointer-events: none; background-repeat: no-repeat; }
 .ficha-pin { position: absolute; right: 24px; bottom: 24px; width: min(260px, 70%); z-index: 6;

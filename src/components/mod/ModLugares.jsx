@@ -20,7 +20,13 @@ import BotonMod from '../BotonMod.jsx';
 // el planeta del Observatorio.
 // ============================================================================
 
-export default function ModLugares({ campanaId, autor, visible }) {
+export default function ModLugares({
+  campanaId,
+  autor,
+  visible,
+  heredadoDe = '', // nombre de la campaña de la que se heredan los mapas
+  alDejarHerencia = null,
+}) {
   const [lugares, setLugares] = useState([]);
   const [sel, setSel] = useState(null); // id en edición
   const [d, setD] = useState(null);
@@ -97,6 +103,25 @@ export default function ModLugares({ campanaId, autor, visible }) {
 
   return (
     <BotonMod sala visible={visible} titulo="Lugares de la campaña" etiqueta="Moderar categoría">
+      {heredadoDe ? (
+        // Cartografía heredada (§7): el botón sale igual, pero aquí lo único
+        // que cabe hacer es cortar la herencia para tener mapas propios.
+        <div className="stack">
+          <p>
+            Esta campaña usa la cartografía de <b>{heredadoDe}</b>. Mientras la herede, los mapas y
+            los lugares se editan allí y los cambios se ven en todas las campañas que heredan.
+          </p>
+          <p className="mono muted" style={{ fontSize: '.68rem' }}>
+            Si cortas la herencia, esta campaña empieza sin lugares y podrás crear los suyos. Se
+            puede volver a heredar desde Moderación.
+          </p>
+          <div>
+            <button className="btn" onClick={() => alDejarHerencia?.()} disabled={!alDejarHerencia}>
+              Dejar de heredar y crear mapas propios
+            </button>
+          </div>
+        </div>
+      ) : (
       <div className="mod-lugares">
             <aside className="lista">
               <button className="btn" onClick={nuevo}>+ Nuevo lugar</button>
@@ -201,6 +226,7 @@ export default function ModLugares({ campanaId, autor, visible }) {
               )}
         </section>
       </div>
+      )}
       <style>{css}</style>
     </BotonMod>
   );

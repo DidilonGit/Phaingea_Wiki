@@ -4,6 +4,7 @@ import { $campaign } from '../stores/campaign.js';
 import { db } from '../lib/firebase.js';
 import { ref, onValue } from 'firebase/database';
 import { paginar, tituloDePagina } from '../lib/markdown.js';
+import { repartirDocumento } from '../lib/documento.js';
 import Libro from './Libro.jsx';
 import ModDocumento from './mod/ModDocumento.jsx';
 import { $user } from '../stores/user.js';
@@ -33,16 +34,15 @@ export default function TallerLibro() {
   // Dos orígenes posibles (guía §16.2): un documento ya maquetado (cada página
   // es su imagen, se respeta su diseño tal cual, §27.1) o markdown propio.
   const docPaginas = Array.isArray(datos?.paginasUrl) ? datos.paginasUrl : [];
+  // El máster decide si el documento trae sus propias tapas (§27.1).
+  const doc = repartirDocumento(docPaginas, datos);
   let paginas, titulos;
 
   if (docPaginas.length) {
-    // La primera página del documento hace de portada del libro. En el índice
-    // sale el título que el máster le haya puesto a cada página.
-    const nombres = Array.isArray(datos?.paginasTitulos) ? datos.paginasTitulos : [];
-    paginas = docPaginas.slice(1).map((url, i) => (
-      <img key={i} src={url} alt={nombres[i + 1] || `Página ${i + 2}`} className="pagina-doc" loading="lazy" />
+    paginas = doc.paginas.map((p) => (
+      <img key={p.i} src={p.url} alt={p.titulo} className="pagina-doc" loading="lazy" />
     ));
-    titulos = docPaginas.slice(1).map((_, i) => nombres[i + 1] || `Página ${i + 2}`);
+    titulos = doc.paginas.map((p) => p.titulo);
   } else {
     const paginasHtml = paginar(datos?.reglasMd || '');
     paginas = paginasHtml.map((html, i) => (
@@ -61,7 +61,8 @@ export default function TallerLibro() {
         titulo={campana?.nombre ? `Reglas de ${campana.nombre}` : 'Reglas'}
         sub="WIP"
         cubierta="cuero-negro"
-      portada={docPaginas.length ? <img src={docPaginas[0]} alt="Portada" className="pagina-doc" /> : null}
+      portada={doc.portadaUrl ? <img src={doc.portadaUrl} alt="Portada" className="pagina-doc" /> : null}
+      contraportada={doc.contraportadaUrl ? <img src={doc.contraportadaUrl} alt="Contraportada" className="pagina-doc" /> : null}
       proporcion={docPaginas.length ? 792 / 612 : 1.38}
         paginas={[
           <div key="wip" className="pagina-md">
@@ -82,7 +83,8 @@ export default function TallerLibro() {
       titulo={datos?.titulo || (campana?.nombre ? `Reglas de ${campana.nombre}` : 'Reglas')}
       sub={datos?.subtitulo || 'Pathfinder 1e · reglas de la casa'}
       cubierta="cuero-negro"
-      portada={docPaginas.length ? <img src={docPaginas[0]} alt="Portada" className="pagina-doc" /> : null}
+      portada={doc.portadaUrl ? <img src={doc.portadaUrl} alt="Portada" className="pagina-doc" /> : null}
+      contraportada={doc.contraportadaUrl ? <img src={doc.contraportadaUrl} alt="Contraportada" className="pagina-doc" /> : null}
       proporcion={docPaginas.length ? 792 / 612 : 1.38}
       paginas={paginas}
       titulosPaginas={titulos}

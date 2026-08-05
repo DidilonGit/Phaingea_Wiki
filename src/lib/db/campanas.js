@@ -103,6 +103,16 @@ export async function crearCampana(datos) {
   return guardarCampana(id, { ...campanaVacia(datos.nombre), ...datos, orden, esBase: false });
 }
 
+/**
+ * Corta la herencia de una categoría (guía §7): a partir de ahora la campaña
+ * tiene su propio contenido, que empieza vacío. Se puede volver a heredar
+ * desde Moderación.
+ */
+export async function dejarDeHeredar(campanaId, categoria) {
+  if (!campanaId || !categoria) return;
+  await update(ref(db, `campanas/${campanaId}/categorias/${categoria}`), { heredaDe: '' });
+}
+
 /** Elimina una campaña. Base de Phaingea no se puede eliminar (guía §6). */
 export async function eliminarCampana(id) {
   if (id === ID_BASE) throw new Error('Base de Phaingea no se puede eliminar.');

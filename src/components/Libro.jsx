@@ -46,6 +46,9 @@ export default function Libro({
   // Portada propia: con un documento maquetado, su primera página ES la
   // portada del libro (guía §27.1), en vez de la tapa de cuero genérica.
   portada = null,
+  // Contraportada propia: si el documento trae su última página como
+  // contraportada, se usa esa en vez de la tapa genérica.
+  contraportada = null,
   // Proporción de la hoja (alto ÷ ancho). Con documentos maquetados conviene
   // pasar la del original (p. ej. 792/612 en tamaño carta) para que la página
   // llene el libro sin bordes ni recortes.
@@ -260,13 +263,17 @@ export default function Libro({
           </div>
         ))}
 
-        {/* contraportada */}
+        {/* contraportada: la del documento si la trae, si no la tapa de cuero */}
         <div className="hoja tapa" data-density="hard">
-          <div className="tapa-interior">
-            <span className="esquina a" /><span className="esquina b" />
-            <span className="esquina c" /><span className="esquina d" />
-            <span className="portada-sub">Fin</span>
-          </div>
+          {contraportada ? (
+            <div className="tapa-doc">{contraportada}</div>
+          ) : (
+            <div className="tapa-interior">
+              <span className="esquina a" /><span className="esquina b" />
+              <span className="esquina c" /><span className="esquina d" />
+              <span className="portada-sub">Fin</span>
+            </div>
+          )}
         </div>
       </div>
 

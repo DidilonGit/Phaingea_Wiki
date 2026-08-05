@@ -19,7 +19,14 @@ import { MARCA_SALTO } from '../../lib/markdown.js';
 //   <ModDocumento nodo="capilla" campanaId="…" campoMd="deidadesMd" />
 // ============================================================================
 
-export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
+export default function ModDocumento({
+  nodo,
+  campanaId,
+  campoMd,
+  visible,
+  heredadoDe = '', // nombre de la campaña de la que se hereda ('' si es propia)
+  alDejarHerencia = null, // corta la herencia para poder editar aquí
+}) {
   const [datos, setDatos] = useState({});
   const [modo, setModo] = useState('documento'); // 'documento' | 'texto'
   const [subiendo, setSubiendo] = useState(false);
@@ -83,6 +90,13 @@ export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
     await guardar({ paginasUrl: url, paginasTitulos: tit });
   }
 
+  /** Cómo se llama cada hoja según qué tapas traiga el documento. */
+  function etiquetaPagina(i) {
+    if (i === 0 && datos.portadaPropia !== false) return 'portada';
+    if (i === paginas.length - 1 && datos.contraportadaPropia) return 'contraportada';
+    return String(i + 1);
+  }
+
   /** Renombra una página (lo que se ve en el índice del libro). */
   async function tituloPagina(i, texto) {
     if (titulos[i] === texto) return;
@@ -93,6 +107,26 @@ export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
 
   return (
     <BotonMod sala visible={visible} titulo="Contenido de la categoría" etiqueta="Moderar categoría">
+      {heredadoDe ? (
+        // Categoría heredada (§7): el botón existe igual en todas las campañas,
+        // pero aquí lo único que se puede hacer es cortar la herencia.
+        <div className="stack">
+          <p>
+            Esta categoría muestra el contenido de <b>{heredadoDe}</b>. Mientras lo herede no se
+            puede editar desde aquí: lo que cambies en la campaña de origen se ve en todas las que
+            heredan de ella.
+          </p>
+          <p className="mono muted" style={{ fontSize: '.68rem' }}>
+            Si cortas la herencia, esta campaña arranca con la categoría vacía y podrás subir su
+            propio documento o escribir su texto. Se puede volver a heredar desde Moderación.
+          </p>
+          <div>
+            <button className="btn" onClick={() => alDejarHerencia?.()} disabled={!alDejarHerencia}>
+              Dejar de heredar y editar aquí
+            </button>
+          </div>
+        </div>
+      ) : (
       <div className="stack">
             <label className="lbl">Título de la portada
               <input
@@ -122,9 +156,33 @@ export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
               <>
                 <p className="mono muted" style={{ fontSize: '.68rem' }}>
                   Cada imagen es una página y se muestra tal cual, respetando su diseño. Si tienes un PDF,
-                  exporta sus páginas a imagen y súbelas ordenadas. La <b>primera página es la portada</b> y
-                  el <b>título de cada página</b> es lo que aparece en el índice del libro.
+                  exporta sus páginas a imagen y súbelas ordenadas. El <b>título de cada página</b> es lo
+                  que aparece en el índice del libro.
                 </p>
+
+                {/* ¿el documento trae sus propias tapas o se usan las de la web? */}
+                <div className="tapas">
+                  <label className="check">
+                    <input
+                      type="checkbox"
+                      checked={datos.portadaPropia !== false}
+                      onChange={(e) => guardar({ portadaPropia: e.target.checked })}
+                    />
+                    La <b>primera página</b> es la portada del documento
+                  </label>
+                  <label className="check">
+                    <input
+                      type="checkbox"
+                      checked={!!datos.contraportadaPropia}
+                      onChange={(e) => guardar({ contraportadaPropia: e.target.checked })}
+                    />
+                    La <b>última página</b> es la contraportada
+                  </label>
+                  <p className="mono muted" style={{ fontSize: '.64rem', margin: 0 }}>
+                    Lo que dejes sin marcar usa la tapa de cuero de la web, y esa página pasa a ser una
+                    página normal del libro.
+                  </p>
+                </div>
                 <div style={{ display: 'flex', gap: '.5rem', flexWrap: 'wrap' }}>
                   <button className="btn" onClick={() => inputRef.current?.click()} disabled={subiendo}>
                     {subiendo ? 'Subiendo…' : '+ Añadir páginas'}
@@ -149,11 +207,11 @@ export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
                     {paginas.map((url, i) => (
                       <div key={i} className="mini-pagina">
                         <img src={url} alt={`Página ${i + 1}`} />
-                        <span className="mono num">{i === 0 ? 'portada' : i + 1}</span>
+                        <span className="mono num">{etiquetaPagina(i)}</span>
                         <input
                           className="mini-titulo"
                           defaultValue={titulos[i]}
-                          placeholder={i === 0 ? 'Portada' : `Página ${i + 1}`}
+                          placeholder={etiquetaPagina(i)}
                           title="Título en el índice"
                           onBlur={(e) => tituloPagina(i, e.target.value.trim())}
                         />
@@ -187,6 +245,7 @@ export default function ModDocumento({ nodo, campanaId, campoMd, visible }) {
             {aviso && <p style={{ color: aviso.startsWith('No') ? '#f0a29c' : '#9fd07a' }}>{aviso}</p>}
         <p className="mono muted" style={{ fontSize: '.64rem' }}>Los cambios se guardan al salir de cada campo.</p>
       </div>
+      )}
       <style>{css}</style>
     </BotonMod>
   );
@@ -210,6 +269,10 @@ const css = `
 .mini-acciones { display: flex; justify-content: center; gap: .3rem; background: rgba(0,0,0,.45); }
 .mini-acciones button { background: none; border: 0; cursor: pointer; color: var(--parchment); font-size: .68rem; padding: .1rem .2rem; }
 .mini-acciones button:hover { color: var(--gold); }
+.tapas { display: grid; gap: .3rem; padding: .6rem .7rem; border-radius: 8px;
+  border: 1px solid rgba(201,164,90,.25); background: rgba(0,0,0,.22); }
+.check { display: flex; align-items: center; gap: .5rem; cursor: pointer;
+  font-family: var(--font-body); font-size: .84rem; color: var(--paper); }
 .lbl { display: grid; gap: .25rem; font-family: var(--font-ui); font-size: .78rem; color: var(--parchment); }
 .inp { padding: .45rem .6rem; border-radius: 7px; border: 1px solid rgba(201,164,90,.35);
   background: rgba(0,0,0,.3); color: var(--paper); font-family: var(--font-body); font-size: .9rem; width: 100%; }

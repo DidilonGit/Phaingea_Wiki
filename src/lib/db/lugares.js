@@ -107,6 +107,24 @@ export function camino(lugares, id) {
   return ruta;
 }
 
+/**
+ * Mapa que hay que enseñar de un lugar. Si el lugar no tiene mapa propio (una
+ * región dentro de un continente, una sala dentro de un castillo…), se sube por
+ * la jerarquía hasta encontrar uno: así nunca se queda el marco vacío (§10.6).
+ * Devuelve el LUGAR que aporta el mapa, o null si no hay ninguno.
+ */
+export function lugarConMapa(lugares, id) {
+  const porId = Object.fromEntries((lugares || []).map((l) => [l.id, l]));
+  let actual = porId[id];
+  const vistos = new Set();
+  while (actual && !vistos.has(actual.id)) {
+    if (actual.mapaUrl) return actual;
+    vistos.add(actual.id);
+    actual = actual.superior ? porId[actual.superior] : null;
+  }
+  return null;
+}
+
 /** Lugares marcados para verse sobre el planeta del Observatorio (§8.4). */
 export function destacados(lugares) {
   return (lugares || []).filter((l) => l.destacado && typeof l.lat === 'number' && typeof l.lon === 'number');

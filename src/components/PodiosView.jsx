@@ -11,6 +11,7 @@ import BarraXP from './BarraXP.jsx';
 import Libro from './Libro.jsx';
 import Comentarios from './Comentarios.jsx';
 import ModPersonajes from './mod/ModPersonajes.jsx';
+import SubirFicha from './SubirFicha.jsx';
 
 // ============================================================================
 // PODIOS (guía §11) — y LEYENDAS en Base de Phaingea (§12).
@@ -41,6 +42,7 @@ export default function PodiosView() {
   const [grupo, setGrupo] = useState(null);
   const [ampliado, setAmpliado] = useState(false);
   const [diarioAbierto, setDiarioAbierto] = useState(false);
+  const [fichaAbierta, setFichaAbierta] = useState(null); // 'nueva' | personaje
   const [montado, setMontado] = useState(false);
 
   useEffect(() => setMontado(true), []);
@@ -82,6 +84,10 @@ export default function PodiosView() {
     setEstados((prev) => (prev.includes(e) ? prev.filter((x) => x !== e) : [...prev, e]));
   }
 
+  // Cualquiera que participe en la campaña puede subir su ficha (§20); el
+  // máster además puede subirla por otros.
+  const puedeSubir = !!user && !!campana?.id && !esBase;
+
   if (total === 0) {
     return (
       <div className="empty">
@@ -89,6 +95,21 @@ export default function PodiosView() {
         <p className="muted">
           {esBase ? 'Aún no hay leyendas registradas.' : 'Esta campaña todavía no tiene personajes.'}
         </p>
+        {puedeSubir && (
+          <button className="btn" style={{ marginTop: '.9rem' }} onClick={() => setFichaAbierta('nueva')}>
+            + Subir ficha
+          </button>
+        )}
+        {fichaAbierta && (
+          <SubirFicha
+            abierto
+            campanaId={campana.id}
+            user={user}
+            esGestor={esGestor}
+            personaje={fichaAbierta === 'nueva' ? null : fichaAbierta}
+            onCerrar={() => setFichaAbierta(null)}
+          />
+        )}
       </div>
     );
   }
@@ -129,6 +150,11 @@ export default function PodiosView() {
             {g}
           </button>
         ))}
+        {puedeSubir && (
+          <button className="chip subir" onClick={() => setFichaAbierta('nueva')} title="Subir la ficha de un personaje">
+            + Subir ficha
+          </button>
+        )}
       </div>
 
       {/* ---- escena del podio ---- */}
@@ -167,11 +193,13 @@ export default function PodiosView() {
               {oculto ? (
                 <span className="barra-negra">██████ · ██ · ██</span>
               ) : (
-                [actual?.raza, actual?.edad && `${actual.edad} años`, actual?.sexo].filter(Boolean).join(' · ')
+                [actual?.clase, actual?.raza, actual?.edad && `${actual.edad} años`, actual?.sexo]
+                  .filter(Boolean)
+                  .join(' · ')
               )}
             </p>
             <p className="mono sub">
-              Nivel {oculto ? '—' : nivelDe(xp.total, progresion)} · <span className={`badge ${actual?.estado}`}>{actual?.estado}</span>
+              Nivel {oculto ? '—' : nivelMostrado(actual, xp.total, progresion)} · <span className={`badge ${actual?.estado}`}>{actual?.estado}</span>
               {actual?.propietario && !esBase && <> · Jugador: {oculto ? '—' : actual.propietario}</>}
             </p>
           </div>
@@ -181,7 +209,13 @@ export default function PodiosView() {
             <button className="btn ghost" onClick={() => setDiarioAbierto((v) => !v)} disabled={oculto}>
               {diarioAbierto ? 'Ocultar diario' : 'Mostrar diario'}
             </button>
+            {(esGestor || actual?.propietario === user?.nombre) && (
+              <button className="btn ghost" onClick={() => setFichaAbierta(actual)}>Editar ficha</button>
+            )}
           </div>
+
+          {/* texto libre de la ficha (§11.2) */}
+          {!oculto && actual?.descripcion && <p className="descripcion">{actual.descripcion}</p>}
 
           <p className="mono contador">{indice + 1} / {total}</p>
         </div>
@@ -232,15 +266,35 @@ export default function PodiosView() {
         />
       )}
 
+      {fichaAbierta && (
+        <SubirFicha
+          abierto
+          campanaId={campana.id}
+          user={user}
+          esGestor={esGestor}
+          personaje={fichaAbierta === 'nueva' ? null : fichaAbierta}
+          onCerrar={() => setFichaAbierta(null)}
+        />
+      )}
+
       <style>{css}</style>
     </div>
   );
 }
 
-const nivelDe = (total, progresion) => nivelDeXp(total, progresion);
+/**
+ * Nivel que se enseña: el que sale de la experiencia en cuanto el personaje
+ * tiene alguna; mientras no tenga, el que declaró su jugador al subir la ficha
+ * (guía §23: la XP manda, pero una ficha recién subida ya trae su nivel).
+ */
+function nivelMostrado(personaje, xpTotal, progresion) {
+  if (xpTotal > 0) return nivelDeXp(xpTotal, progresion);
+  return Math.max(1, Number(personaje?.nivel) || 1);
+}
 
 const css = `
 .podios { display: grid; gap: 1rem; }
+.chips .subir { border-color: var(--gold); color: var(--gold); }
 .chips .separador { width: 1px; height: 20px; background: rgba(201,164,90,.35); margin: 0 .3rem; }
 .escena-podio { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: .6rem; }
 .flecha {
@@ -283,6 +337,10 @@ const css = `
 .barra-negra { background: #000; color: transparent; border-radius: 2px; }
 .badge { text-transform: capitalize; }
 .botones-podio { display: flex; gap: .6rem; margin-top: .9rem; flex-wrap: wrap; justify-content: center; }
+.descripcion {
+  max-width: 62ch; margin: .9rem auto 0; text-align: center; white-space: pre-wrap;
+  color: var(--parchment); font-family: var(--font-body); font-size: .9rem; line-height: 1.6;
+}
 .contador { color: var(--stone); font-size: .68rem; margin-top: .6rem; }
 .diario { margin-top: 1.4rem; }
 .diario-xp { margin-bottom: .8rem; }

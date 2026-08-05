@@ -7,7 +7,8 @@ import { esMasterDe } from '../../lib/permisos.js';
 import { suscribirRegistros, registrar } from '../../lib/db/notificaciones.js';
 import { suscribirImagenes, aprobarImagen, denegarImagen } from '../../lib/db/galeria.js';
 import { db } from '../../lib/firebase.js';
-import { ref, onValue, update } from 'firebase/database';
+import { ref, onValue, update, remove } from 'firebase/database';
+import Modal from '../Modal.jsx';
 
 // ============================================================================
 // PANEL DE MODERACIÓN (guía §25, §26, §7).
@@ -31,6 +32,7 @@ export default function ModPanel() {
   const [seleccion, setSeleccion] = useState(null);
   const [montado, setMontado] = useState(false);
   const [aviso, setAviso] = useState('');
+  const [borrando, setBorrando] = useState(null); // cuenta pendiente de confirmar
 
   useEffect(() => setMontado(true), []);
 
@@ -80,6 +82,33 @@ export default function ModPanel() {
     setTimeout(() => setAviso(''), 3000);
   }
 
+  /**
+   * Borra una cuenta del todo: desaparece de /usuarios y de las listas de
+   * jugadores y másteres de todas las campañas. Sus personajes, comentarios e
+   * imágenes se quedan (llevan su nombre), así no se pierde historia.
+   */
+  async function borrarCuenta(nombre) {
+    await remove(ref(db, `usuarios/${nombre}`));
+    for (const c of campanas) {
+      const cambios = {};
+      if (c.jugadores?.[nombre]) {
+        const l = { ...c.jugadores };
+        delete l[nombre];
+        cambios.jugadores = l;
+      }
+      if (c.masters?.[nombre]) {
+        const l = { ...c.masters };
+        delete l[nombre];
+        cambios.masters = l;
+      }
+      if (Object.keys(cambios).length) await actualizarCampana(c.id, cambios);
+    }
+    await registrar(campanaId, { tipo: 'cuenta_borrada', actor: user?.nombre, resumen: nombre });
+    setBorrando(null);
+    setAviso(`Cuenta de ${nombre} borrada.`);
+    setTimeout(() => setAviso(''), 3500);
+  }
+
   async function cambiarHerencia(categoria, valor) {
     const cats = { ...(campana.categorias || {}) };
     cats[categoria] = { heredaDe: valor };
@@ -118,6 +147,7 @@ export default function ModPanel() {
                   <th>Rol global</th>
                   <th>Jugador</th>
                   <th>Máster</th>
+                  {puedeRolesGlobales && <th>Cuenta</th>}
                 </tr>
               </thead>
               <tbody>
@@ -154,6 +184,18 @@ export default function ModPanel() {
                         disabled={!puedeRolesGlobales}
                       />
                     </td>
+                    {puedeRolesGlobales && (
+                      <td>
+                        <button
+                          className="borrar-cuenta"
+                          onClick={() => setBorrando(u.nombre)}
+                          disabled={u.nombre === user?.nombre}
+                          title={u.nombre === user?.nombre ? 'No puedes borrar tu propia cuenta' : 'Borrar esta cuenta'}
+                        >
+                          Borrar
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -161,6 +203,35 @@ export default function ModPanel() {
             {aviso && <p className="mono" style={{ color: '#9fd07a' }}>{aviso}</p>}
             {!puedeRolesGlobales && (
               <p className="mono muted" style={{ fontSize: '.66rem' }}>Solo el owner asigna másteres y roles globales.</p>
+            )}
+
+            {/* confirmación de borrado (guía §4: lo destructivo se confirma) */}
+            {borrando && (
+              <Modal
+                abierto
+                destructivo
+                titulo="Borrar cuenta"
+                onCerrar={() => setBorrando(null)}
+                ancho="420px"
+              >
+                <p>
+                  Oye, ¿seguro que quieres borrar la cuenta de <b>{borrando}</b>?
+                </p>
+                <p className="mono muted" style={{ fontSize: '.68rem' }}>
+                  No podrá volver a entrar y saldrá de todas las campañas. Sus personajes,
+                  comentarios e imágenes se quedan como están.
+                </p>
+                <div style={{ display: 'flex', gap: '.5rem', justifyContent: 'flex-end', marginTop: '.8rem' }}>
+                  <button className="btn ghost" onClick={() => setBorrando(null)}>No, dejarlo</button>
+                  <button
+                    className="btn"
+                    style={{ background: 'linear-gradient(180deg,#c07a70,#a4443a)', borderColor: '#7d2f27' }}
+                    onClick={() => borrarCuenta(borrando)}
+                  >
+                    Sí, borrar la cuenta
+                  </button>
+                </div>
+              </Modal>
             )}
           </section>
 
@@ -249,6 +320,13 @@ const css = `
 .tabla-usuarios { width: 100%; border-collapse: collapse; font-size: .84rem; }
 .tabla-usuarios th, .tabla-usuarios td { text-align: left; padding: .35rem .5rem; border-bottom: 1px solid rgba(201,164,90,.15); }
 .tabla-usuarios th { font-family: ui-monospace, monospace; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone); }
+.borrar-cuenta {
+  background: rgba(164,68,58,.18); border: 1px solid rgba(200,110,100,.5); color: #f0a29c;
+  border-radius: 999px; padding: .15rem .6rem; cursor: pointer;
+  font-family: ui-monospace, monospace; font-size: .64rem; letter-spacing: .06em;
+}
+.borrar-cuenta:hover:not(:disabled) { background: rgba(164,68,58,.35); color: #ffd9d3; }
+.borrar-cuenta:disabled { opacity: .3; cursor: default; }
 .sel-rol { background: rgba(0,0,0,.3); border: 1px solid rgba(201,164,90,.35); color: var(--paper); border-radius: 6px; padding: .2rem .4rem; font-size: .78rem; }
 .fila-herencia { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; margin-bottom: .5rem; }
 .cat-nombre { font-family: var(--font-title); color: var(--parchment); min-width: 100px; }

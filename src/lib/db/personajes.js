@@ -3,6 +3,10 @@
 // Nodo: /personajes/{campanaId}/{personajeId}
 //   propietario    string   · usuario que lo controla
 //   nombre, edad, raza, sexo, descripcion
+//   clase          string   · clase de Pathfinder (guerrero, mago…)
+//   nivel          number   · nivel DECLARADO al subir la ficha. Solo se usa
+//                             mientras el personaje no tenga experiencia
+//                             registrada; en cuanto la tiene, manda la XP.
 //   imagenUrl      string   · ilustración completa (Podios, §11.1)
 //   recorte        {x,y,zoom} · encuadre circular para el avatar (§19.4)
 //   diarioMd       string   · diario en markdown (§11.7)
