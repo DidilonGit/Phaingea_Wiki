@@ -1,7 +1,33 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import 'page-flip/src/Style/stPageFlip.css';
 import { sonar } from '../lib/sonidos.js';
 
-// Extrae el texto plano de un nodo React (para el buscador, T10).
+// ============================================================================
+// LIBRO — componente compartido (guía §27).
+//
+// Usa StPageFlip (paquete `page-flip`) para el paso de página realista: la
+// hoja se dobla y se levanta como en un libro de verdad, con su sombra.
+//
+// API:
+//   <Libro
+//     titulo="Panteón de Phaingea"
+//     sub="Heredado de Base"
+//     cubierta="cuero-rojo"              · cuero-rojo | cuero-verde | cuero-negro
+//     paginas={[<div/>, …]}              · contenido de cada página
+//     titulosPaginas={['Cap. 1', …]}     · para el índice y el buscador
+//     alAbrirPagina={(i) => {}}
+//   />
+//
+// Estructura del libro: PORTADA · ÍNDICE · páginas · CONTRAPORTADA.
+// Alrededor: flechas, ir-a-página, volver al índice, buscador (§27.3) y
+// pantalla completa (§9.3).
+//
+// OJO: el libro vive dentro de secciones que el SPA oculta con `hidden`. Si se
+// inicializa sin tamaño, StPageFlip se rompe; por eso se espera a que el
+// contenedor tenga ancho real (ResizeObserver) para montarlo.
+// ============================================================================
+
+// Extrae el texto plano de un nodo React (para el buscador).
 function extraerTexto(nodo) {
   if (nodo == null || typeof nodo === 'boolean') return '';
   if (typeof nodo === 'string' || typeof nodo === 'number') return String(nodo);
@@ -9,27 +35,6 @@ function extraerTexto(nodo) {
   if (nodo.props && nodo.props.children != null) return extraerTexto(nodo.props.children);
   return '';
 }
-
-// ============================================================================
-// LIBRO — componente compartido de libros (guía §27).
-//
-// API:
-//   <Libro
-//     titulo="Panteón de Phaingea"       · título de la portada
-//     sub="Heredado de Base"             · subtítulo de la portada (opcional)
-//     cubierta="cuero-rojo"              · cuero-rojo | cuero-verde | cuero-negro
-//     paginas={[<div>…</div>, …]}        · contenido de cada página (nodos React)
-//     titulosPaginas={['Cap. 1', …]}     · para el índice (opcional; si falta,
-//                                          se usa "Página N")
-//     alAbrirPagina={(i) => {}}          · callback opcional
-//   />
-//
-// El libro empieza en la PORTADA. Al abrirlo va al ÍNDICE (página especial),
-// que lista las páginas y navega con animación de paso. Controles: flechas
-// (también ← → de teclado), "ir a página", y volver al índice desde cualquier
-// página. La animación es un giro 3D (CSS) breve y suave (guía §28).
-// El buscador (T10) y la pantalla completa (T11) se añaden sobre esta base.
-// ============================================================================
 
 export default function Libro({
   titulo = 'Libro',
@@ -39,26 +44,24 @@ export default function Libro({
   titulosPaginas = [],
   alAbrirPagina,
 }) {
-  // vista: 'portada' | 'indice' | número de página (0-based)
-  const [vista, setVista] = useState('portada');
-  const [girando, setGirando] = useState(null); // 'adelante' | 'atras' | null
+  const [pagina, setPagina] = useState(0); // índice dentro del libro completo
   const [irA, setIrA] = useState('');
   const [busqueda, setBusqueda] = useState('');
-  const [fs, setFs] = useState(false); // pantalla completa (T11, guía §9.3)
-  const contRef = useRef(null);
+  const [fs, setFs] = useState(false);
+  const [listo, setListo] = useState(false);
 
-  // Esc cierra la pantalla completa.
-  useEffect(() => {
-    if (!fs) return;
-    const onEsc = (e) => e.key === 'Escape' && setFs(false);
-    window.addEventListener('keydown', onEsc);
-    return () => window.removeEventListener('keydown', onEsc);
-  }, [fs]);
+  const contRef = useRef(null);
+  const libroRef = useRef(null);
+  const flipRef = useRef(null);
 
   const total = paginas.length;
   const tituloDe = (i) => titulosPaginas[i] || `Página ${i + 1}`;
 
-  // --- Buscador (T10): índice de texto plano por página, calculado una vez ---
+  // Estructura: 0 = portada, 1 = índice, 2..(total+1) = contenido, último = contraportada
+  const OFFSET = 2;
+  const totalHojas = total + 3;
+
+  // --- buscador (§27.3) ---
   const textos = useMemo(() => paginas.map((p) => extraerTexto(p).toLowerCase()), [paginas]);
   const resultados = useMemo(() => {
     const q = busqueda.trim().toLowerCase();
@@ -68,95 +71,155 @@ export default function Libro({
       const pos = t.indexOf(q);
       if (pos === -1) return;
       const ini = Math.max(0, pos - 30);
-      res.push({
-        pagina: i,
-        contexto: (ini > 0 ? '…' : '') + t.slice(ini, pos + q.length + 30) + '…',
-      });
+      res.push({ pagina: i, contexto: (ini > 0 ? '…' : '') + t.slice(ini, pos + q.length + 30) + '…' });
     });
     return res;
   }, [busqueda, textos]);
 
-  // Navegar con animación de giro: se marca la dirección, a mitad de la
-  // animación se cambia el contenido y se completa el giro.
-  function navegar(destino, dir = 'adelante') {
-    if (girando) return;
-    sonar(vista === 'portada' ? 'libro' : 'pagina');
-    setGirando(dir);
-    setTimeout(() => {
-      setVista(destino);
-      if (typeof destino === 'number' && alAbrirPagina) alAbrirPagina(destino);
-      setTimeout(() => setGirando(null), 180);
-    }, 180);
+  // --- montar StPageFlip cuando el contenedor tenga tamaño real ---
+  // Se monta UNA sola vez (cuando el contenedor deja de estar oculto y mide).
+  // Si luego cambian las páginas, se refresca con updateFromHtml en vez de
+  // rehacer el libro: así no hay carreras que destruyan el recién montado.
+  const montandoRef = useRef(false);
+  const paginasRef = useRef(paginas);
+  paginasRef.current = paginas;
+
+  useEffect(() => {
+    let vivo = true;
+
+    async function montar() {
+      const el = libroRef.current;
+      if (!el || flipRef.current || montandoRef.current) return;
+      if (el.clientWidth < 50) return; // sigue oculto: esperamos al ResizeObserver
+      montandoRef.current = true;
+      try {
+        // page-flip se publica como bundle UMD: PageFlip cuelga del default.
+        const mod = await import('page-flip');
+        const PageFlip = mod.PageFlip || mod.default?.PageFlip || mod.default;
+        if (!vivo || flipRef.current || typeof PageFlip !== 'function') return;
+
+        const ancho = Math.min(el.clientWidth / 2, 460);
+        const flip = new PageFlip(el, {
+          width: ancho,
+          height: Math.round(ancho * 1.38),
+          size: 'stretch',
+          minWidth: 220,
+          maxWidth: 520,
+          minHeight: 300,
+          maxHeight: 760,
+          showCover: true,
+          usePortrait: true,
+          maxShadowOpacity: 0.5,
+          mobileScrollSupport: false,
+          drawShadow: true,
+        });
+        flip.loadFromHTML(el.querySelectorAll('.hoja'));
+        flip.on('flip', (e) => {
+          const n = e.data;
+          setPagina(n);
+          sonar('pagina');
+          const cuantas = paginasRef.current.length;
+          if (n >= OFFSET && n < OFFSET + cuantas && alAbrirPagina) alAbrirPagina(n - OFFSET);
+        });
+        flipRef.current = flip;
+        setListo(true);
+      } finally {
+        montandoRef.current = false;
+      }
+    }
+
+    montar();
+    // El ResizeObserver no siempre dispara al pasar de oculto a visible, así
+    // que también reintentamos cuando el SPA anuncia el cambio de sala.
+    const ro = new ResizeObserver(() => montar());
+    if (libroRef.current) ro.observe(libroRef.current);
+    const alCambiarVista = () => setTimeout(montar, 60);
+    window.addEventListener('phaingea:vista', alCambiarVista);
+
+    return () => {
+      vivo = false;
+      ro.disconnect();
+      window.removeEventListener('phaingea:vista', alCambiarVista);
+      try {
+        flipRef.current?.destroy();
+      } catch (_) {}
+      flipRef.current = null;
+    };
+  }, []);
+
+  // Si cambian las páginas (contenido cargado o nuevo), refrescar el libro.
+  useEffect(() => {
+    if (!flipRef.current) return;
+    try {
+      flipRef.current.updateFromHtml(libroRef.current.querySelectorAll('.hoja'));
+    } catch (_) {}
+  }, [total]);
+
+  function irAHoja(n) {
+    const f = flipRef.current;
+    if (!f) return;
+    try {
+      f.flip(Math.max(0, Math.min(totalHojas - 1, n)));
+    } catch (_) {}
   }
+  const siguiente = () => flipRef.current?.flipNext();
+  const anterior = () => flipRef.current?.flipPrev();
 
-  const puedeAtras = vista !== 'portada';
-  const siguiente = () => {
-    if (vista === 'portada') navegar('indice');
-    else if (vista === 'indice') total && navegar(0);
-    else if (vista < total - 1) navegar(vista + 1);
-  };
-  const anterior = () => {
-    if (vista === 'indice') navegar('portada', 'atras');
-    else if (vista === 0) navegar('indice', 'atras');
-    else if (typeof vista === 'number') navegar(vista - 1, 'atras');
-  };
-
-  // Teclado (solo cuando el ratón está sobre el libro no hace falta: global
-  // pero ignorando inputs).
+  // Teclado (solo con el libro visible y fuera de campos de texto).
   useEffect(() => {
     const onKey = (e) => {
       if (e.target.closest?.('input, textarea, select')) return;
-      if (!contRef.current || contRef.current.offsetParent === null) return; // libro oculto
+      if (!contRef.current || contRef.current.offsetParent === null) return;
       if (e.key === 'ArrowRight') siguiente();
       if (e.key === 'ArrowLeft') anterior();
+      if (e.key === 'Escape' && fs) setFs(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  });
+  }, [fs]);
 
   function irAPagina(e) {
     e.preventDefault();
     const n = parseInt(irA, 10);
     if (!isNaN(n) && n >= 1 && n <= total) {
-      navegar(n - 1, typeof vista === 'number' && n - 1 < vista ? 'atras' : 'adelante');
+      irAHoja(OFFSET + n - 1);
       setIrA('');
     }
   }
 
+  const enContenido = pagina >= OFFSET && pagina < OFFSET + total;
+
   return (
     <div className={`libro-wrap ${fs ? 'fs' : ''}`} ref={contRef}>
-      {/* fondo oscurecido y borroso de la pantalla completa (clic fuera cierra) */}
       {fs && <div className="fs-fondo" onClick={() => setFs(false)} aria-hidden="true" />}
 
-      {/* icono de ampliar, FUERA del libro (guía §9.3) */}
       {!fs && (
         <button className="btn-ampliar" onClick={() => setFs(true)} aria-label="Pantalla completa">
           ⛶<span className="tip-ampliar">Pantalla completa</span>
         </button>
       )}
 
-      <div className={`libro cubierta-${cubierta} ${girando ? 'girando-' + girando : ''} ${vista === 'portada' ? 'cerrado' : 'abierto'}`}>
-        {/* esquinas decorativas de la cubierta (guía §27.2) */}
-        <span className="esquina a" aria-hidden="true" />
-        <span className="esquina b" aria-hidden="true" />
-        <span className="esquina c" aria-hidden="true" />
-        <span className="esquina d" aria-hidden="true" />
-
-        {vista === 'portada' && (
-          <button className="portada" onClick={() => navegar('indice')} aria-label={`Abrir ${titulo}`}>
+      {/* El libro: cada .hoja es una página que StPageFlip anima */}
+      <div className={`libro cubierta-${cubierta}`} ref={libroRef}>
+        {/* portada */}
+        <div className="hoja tapa" data-density="hard">
+          <div className="tapa-interior">
+            <span className="esquina a" /><span className="esquina b" />
+            <span className="esquina c" /><span className="esquina d" />
             <span className="portada-titulo">{titulo}</span>
             {sub && <span className="portada-sub">{sub}</span>}
             <span className="portada-abrir mono">ABRIR</span>
-          </button>
-        )}
+          </div>
+        </div>
 
-        {vista === 'indice' && (
-          <div className="pagina indice" role="navigation" aria-label="Índice del libro">
+        {/* índice */}
+        <div className="hoja">
+          <div className="pagina indice">
             <h4 className="pagina-titulo">Índice</h4>
             <ol className="indice-lista">
               {paginas.map((_, i) => (
                 <li key={i}>
-                  <button onClick={() => navegar(i)}>
+                  <button onClick={() => irAHoja(OFFSET + i)}>
                     <span className="indice-titulo">{tituloDe(i)}</span>
                     <span className="indice-num mono">{i + 1}</span>
                   </button>
@@ -165,32 +228,40 @@ export default function Libro({
             </ol>
             {total === 0 && <p className="muted">Este libro aún no tiene páginas.</p>}
           </div>
-        )}
+        </div>
 
-        {typeof vista === 'number' && paginas[vista] != null && (
-          <div className="pagina" aria-label={tituloDe(vista)}>
-            <div className="pagina-contenido">{paginas[vista]}</div>
-            <div className="pagina-pie mono">
-              <button className="lnk" onClick={() => navegar('indice', 'atras')}>⌂ Índice</button>
-              <span>{vista + 1} / {total}</span>
+        {/* contenido */}
+        {paginas.map((p, i) => (
+          <div className="hoja" key={i}>
+            <div className="pagina">
+              <div className="pagina-contenido">{p}</div>
+              <div className="pagina-pie mono">
+                <button className="lnk" onClick={() => irAHoja(1)}>⌂ Índice</button>
+                <span>{i + 1} / {total}</span>
+              </div>
             </div>
           </div>
-        )}
+        ))}
+
+        {/* contraportada */}
+        <div className="hoja tapa" data-density="hard">
+          <div className="tapa-interior">
+            <span className="esquina a" /><span className="esquina b" />
+            <span className="esquina c" /><span className="esquina d" />
+            <span className="portada-sub">Fin</span>
+          </div>
+        </div>
       </div>
 
-      {/* controles bajo el libro */}
+      {/* controles */}
       <div className="libro-controles">
-        <button className="ctrl" onClick={anterior} disabled={!puedeAtras || !!girando} aria-label="Página anterior">‹</button>
+        <button className="ctrl" onClick={anterior} disabled={!listo || pagina === 0} aria-label="Página anterior">‹</button>
+        <button className="ctrl indice-btn" onClick={() => irAHoja(1)} disabled={!listo} aria-label="Ir al índice" title="Índice">⌂</button>
         <form onSubmit={irAPagina} className="ira mono">
-          <input
-            value={irA}
-            onChange={(e) => setIrA(e.target.value)}
-            placeholder="pág."
-            aria-label="Ir a página"
-            inputMode="numeric"
-          />
+          <input value={irA} onChange={(e) => setIrA(e.target.value)} placeholder="pág." aria-label="Ir a página" inputMode="numeric" />
         </form>
-        <button className="ctrl" onClick={siguiente} disabled={(vista === total - 1 && total > 0) || !!girando} aria-label="Página siguiente">›</button>
+        <button className="ctrl" onClick={siguiente} disabled={!listo || pagina >= totalHojas - 1} aria-label="Página siguiente">›</button>
+
         <div className="buscador">
           <input
             value={busqueda}
@@ -205,7 +276,7 @@ export default function Libro({
                 <button
                   key={r.pagina}
                   onClick={() => {
-                    navegar(r.pagina, typeof vista === 'number' && r.pagina < vista ? 'atras' : 'adelante');
+                    irAHoja(OFFSET + r.pagina);
                     setBusqueda('');
                   }}
                 >
@@ -218,99 +289,83 @@ export default function Libro({
         </div>
       </div>
 
-      {/* X de cierre: fuera del libro, esquina inferior derecha del conjunto */}
-      {fs && (
-        <button className="fs-cerrar" onClick={() => setFs(false)} aria-label="Salir de pantalla completa">✕</button>
-      )}
+      {enContenido && <p className="mono posicion">{pagina - OFFSET + 1} / {total}</p>}
+
+      {fs && <button className="fs-cerrar" onClick={() => setFs(false)} aria-label="Salir de pantalla completa">✕</button>}
 
       <style>{css}</style>
     </div>
   );
 }
 
-// Estilos del libro (inyectados con el componente; solo se montan una vez por
-// libro y son baratos). Colores del sistema (tokens.css).
 const css = `
-.libro-wrap { display: grid; justify-items: center; gap: 0.7rem; }
-.libro {
-  position: relative;
-  width: min(560px, 92vw);
-  aspect-ratio: 4 / 3;
-  border-radius: 6px 14px 14px 6px;
-  border: 1px solid rgba(0,0,0,.55);
-  box-shadow: 8px 12px 34px rgba(0,0,0,.55), inset 0 0 0 2px rgba(255,255,255,.05);
-  perspective: 1200px;
-  transition: transform .25s var(--ease);
-  overflow: hidden;
+.libro-wrap { display: grid; justify-items: center; gap: .7rem; width: 100%; }
+.libro { width: min(560px, 92vw); height: min(72vh, 620px); margin: 0 auto; }
+.libro .hoja { background: linear-gradient(120deg, var(--paper), var(--parchment) 85%); overflow: hidden; }
+.libro .hoja.tapa { background: none; }
+
+/* tapas de cuero con esquinas decorativas (guía §27.2) */
+.cubierta-cuero-rojo  .tapa-interior { --cuero: var(--leather-red);   --fondo: #241610; }
+.cubierta-cuero-verde .tapa-interior { --cuero: var(--leather-green); --fondo: #16200f; }
+.cubierta-cuero-negro .tapa-interior { --cuero: var(--leather-black); --fondo: #0d0b09; }
+.tapa-interior {
+  position: absolute; inset: 0; display: grid; place-content: center; gap: .5rem; text-align: center; padding: 1.4rem;
+  background: radial-gradient(120% 100% at 30% 20%, rgba(255,255,255,.08), transparent 55%),
+              linear-gradient(135deg, var(--cuero, var(--leather-red)), var(--fondo, #241610));
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.05);
 }
-.libro.cerrado { width: min(360px, 80vw); aspect-ratio: 3 / 4; }
-.cubierta-cuero-rojo   { background: radial-gradient(120% 100% at 30% 20%, rgba(255,255,255,.08), transparent 55%), linear-gradient(135deg, var(--leather-red), #241610); }
-.cubierta-cuero-verde  { background: radial-gradient(120% 100% at 30% 20%, rgba(255,255,255,.08), transparent 55%), linear-gradient(135deg, var(--leather-green), #16200f); }
-.cubierta-cuero-negro  { background: radial-gradient(120% 100% at 30% 20%, rgba(255,255,255,.08), transparent 55%), linear-gradient(135deg, var(--leather-black), #0d0b09); }
-.libro .esquina { position: absolute; width: 22px; height: 22px; border: 2px solid rgba(201,164,90,.55); pointer-events: none; z-index: 3; }
-.libro .esquina.a { top: 7px; left: 7px; border-right: 0; border-bottom: 0; }
-.libro .esquina.b { top: 7px; right: 7px; border-left: 0; border-bottom: 0; }
-.libro .esquina.c { bottom: 7px; left: 7px; border-right: 0; border-top: 0; }
-.libro .esquina.d { bottom: 7px; right: 7px; border-left: 0; border-top: 0; }
-.portada {
-  position: absolute; inset: 0; display: grid; place-content: center; gap: .6rem;
-  background: none; border: 0; cursor: pointer; text-align: center; padding: 1.5rem;
-}
-.portada-titulo { font-family: var(--font-title); font-size: clamp(1.4rem, 4vw, 2rem); color: var(--gold-soft); letter-spacing: .05em; }
-.portada-sub { font-family: var(--font-body); color: var(--parchment); opacity: .8; font-size: .9rem; }
-.portada-abrir { margin-top: 1rem; color: var(--gold); font-size: .7rem; letter-spacing: .3em; border: 1px solid rgba(201,164,90,.5); border-radius: 999px; padding: .4rem .9rem; justify-self: center; }
-.portada:hover .portada-abrir { background: rgba(201,164,90,.15); }
-.pagina {
-  position: absolute; inset: 10px;
-  background: linear-gradient(120deg, var(--paper), var(--parchment) 85%);
-  color: var(--ink);
-  border-radius: 4px 10px 10px 4px;
-  padding: 1.2rem 1.4rem 2.2rem;
-  overflow-y: auto;
-  transform-origin: left center;
-  backface-visibility: hidden;
-}
-.girando-adelante .pagina, .girando-adelante .portada { animation: libroGiroA .36s var(--ease); }
-.girando-atras .pagina, .girando-atras .portada { animation: libroGiroB .36s var(--ease); }
-@keyframes libroGiroA { 0% { transform: rotateY(0); } 50% { transform: rotateY(-24deg); opacity: .35; } 100% { transform: rotateY(0); } }
-@keyframes libroGiroB { 0% { transform: rotateY(0); } 50% { transform: rotateY(18deg); opacity: .35; } 100% { transform: rotateY(0); } }
-.pagina-titulo { font-family: var(--font-title); color: #5a3d26; font-size: 1.25rem; margin: 0 0 .8rem; }
-.indice-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: .15rem; max-height: 100%; overflow-y: auto; }
+.tapa-interior .esquina { position: absolute; width: 22px; height: 22px; border: 2px solid rgba(201,164,90,.55); }
+.tapa-interior .esquina.a { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+.tapa-interior .esquina.b { top: 10px; right: 10px; border-left: 0; border-bottom: 0; }
+.tapa-interior .esquina.c { bottom: 10px; left: 10px; border-right: 0; border-top: 0; }
+.tapa-interior .esquina.d { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+.portada-titulo { font-family: var(--font-title); font-size: clamp(1.2rem, 3.4vw, 1.8rem); color: var(--gold-soft); letter-spacing: .05em; }
+.portada-sub { font-family: var(--font-body); color: var(--parchment); opacity: .8; font-size: .85rem; }
+.portada-abrir { margin-top: .8rem; color: var(--gold); font-size: .64rem; letter-spacing: .3em; border: 1px solid rgba(201,164,90,.5); border-radius: 999px; padding: .35rem .8rem; justify-self: center; }
+
+/* páginas de papel */
+.pagina { position: absolute; inset: 0; color: var(--ink); padding: 1.1rem 1.2rem 2rem; overflow-y: auto; }
+.pagina-titulo { font-family: var(--font-title); color: #5a3d26; font-size: 1.2rem; margin: 0 0 .7rem; }
+.indice-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
 .indice-lista button {
   width: 100%; display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
-  background: none; border: 0; cursor: pointer; padding: .35rem .3rem;
-  font-family: var(--font-body); color: var(--ink); font-size: .95rem;
+  background: none; border: 0; cursor: pointer; padding: .32rem .3rem;
+  font-family: var(--font-body); color: var(--ink); font-size: .92rem;
   border-bottom: 1px dotted rgba(90,61,38,.35);
 }
 .indice-lista button:hover .indice-titulo { color: #7a4a1a; }
-.indice-num { color: #8a7350; font-size: .75rem; }
-.pagina-contenido { min-height: calc(100% - 1.6rem); font-family: var(--font-body); line-height: 1.55; }
+.indice-num { color: #8a7350; font-size: .74rem; }
+.pagina-contenido { font-family: var(--font-body); line-height: 1.55; }
+.pagina-contenido img { width: 100%; height: auto; display: block; }
 .pagina-pie {
   position: absolute; left: 0; right: 0; bottom: 0;
   display: flex; justify-content: space-between; align-items: center;
-  padding: .35rem .9rem; font-size: .7rem; color: #8a7350;
+  padding: .3rem .9rem; font-size: .68rem; color: #8a7350;
   background: linear-gradient(transparent, rgba(90,61,38,.08));
 }
-.pagina-pie .lnk { background: none; border: 0; cursor: pointer; color: #7a4a1a; font-family: inherit; font-size: inherit; }
+.pagina-pie .lnk { background: none; border: 0; cursor: pointer; color: #7a4a1a; font: inherit; }
 .pagina-pie .lnk:hover { text-decoration: underline; }
-.libro-controles { display: flex; align-items: center; gap: .5rem; }
+
+/* controles */
+.libro-controles { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; justify-content: center; }
 .libro-controles .ctrl {
-  width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;
+  width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.1rem;
   border: 1px solid rgba(201,164,90,.5); background: rgba(14,17,22,.7); color: var(--gold);
   transition: transform .15s var(--ease);
 }
 .libro-controles .ctrl:hover:not(:disabled) { transform: scale(1.08); }
 .libro-controles .ctrl:disabled { opacity: .35; cursor: default; }
 .libro-controles .ira input {
-  width: 58px; text-align: center; padding: .35rem .3rem; border-radius: 999px;
-  border: 1px solid rgba(201,164,90,.4); background: rgba(0,0,0,.3); color: var(--paper);
-  font-size: .75rem;
+  width: 56px; text-align: center; padding: .32rem .3rem; border-radius: 999px;
+  border: 1px solid rgba(201,164,90,.4); background: rgba(0,0,0,.3); color: var(--paper); font-size: .74rem;
 }
+.posicion { color: var(--stone); font-size: .68rem; }
 .buscador { position: relative; }
 .buscador input {
-  width: 170px; padding: .4rem .7rem; border-radius: 999px;
+  width: 160px; padding: .38rem .7rem; border-radius: 999px;
   border: 1px solid rgba(201,164,90,.4); background: rgba(0,0,0,.3); color: var(--paper);
-  font-size: .78rem; font-family: var(--font-body);
+  font-size: .76rem; font-family: var(--font-body);
 }
 .buscador-resultados {
   position: absolute; top: calc(100% + 6px); right: 0; z-index: 40;
@@ -320,15 +375,15 @@ const css = `
   box-shadow: 0 14px 40px rgba(0,0,0,.6); padding: .35rem;
 }
 .buscador-resultados button {
-  display: grid; gap: .15rem; width: 100%; text-align: left; cursor: pointer;
-  background: none; border: 0; padding: .45rem .5rem; border-radius: 6px;
+  display: grid; gap: .12rem; width: 100%; text-align: left; cursor: pointer;
+  background: none; border: 0; padding: .42rem .5rem; border-radius: 6px;
 }
 .buscador-resultados button:hover { background: rgba(201,164,90,.12); }
-.br-pag { color: var(--gold); font-size: .62rem; letter-spacing: .06em; }
-.br-ctx { color: var(--parchment); font-size: .78rem; font-family: var(--font-body); }
+.br-pag { color: var(--gold); font-size: .6rem; letter-spacing: .06em; }
+.br-ctx { color: var(--parchment); font-size: .76rem; font-family: var(--font-body); }
 .sin-resultados { color: var(--stone); font-size: .7rem; text-align: center; margin: .4rem 0; }
 
-/* ---- pantalla completa (T11, guía §9.3) ---- */
+/* pantalla completa (§9.3) */
 .btn-ampliar {
   position: relative; justify-self: end;
   width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1rem;
@@ -339,27 +394,17 @@ const css = `
   position: absolute; right: 0; bottom: calc(100% + 6px);
   background: linear-gradient(#3a2415, #241609); color: var(--paper);
   border: 1px solid rgba(201,164,90,.5); border-radius: 6px;
-  font-family: ui-monospace, monospace; font-size: .62rem; letter-spacing: .1em;
+  font-family: ui-monospace, monospace; font-size: .6rem; letter-spacing: .1em;
   text-transform: uppercase; padding: .25rem .5rem; white-space: nowrap;
   opacity: 0; pointer-events: none; transition: opacity .15s ease;
 }
 .btn-ampliar:hover .tip-ampliar { opacity: 1; }
-.libro-wrap.fs {
-  position: fixed; inset: 0; z-index: 140;
-  display: grid; place-content: center; gap: .7rem; justify-items: center;
-}
-.fs-fondo {
-  position: fixed; inset: 0; z-index: -1;
-  background: rgba(5, 6, 10, .72);
-  backdrop-filter: blur(5px);
-}
-.libro-wrap.fs .libro { width: min(92vw, calc(76vh * 4 / 3)); }
-.libro-wrap.fs .libro.cerrado { width: min(80vw, calc(72vh * 3 / 4)); }
+.libro-wrap.fs { position: fixed; inset: 0; z-index: 140; display: grid; place-content: center; gap: .7rem; justify-items: center; }
+.fs-fondo { position: fixed; inset: 0; z-index: -1; background: rgba(5,6,10,.72); backdrop-filter: blur(5px); }
+.libro-wrap.fs .libro { width: min(94vw, 1000px); height: min(84vh, 820px); }
 .fs-cerrar {
-  justify-self: end;
-  width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-weight: 700;
+  justify-self: end; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-weight: 700;
   background: linear-gradient(180deg, #f2dc94, #c9a45a 55%, #87692f);
-  border: 1px solid #1c120a; color: #241a12;
-  box-shadow: 0 4px 10px rgba(0,0,0,.5);
+  border: 1px solid #1c120a; color: #241a12; box-shadow: 0 4px 10px rgba(0,0,0,.5);
 }
 `;

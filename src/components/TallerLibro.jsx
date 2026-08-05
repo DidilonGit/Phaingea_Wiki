@@ -26,12 +26,23 @@ export default function TallerLibro() {
 
   if (!montado) return null;
 
-  const md = datos?.reglasMd || '';
-  const paginasHtml = paginar(md);
-  const paginas = paginasHtml.map((html, i) => (
-    <div key={i} className="pagina-md" dangerouslySetInnerHTML={{ __html: html }} />
-  ));
-  const titulos = paginasHtml.map((html, i) => tituloDePagina(html, i));
+  // Dos orígenes posibles (guía §16.2): un documento ya maquetado (cada página
+  // es su imagen, se respeta su diseño tal cual, §27.1) o markdown propio.
+  const docPaginas = Array.isArray(datos?.paginasUrl) ? datos.paginasUrl : [];
+  let paginas, titulos;
+
+  if (docPaginas.length) {
+    paginas = docPaginas.map((url, i) => (
+      <img key={i} src={url} alt={`Página ${i + 1}`} className="pagina-doc" loading="lazy" />
+    ));
+    titulos = docPaginas.map((_, i) => `Página ${i + 1}`);
+  } else {
+    const paginasHtml = paginar(datos?.reglasMd || '');
+    paginas = paginasHtml.map((html, i) => (
+      <div key={i} className="pagina-md" dangerouslySetInnerHTML={{ __html: html }} />
+    ));
+    titulos = paginasHtml.map((html, i) => tituloDePagina(html, i));
+  }
 
   if (paginas.length === 0) {
     return (
@@ -52,7 +63,7 @@ export default function TallerLibro() {
 
   return (
     <Libro
-      titulo={campana?.nombre ? `Reglas de ${campana.nombre}` : 'Reglas'}
+      titulo={datos?.titulo || (campana?.nombre ? `Reglas de ${campana.nombre}` : 'Reglas')}
       sub={datos?.subtitulo || 'Pathfinder 1e · reglas de la casa'}
       cubierta="cuero-negro"
       paginas={paginas}

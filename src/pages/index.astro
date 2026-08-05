@@ -1118,6 +1118,9 @@ arrancar();
         }
       }
       window.dispatchEvent(new Event('resize'));
+      // Avisar a las islas de que esta vista ya es visible (algunas, como el
+      // Libro, necesitan medir el contenedor para montarse).
+      window.dispatchEvent(new CustomEvent('phaingea:vista', { detail: { vista: key } }));
     }
     bms.forEach(function(b){ b.addEventListener('click', function(){
       // sonido discreto de madera al cambiar de sala (guia 29)
