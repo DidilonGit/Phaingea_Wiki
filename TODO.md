@@ -1,4 +1,7 @@
-que hacer [0] no hecho [-] pendiente test [x] hecho
+# TODO Proveniente del Feedback como Usuario
+"Nada" = no hecho
+[-] pendiente test
+[x] hecho
 
 Bug: Al entrar en la categoria de Taller, muchas veces no sale el libro, quedando solo la jaula y tips de pantalla, para solucionarlo recargo página, pero siempre que se entra a una campaña desde otra es igual.
 
