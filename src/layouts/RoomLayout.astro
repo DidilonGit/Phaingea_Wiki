@@ -16,6 +16,21 @@ const { title = 'Phaingea' } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    {/* El HTML se genera al construir (sin saber si hay sesión), así que la
+        ventana de login viene en el paquete. Este script corre ANTES de pintar
+        y marca el documento si ya hay sesión guardada: el CSS de abajo la
+        oculta, y al hidratar React ya ni la crea. Resultado: al recargar
+        estando dentro no se ve pasar el login. */}
+    <script is:inline>
+      try {
+        if (JSON.parse(localStorage.getItem('phaingea_session') || 'null')?.nombre) {
+          document.documentElement.dataset.sesion = 'si';
+        }
+      } catch (e) {}
+    </script>
+    <style is:global>
+      html[data-sesion='si'] [data-login] { display: none !important; }
+    </style>
   </head>
   <body>
     <TopBar />

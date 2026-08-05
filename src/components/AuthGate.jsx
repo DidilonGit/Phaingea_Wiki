@@ -43,13 +43,11 @@ export default function AuthGate() {
     return () => { quitar(); if (off) off(); };
   }, []);
 
-  // Auto-login desde la sesión + animación de ENTRADA del overlay.
+  // La sesión ya se recupera al cargar el store (así no parpadea el login al
+  // recargar). Aquí solo queda la animación de ENTRADA del overlay para quien
+  // de verdad tiene que identificarse.
   useEffect(() => {
-    const s = leerSesion();
-    if (s && s.nombre) {
-      $user.set(s);
-      return;
-    }
+    if (leerSesion()?.nombre) return;
     backdropRef.current?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, easing: 'ease' });
     cardRef.current?.animate(
       [
@@ -150,7 +148,14 @@ export default function AuthGate() {
 
   // --- no logueado: overlay ---
   return (
-    <div ref={backdropRef} style={ov.backdrop} role="dialog" aria-modal="true" aria-label="Acceso a Phaingea">
+    <div
+      ref={backdropRef}
+      style={ov.backdrop}
+      data-login
+      role="dialog"
+      aria-modal="true"
+      aria-label="Acceso a Phaingea"
+    >
       <form ref={cardRef} style={{ ...ov.card, ...woodBg }} onSubmit={enviar}>
         <div style={ov.brand}>PHAINGEA</div>
         <p style={ov.kicker}>{modo === 'login' ? 'Entrar en el archivo' : 'Crear una cuenta'}</p>
