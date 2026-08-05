@@ -98,8 +98,8 @@ const css = `
   transition: opacity .35s var(--ease), transform .35s var(--ease);
 }
 .nota.fundiendo { opacity: 0; transform: translateY(6px); }
-.nota-cabecera { display: flex; align-items: center; gap: .9rem; }
-.nota-logo { width: 46px; height: 46px; border-radius: 50%; flex: none; box-shadow: 0 2px 8px rgba(0,0,0,.4); object-fit: cover; }
+.nota-cabecera { display: flex; align-items: center; gap: .6rem; }
+.nota-logo { width: 28px; height: 28px; border-radius: 50%; flex: none; box-shadow: 0 2px 6px rgba(0,0,0,.4); object-fit: cover; }
 .nota-titulo {
   margin: 0; font-size: clamp(1.5rem, 4vw, 2.2rem); letter-spacing: .03em; line-height: 1.1;
   -webkit-text-stroke-width: 1px;
