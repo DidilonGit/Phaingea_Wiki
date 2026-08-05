@@ -47,14 +47,24 @@ export default function PinesPlaneta() {
     return suscribirPinesPlaneta(campana.id, setPines);
   }, [campana?.id]);
 
-  // Seguimos el giro del globo (el prototipo expone su estado en __engren).
+  // Seguimos el giro del globo cuadro a cuadro (el prototipo expone su estado
+  // en __engren). Con un temporizador los pines iban a tirones, porque el globo
+  // se dibuja con requestAnimationFrame y ellos se movían por su cuenta.
   useEffect(() => {
     if (!montado) return;
-    const id = setInterval(() => {
+    let id = 0;
+    let ultimo = null;
+    const seguir = () => {
       const st = window.__engren?.st;
-      if (st) setGiro(st.rotY || 0);
-    }, 120);
-    return () => clearInterval(id);
+      const r = st?.rotY ?? 0;
+      if (ultimo === null || Math.abs(r - ultimo) > 0.0004) {
+        ultimo = r;
+        setGiro(r);
+      }
+      id = requestAnimationFrame(seguir);
+    };
+    id = requestAnimationFrame(seguir);
+    return () => cancelAnimationFrame(id);
   }, [montado]);
 
   if (!montado) return null;
@@ -101,7 +111,18 @@ export default function PinesPlaneta() {
       )}
 
       {abiertoObj && abiertoObj.visible && (
-        <div className="ficha-region">
+        <div
+          className="ficha-region"
+          style={{
+            left: `${abiertoObj.left}%`,
+            top: `${abiertoObj.top}%`,
+            // si el pin está en la mitad derecha, la ficha se abre hacia la izquierda
+            transform:
+              abiertoObj.left > 50
+                ? 'translate(calc(-100% - 16px), -50%)'
+                : 'translate(16px, -50%)',
+          }}
+        >
           <button className="cerrar" onClick={() => setAbierto(null)} aria-label="Cerrar">✕</button>
           <h4>{abiertoObj.lugar.nombre}</h4>
           {abiertoObj.lugar.imagenUrl && <img src={abiertoObj.lugar.imagenUrl} alt="" />}
@@ -141,9 +162,11 @@ const css = `
   color: var(--paper); text-shadow: 0 1px 4px rgba(0,0,0,.9); white-space: nowrap;
 }
 .pin-planeta:hover b, .pin-planeta.abierto b { box-shadow: 0 0 0 4px rgba(201,164,90,.4), 0 0 12px rgba(201,164,90,.6); }
+/* Anclada al pin (como la tarjeta de los marcadores del observatorio), no
+   colgando debajo del globo: left/top se calculan en el propio componente. */
 .ficha-region {
-  position: absolute; left: 50%; bottom: -8%; transform: translateX(-50%);
-  width: min(280px, 84%); z-index: 30; pointer-events: auto;
+  position: absolute;
+  width: min(260px, 70vw); z-index: 30; pointer-events: auto;
   background: linear-gradient(180deg, rgba(42,30,19,.97), rgba(26,18,11,.98));
   border: 1px solid rgba(201,164,90,.5); border-radius: 10px; padding: .9rem 1rem;
   box-shadow: 0 18px 44px rgba(0,0,0,.65);

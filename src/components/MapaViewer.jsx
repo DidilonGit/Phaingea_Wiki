@@ -30,6 +30,9 @@ import {
 //  · Debajo: nombre del lugar, "Mostrar información" desplegable, lista
 //    alfabética de lugares y comentarios del lugar activo (§10.5-§10.8).
 //
+// Pulsar un pin ENTRA en ese lugar (su nombre se ve al pasar por encima). El
+// resumen y la información del lugar están debajo del mapa.
+//
 // Escucha el evento 'phaingea:abrir-lugar' que lanza el Observatorio (T20).
 // ============================================================================
 
@@ -44,12 +47,12 @@ export default function MapaViewer() {
   const [lugares, setLugares] = useState([]);
   const [activoId, setActivoId] = useState(null);
   const [vista, setVista] = useState({ x: 0, y: 0, z: 1 });
-  const [pinAbierto, setPinAbierto] = useState(null);
   const [herramienta, setHerramienta] = useState(null); // 'lupa' | 'compas' | 'pano'
   const [color, setColor] = useState(COLORES[0]);
   const [modoCompas, setModoCompas] = useState('circulo'); // 'circulo' | 'libre'
   const [lupaPos, setLupaPos] = useState(null);
   const [infoAbierta, setInfoAbierta] = useState(false);
+  const [resaltado, setResaltado] = useState(null); // lugar al que se acaba de llegar
   const [montado, setMontado] = useState(false);
 
   const [caja, setCaja] = useState({ w: 0, h: 0 }); // tamaño del mapa dentro del marco
@@ -77,11 +80,24 @@ export default function MapaViewer() {
     });
   }, [origenId]);
 
-  // El Observatorio puede pedir abrir un lugar concreto (T20, §8.4).
+  // El Observatorio puede pedir abrir un lugar concreto (T20, §8.4). Al llegar
+  // se resalta unos segundos para localizarlo de un vistazo, y luego se apaga
+  // solo: si se quedara encendido, el nombre no se iría nunca del mapa.
   useEffect(() => {
-    const abrir = (e) => e.detail?.lugarId && setActivoId(e.detail.lugarId);
+    let reloj = 0;
+    const abrir = (e) => {
+      const id = e.detail?.lugarId;
+      if (!id) return;
+      setActivoId(id);
+      setResaltado(id);
+      clearTimeout(reloj);
+      reloj = setTimeout(() => setResaltado(null), 5000);
+    };
     window.addEventListener('phaingea:abrir-lugar', abrir);
-    return () => window.removeEventListener('phaingea:abrir-lugar', abrir);
+    return () => {
+      clearTimeout(reloj);
+      window.removeEventListener('phaingea:abrir-lugar', abrir);
+    };
   }, []);
 
   const activo = lugares.find((l) => l.id === activoId) || null;
@@ -133,6 +149,7 @@ export default function MapaViewer() {
   }
 
   function onDown(e) {
+    setResaltado(null); // en cuanto tocas el mapa, deja de resaltarse
     if (herramienta === 'compas' || herramienta === 'pano') {
       const p = coordenadasLienzo(e);
       trazo.current = { inicio: p, ultimo: p };
@@ -268,7 +285,7 @@ export default function MapaViewer() {
 
   function entrarEn(id) {
     setActivoId(id);
-    setPinAbierto(null);
+    setResaltado(null);
     setVista({ x: 0, y: 0, z: 1 });
     setInfoAbierta(false);
   }
@@ -370,11 +387,11 @@ export default function MapaViewer() {
             {Object.entries(pines).map(([id, p]) => (
               <button
                 key={id}
-                className={`pin ${id === activoId ? 'actual' : ''}`}
+                className={`pin ${id === activoId ? 'actual' : ''} ${id === resaltado ? 'resaltado' : ''}`}
                 style={{ left: `${p.x}%`, top: `${p.y}%` }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setPinAbierto(id);
+                  entrarEn(id); // pulsar el pin te lleva a ese lugar (§10.3)
                 }}
                 title={porId[id]?.nombre || 'Lugar'}
               >
@@ -402,16 +419,6 @@ export default function MapaViewer() {
           )}
         </div>
 
-        {/* recuadro del pin (§10.3) */}
-        {pinAbierto && porId[pinAbierto] && (
-          <div className="ficha-pin">
-            <button className="cerrar-pin" onClick={() => setPinAbierto(null)} aria-label="Cerrar">✕</button>
-            <h4>{porId[pinAbierto].nombre}</h4>
-            {porId[pinAbierto].imagenUrl && <img src={porId[pinAbierto].imagenUrl} alt="" />}
-            <p className="muted">{porId[pinAbierto].resumen || 'Sin resumen todavía.'}</p>
-            <button className="btn" onClick={() => entrarEn(pinAbierto)}>Entrar al lugar</button>
-          </div>
-        )}
       </div>
 
       {/* ---- información del lugar ---- */}
@@ -427,6 +434,8 @@ export default function MapaViewer() {
           </p>
         )}
         <h3 className="nombre-lugar">{activo?.nombre || 'Sin lugares todavía'}</h3>
+        {activo?.resumen && <p className="resumen-lugar">{activo.resumen}</p>}
+        {activo?.imagenUrl && <img className="foto-lugar" src={activo.imagenUrl} alt="" />}
         {mapaPrestado && (
           <p className="mono aviso-herencia-carto">
             Este lugar no tiene mapa propio · se muestra el de «{fuenteMapa.nombre}»
@@ -535,9 +544,18 @@ const css = `
 .pin:hover em, .pin:focus-visible em { opacity: 1; }
 /* el lugar en el que estás, señalado sobre el mapa prestado del que lo contiene */
 .pin.actual b { background: radial-gradient(circle at 35% 30%, #a5713f, #4a2a12 70%); box-shadow: 0 0 0 4px rgba(201,164,90,.55), 0 0 10px rgba(120,72,30,.8); }
-.pin.actual em { opacity: 1; }
+/* Solo el recién llegado desde el Observatorio ensena el nombre fijo, y se
+   apaga sola a los pocos segundos o en cuanto tocas el mapa. */
+.pin.resaltado em { opacity: 1; }
+.pin.resaltado b { animation: latido 1.2s ease-in-out 3; }
+@keyframes latido {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(201,164,90,.55); }
+  50% { box-shadow: 0 0 0 9px rgba(201,164,90,.12), 0 0 14px rgba(228,183,91,.7); }
+}
 .lente { position: absolute; width: 160px; height: 160px; border-radius: 50%; transform: translate(-50%,-50%);
   border: 3px solid #b9a27a; box-shadow: 0 8px 24px rgba(0,0,0,.6), inset 0 0 30px rgba(255,255,255,.15); pointer-events: none; background-repeat: no-repeat; }
+.resumen-lugar { color: var(--parchment); font-family: var(--font-body); font-size: .9rem; margin: .2rem 0 .4rem; }
+.foto-lugar { max-width: 260px; border-radius: 8px; margin-bottom: .5rem; border: 1px solid rgba(201,164,90,.3); }
 .ficha-pin { position: absolute; right: 24px; bottom: 24px; width: min(260px, 70%); z-index: 6;
   background: linear-gradient(180deg, rgba(42,30,19,.97), rgba(26,18,11,.98)); border: 1px solid rgba(201,164,90,.45);
   border-radius: 10px; padding: .9rem 1rem; box-shadow: 0 16px 40px rgba(0,0,0,.6); }

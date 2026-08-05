@@ -47,8 +47,12 @@ export default function Modal({
         aria-label={titulo || 'Ventana'}
         style={{ ...st.caja, width: `min(${ancho}, 94vw)` }}
       >
-        <button style={st.cerrar} onClick={onCerrar} aria-label="Cerrar">✕</button>
-        {titulo && <h3 style={st.titulo}>{titulo}</h3>}
+        {/* Cabecera fija: la X tiene que estar SIEMPRE a mano, aunque el
+            contenido sea largo y haya que hacer scroll dentro de la ventana. */}
+        <div style={st.cabecera}>
+          <h3 style={st.titulo}>{titulo}</h3>
+          <button style={st.cerrar} onClick={onCerrar} aria-label="Cerrar">✕</button>
+        </div>
         <div style={st.cuerpo}>{children}</div>
       </div>
     </>
@@ -89,21 +93,29 @@ const st = {
   },
   caja: {
     position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-    zIndex: 161, maxHeight: '88vh', overflowY: 'auto',
+    zIndex: 161, maxHeight: '88vh',
+    display: 'flex', flexDirection: 'column', overflow: 'hidden',
     background: 'linear-gradient(180deg, rgba(42,30,19,.98), rgba(26,18,11,.99))',
     border: '1px solid rgba(201,164,90,.45)', borderRadius: '12px',
     boxShadow: '0 30px 80px rgba(0,0,0,.65)',
-    padding: '1.4rem 1.5rem 1.5rem', color: 'var(--paper)',
+    color: 'var(--paper)',
+  },
+  cabecera: {
+    flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+    gap: '1rem', padding: '1rem 1.2rem 0.7rem',
+    borderBottom: '1px solid rgba(201,164,90,.2)',
   },
   cerrar: {
-    position: 'absolute', top: '0.6rem', right: '0.6rem',
-    width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer',
+    flex: 'none', width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer',
     background: 'rgba(201,164,90,.15)', border: '1px solid rgba(201,164,90,.45)',
     color: 'var(--gold)', fontSize: '0.8rem',
   },
   titulo: {
     fontFamily: 'var(--font-title)', color: 'var(--gold-soft)',
-    fontSize: '1.2rem', letterSpacing: '0.03em', margin: '0 2rem 0.9rem 0',
+    fontSize: '1.2rem', letterSpacing: '0.03em', margin: 0,
   },
-  cuerpo: { display: 'grid', gap: '0.8rem' },
+  cuerpo: {
+    display: 'grid', gap: '0.8rem',
+    overflowY: 'auto', padding: '1rem 1.2rem 1.3rem', minHeight: 0,
+  },
 };

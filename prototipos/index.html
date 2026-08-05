@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Phaingea · prototipos</title>
+<!--
+  ÍNDICE DE PROTOTIPOS
+  Página suelta para abrir de un clic cualquiera de las piezas del proyecto.
+  Se abre tal cual con doble clic (no necesita servidor), aunque las que
+  apuntan a la web en local necesitan que esté arrancada (npm run dev).
+
+  CÓMO AÑADIR UNO NUEVO: copia una <a class="carta"> y cambia href, título y
+  descripción. Nada más: no hay JavaScript de por medio.
+-->
+<style>
+  :root {
+    --oro: #c9a45a;
+    --oro-claro: #e8d9a8;
+    --papel: #e8dfc8;
+    --piedra: #97a0ab;
+    --fondo: #0a0c10;
+    --panel: rgba(42, 30, 19, .78);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh; padding: clamp(1.5rem, 5vw, 3.5rem);
+    font-family: Georgia, 'Times New Roman', serif; color: var(--papel);
+    background:
+      radial-gradient(80% 60% at 50% 0%, rgba(60, 80, 120, .18), transparent 60%),
+      radial-gradient(60% 50% at 80% 90%, rgba(120, 90, 40, .14), transparent 60%),
+      var(--fondo);
+  }
+  header { max-width: 980px; margin: 0 auto 2.2rem; text-align: center; }
+  .kicker {
+    font-family: ui-monospace, 'Courier New', monospace; font-size: .68rem;
+    letter-spacing: .34em; text-transform: uppercase; color: var(--oro);
+  }
+  h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); letter-spacing: .06em; margin: .4rem 0 .5rem; }
+  header p { color: var(--piedra); font-size: .98rem; }
+
+  .rejilla {
+    max-width: 980px; margin: 0 auto; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+  .carta {
+    display: block; text-decoration: none; color: inherit;
+    background: linear-gradient(180deg, var(--panel), rgba(26, 18, 11, .9));
+    border: 1px solid rgba(201, 164, 90, .3); border-radius: 12px;
+    padding: 1.1rem 1.2rem 1.2rem;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .45);
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .carta:hover, .carta:focus-visible {
+    transform: translateY(-3px); border-color: var(--oro);
+    box-shadow: 0 20px 44px rgba(0, 0, 0, .6);
+  }
+  .carta h2 {
+    font-size: 1.15rem; letter-spacing: .03em; color: var(--oro-claro);
+    margin-bottom: .35rem; display: flex; align-items: center; gap: .5rem;
+  }
+  .carta .ico { font-size: 1.25rem; }
+  .carta p { font-size: .88rem; line-height: 1.55; color: var(--papel); opacity: .82; }
+  .carta .ruta {
+    display: block; margin-top: .7rem;
+    font-family: ui-monospace, 'Courier New', monospace; font-size: .64rem;
+    letter-spacing: .08em; color: var(--piedra); word-break: break-all;
+  }
+  .aviso {
+    max-width: 980px; margin: 2rem auto 0; padding: .9rem 1.1rem;
+    border: 1px dashed rgba(201, 164, 90, .35); border-radius: 10px;
+    font-size: .82rem; color: var(--piedra); line-height: 1.6;
+  }
+  .aviso code {
+    font-family: ui-monospace, monospace; font-size: .78rem;
+    color: var(--oro-claro); background: rgba(0, 0, 0, .35);
+    padding: .1rem .35rem; border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="kicker">◈ Phaingea</p>
+  <h1>Prototipos</h1>
+  <p>Todo lo que se puede abrir del proyecto, de un clic.</p>
+</header>
+
+<main class="rejilla">
+
+  <a class="carta" href="https://didilongit.github.io/Phaingea_Wiki/">
+    <h2><span class="ico">🌍</span> La web publicada</h2>
+    <p>El archivo de campañas tal y como lo ve todo el mundo. Es lo que hay en GitHub Pages ahora mismo.</p>
+    <span class="ruta">didilongit.github.io/Phaingea_Wiki</span>
+  </a>
+
+  <a class="carta" href="http://localhost:4321/Phaingea_Wiki/">
+    <h2><span class="ico">🛠️</span> La web en local</h2>
+    <p>La misma web, con los cambios que estés tocando. Hace falta tener arrancado el servidor de desarrollo.</p>
+    <span class="ruta">localhost:4321/Phaingea_Wiki</span>
+  </a>
+
+  <a class="carta" href="observatorio.html">
+    <h2><span class="ico">🔭</span> Observatorio</h2>
+    <p>El prototipo del globo de puntos: montura de latón, marcadores y arrastre. Es la <b>fuente</b> del observatorio de la web, así que los cambios del planeta se prueban aquí primero.</p>
+    <span class="ruta">prototipos/observatorio.html</span>
+  </a>
+
+  <a class="carta" href="../public/pociones/index.html">
+    <h2><span class="ico">⚗️</span> Mesa de alquimia</h2>
+    <p>La herramienta interactiva de la Sala de Pociones, suelta y sin la web alrededor.</p>
+    <span class="ruta">public/pociones/index.html</span>
+  </a>
+
+  <a class="carta" href="http://localhost:4321/Phaingea_Wiki/demo-libro/">
+    <h2><span class="ico">📖</span> Demo del libro</h2>
+    <p>Banco de pruebas del componente de libro: paso de página, índice, buscador y pantalla completa. También necesita el servidor en local.</p>
+    <span class="ruta">localhost:4321/Phaingea_Wiki/demo-libro</span>
+  </a>
+
+</main>
+
+<p class="aviso">
+  Las dos que van a <code>localhost</code> solo funcionan con el servidor arrancado:
+  abre una terminal en la carpeta del proyecto y ejecuta <code>npm run dev</code>.
+  Las otras se abren tal cual.
+</p>
+
+</body>
+</html>
