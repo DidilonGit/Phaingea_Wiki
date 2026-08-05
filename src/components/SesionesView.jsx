@@ -121,6 +121,7 @@ export default function SesionesView() {
         </div>
       ) : (
         <Libro
+          key={`sesiones-${paginas.length}`}
           titulo={esBase ? 'Libro de acontecimientos' : `Cuaderno de ${campana?.nombre || 'campaña'}`}
           sub={esBase ? 'Historia de Phaingea' : `${entradas.length} sesiones`}
           cubierta="cuero-rojo"

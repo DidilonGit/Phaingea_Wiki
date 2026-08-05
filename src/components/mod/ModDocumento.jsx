@@ -30,6 +30,8 @@ export default function ModDocumento({
   const [datos, setDatos] = useState({});
   const [modo, setModo] = useState('documento'); // 'documento' | 'texto'
   const [subiendo, setSubiendo] = useState(false);
+  const [arrastrando, setArrastrando] = useState(null); // índice que se está moviendo
+  const [encima, setEncima] = useState(null); // hueco sobre el que se soltaría
   const [aviso, setAviso] = useState('');
   const inputRef = useRef(null);
 
@@ -87,6 +89,18 @@ export default function ModDocumento({
     const tit = [...titulos];
     [url[i], url[j]] = [url[j], url[i]];
     [tit[i], tit[j]] = [tit[j], tit[i]];
+    await guardar({ paginasUrl: url, paginasTitulos: tit });
+  }
+
+  /** Saca la página `desde` y la vuelve a meter en la posición `hasta`. */
+  async function reordenarPagina(desde, hasta) {
+    if (desde === hasta || desde == null || hasta == null) return;
+    const url = [...paginas];
+    const tit = [...titulos];
+    const [u] = url.splice(desde, 1);
+    const [t] = tit.splice(desde, 1);
+    url.splice(hasta, 0, u);
+    tit.splice(hasta, 0, t);
     await guardar({ paginasUrl: url, paginasTitulos: tit });
   }
 
@@ -203,26 +217,56 @@ export default function ModDocumento({
                 {paginas.length === 0 ? (
                   <p className="muted">Todavía no hay páginas.</p>
                 ) : (
-                  <div className="rejilla-paginas">
-                    {paginas.map((url, i) => (
-                      <div key={i} className="mini-pagina">
-                        <img src={url} alt={`Página ${i + 1}`} />
-                        <span className="mono num">{etiquetaPagina(i)}</span>
-                        <input
-                          className="mini-titulo"
-                          defaultValue={titulos[i]}
-                          placeholder={etiquetaPagina(i)}
-                          title="Título en el índice"
-                          onBlur={(e) => tituloPagina(i, e.target.value.trim())}
-                        />
-                        <div className="mini-acciones mono">
-                          <button onClick={() => moverPagina(i, -1)} title="Antes">↑</button>
-                          <button onClick={() => moverPagina(i, 1)} title="Después">↓</button>
-                          <button onClick={() => quitarPagina(i)} style={{ color: '#e99' }} title="Quitar">✕</button>
+                  <>
+                    <p className="mono muted" style={{ fontSize: '.64rem', margin: 0 }}>
+                      Arrastra una página para cambiarla de sitio, o usa ‹ › para moverla un puesto.
+                      La ✕ borra esa página sola.
+                    </p>
+                    <div className="rejilla-paginas">
+                      {paginas.map((url, i) => (
+                        <div
+                          key={i}
+                          className={`mini-pagina ${arrastrando === i ? 'cogida' : ''} ${encima === i ? 'diana' : ''}`}
+                          draggable
+                          onDragStart={(e) => {
+                            setArrastrando(i);
+                            e.dataTransfer.effectAllowed = 'move';
+                          }}
+                          onDragOver={(e) => {
+                            e.preventDefault();
+                            if (encima !== i) setEncima(i);
+                          }}
+                          onDragEnd={() => {
+                            setArrastrando(null);
+                            setEncima(null);
+                          }}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            reordenarPagina(arrastrando, i);
+                            setArrastrando(null);
+                            setEncima(null);
+                          }}
+                        >
+                          <div className="mini-lienzo">
+                            <img src={url} alt={`Página ${i + 1}`} draggable="false" />
+                            <span className="mono num">{etiquetaPagina(i)}</span>
+                          </div>
+                          <input
+                            className="mini-titulo"
+                            defaultValue={titulos[i]}
+                            placeholder={etiquetaPagina(i)}
+                            title="Título en el índice del libro"
+                            onBlur={(e) => tituloPagina(i, e.target.value.trim())}
+                          />
+                          <div className="mini-acciones">
+                            <button onClick={() => moverPagina(i, -1)} disabled={i === 0} title="Mover una posición antes">‹</button>
+                            <button onClick={() => moverPagina(i, 1)} disabled={i === paginas.length - 1} title="Mover una posición después">›</button>
+                            <button className="borrar" onClick={() => quitarPagina(i)} title="Borrar esta página">✕</button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  </>
                 )}
               </>
             ) : (
@@ -252,23 +296,39 @@ export default function ModDocumento({
 }
 
 const css = `
-.rejilla-paginas { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: .5rem; max-height: 330px; overflow-y: auto; }
+.rejilla-paginas {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: .6rem; max-height: 46vh; overflow-y: auto; padding: .2rem;
+}
 .mini-titulo {
-  width: 100%; border: 0; border-top: 1px solid rgba(201,164,90,.25);
+  width: 100%; border: 1px solid rgba(201,164,90,.25); border-radius: 4px;
   background: rgba(0,0,0,.35); color: var(--paper);
   font-family: var(--font-body); font-size: .68rem; padding: .18rem .3rem; text-align: center;
 }
 .mini-titulo::placeholder { color: rgba(232,223,200,.35); }
 .mini-titulo:focus { outline: 1px solid rgba(201,164,90,.6); }
-.mini-pagina { position: relative; border: 2px solid #3a2a18; border-radius: 3px; overflow: hidden; background: #201812; }
-.mini-pagina img { width: 100%; display: block; }
-.mini-pagina .num {
-  position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,.6); color: var(--paper);
-  font-size: .58rem; padding: 0 .25rem; border-radius: 3px;
+.mini-pagina {
+  display: grid; gap: .25rem; border: 2px solid #3a2a18; border-radius: 5px;
+  background: #201812; padding: .25rem; cursor: grab;
 }
-.mini-acciones { display: flex; justify-content: center; gap: .3rem; background: rgba(0,0,0,.45); }
-.mini-acciones button { background: none; border: 0; cursor: pointer; color: var(--parchment); font-size: .68rem; padding: .1rem .2rem; }
-.mini-acciones button:hover { color: var(--gold); }
+.mini-pagina.cogida { opacity: .45; }
+.mini-pagina.diana { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,164,90,.35); }
+.mini-lienzo { position: relative; height: 120px; overflow: hidden; border-radius: 3px; background: #120d09; }
+.mini-lienzo img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.mini-pagina .num {
+  position: absolute; top: 3px; left: 3px; background: rgba(0,0,0,.72); color: var(--paper);
+  font-size: .56rem; letter-spacing: .06em; text-transform: uppercase;
+  padding: .05rem .3rem; border-radius: 3px;
+}
+.mini-acciones { display: flex; gap: .25rem; }
+.mini-acciones button {
+  flex: 1; height: 26px; border-radius: 5px; cursor: pointer; font-size: .9rem; line-height: 1;
+  background: rgba(201,164,90,.14); border: 1px solid rgba(201,164,90,.4); color: var(--gold);
+}
+.mini-acciones button:hover:not(:disabled) { background: rgba(201,164,90,.32); }
+.mini-acciones button:disabled { opacity: .3; cursor: default; }
+.mini-acciones .borrar { color: #f0a29c; border-color: rgba(200,110,100,.5); background: rgba(164,68,58,.16); }
+.mini-acciones .borrar:hover { background: rgba(164,68,58,.4); }
 .tapas { display: grid; gap: .3rem; padding: .6rem .7rem; border-radius: 8px;
   border: 1px solid rgba(201,164,90,.25); background: rgba(0,0,0,.22); }
 .check { display: flex; align-items: center; gap: .5rem; cursor: pointer;

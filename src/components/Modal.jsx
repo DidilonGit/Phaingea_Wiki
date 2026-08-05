@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 // ============================================================================
 // MODAL común (guía §4): ventana centrada con el resto de la pantalla
@@ -32,9 +33,12 @@ export default function Modal({
     return () => window.removeEventListener('keydown', onKey);
   }, [abierto, onCerrar]);
 
-  if (!abierto) return null;
+  if (!abierto || typeof document === 'undefined') return null;
 
-  return (
+  // Se pinta colgando del <body>: así ninguna capa de la sala (el atril, el
+  // marco del mapa, la ranura de moderación…) puede quedar por encima y
+  // robarle los clics a la X.
+  return createPortal(
     <>
       <div
         style={st.fondo}
@@ -55,7 +59,8 @@ export default function Modal({
         </div>
         <div style={st.cuerpo}>{children}</div>
       </div>
-    </>
+    </>,
+    document.body
   );
 }
 

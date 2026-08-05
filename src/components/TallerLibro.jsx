@@ -58,6 +58,7 @@ export default function TallerLibro() {
       <>
       <ModDocumento nodo="taller" campanaId={campana?.id} campoMd="reglasMd" visible={puedeGestionar(user, campana)} />
       <Libro
+        key="taller-wip"
         titulo={campana?.nombre ? `Reglas de ${campana.nombre}` : 'Reglas'}
         sub="WIP"
         cubierta="cuero-negro"
@@ -80,6 +81,7 @@ export default function TallerLibro() {
     <>
       <ModDocumento nodo="taller" campanaId={campana?.id} campoMd="reglasMd" visible={puedeGestionar(user, campana)} />
       <Libro
+      key={`taller-${paginas.length}`}
       titulo={datos?.titulo || (campana?.nombre ? `Reglas de ${campana.nombre}` : 'Reglas')}
       sub={datos?.subtitulo || 'Pathfinder 1e · reglas de la casa'}
       cubierta="cuero-negro"

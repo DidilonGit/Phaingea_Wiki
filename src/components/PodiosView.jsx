@@ -228,6 +228,7 @@ export default function PodiosView() {
         <div className="diario">
           {paginasDiario.length > 0 ? (
             <Libro
+              key={`diario-${actual.id}-${paginasDiario.length}`}
               titulo={`Diario de ${actual.nombre}`}
               sub={actual.raza || ''}
               cubierta="cuero-rojo"

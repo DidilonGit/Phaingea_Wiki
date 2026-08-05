@@ -89,6 +89,7 @@ export default function CapillaLibro() {
         alDejarHerencia={() => dejarDeHeredar(campana?.id, 'capilla')}
       />
       <Libro
+        key={`capilla-${paginas.length}`}
         titulo={datos?.titulo || 'Panteón de Phaingea'}
         sub={heredado ? `Heredado de ${origen?.nombre || 'otra campaña'}` : datos?.subtitulo || ''}
         cubierta="cuero-verde"

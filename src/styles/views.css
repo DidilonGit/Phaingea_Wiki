@@ -20,9 +20,11 @@
    contenido, el mismo sitio en todas las categorías y sin nada que la tape.
    Cada vista lleva su `<div class="room-mod">`; el botón se coloca dentro
    mediante `<BotonMod sala>`. Si la sala no tiene moderación, no ocupa nada. */
+/* Sin position/z-index a propósito: si crea su propia capa, se pinta por
+   encima de las ventanas de moderación y se come los clics de su cabecera. */
 .room-mod {
   display: flex; justify-content: flex-end; gap: 0.4rem;
-  position: relative; z-index: 9; margin-bottom: 0.5rem; min-height: 30px;
+  margin-bottom: 0.5rem; min-height: 30px;
 }
 .room-mod:empty { display: none; }
 
