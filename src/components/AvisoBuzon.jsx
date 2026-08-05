@@ -8,6 +8,9 @@ import { suscribirNotificaciones } from '../lib/db/notificaciones.js';
 // el número de cartas pendientes de la campaña activa (1, 2, 3… y "9+" si hay
 // más de nueve). Si no hay pendientes, el icono no aparece. Al pulsarlo abre
 // el Buzón con el sobre ya abierto.
+//
+// Se pinta DENTRO de la chapa del perfil (AuthGate), no suelto por la pantalla:
+// así nunca la pisa, se ponga el nombre que se ponga el jugador.
 export default function AvisoBuzon() {
   const campana = useStore($campaign);
   const user = useStore($user);
@@ -46,13 +49,11 @@ export default function AvisoBuzon() {
 
       <style>{`
         .aviso-buzon {
-          position: fixed; top: .5rem; right: 12.5rem; z-index: 121;
-          display: inline-flex; align-items: center; gap: .3rem;
-          background: rgba(14,17,22,.8); border: 1px solid rgba(201,164,90,.45);
-          border-radius: 999px; padding: .3rem .55rem; cursor: pointer; color: var(--gold);
-          box-shadow: 0 4px 14px rgba(0,0,0,.4);
+          display: inline-flex; align-items: center; gap: .3rem; flex: none;
+          background: rgba(201,164,90,.12); border: 1px solid rgba(201,164,90,.4);
+          border-radius: 999px; padding: .18rem .4rem; cursor: pointer; color: var(--gold);
         }
-        .aviso-buzon:hover { background: rgba(201,164,90,.2); }
+        .aviso-buzon:hover { background: rgba(201,164,90,.28); }
         .aviso-buzon .n {
           font-family: ui-monospace, monospace; font-size: .66rem; font-weight: 700;
           background: var(--gold); color: #241a12; border-radius: 999px; padding: 0 .32rem;

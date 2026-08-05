@@ -101,9 +101,14 @@ export default function DialCampanas() {
     return () => window.removeEventListener('keydown', onKey);
   }, [montado]);
 
-  /** Desliza la ventana un puesto (dir -1 = izquierda, +1 = derecha). */
+  /**
+   * Gira el dial un puesto (dir -1 = izquierda, +1 = derecha).
+   * Con más de MAX_VISIBLES campañas, además entra una nueva por un lado y sale
+   * la del otro. Con menos, el dial gira igual: las campañas cambian de hueco,
+   * que es lo que se espera al arrastrar un dial.
+   */
   function deslizar(dir) {
-    if (otrasTodas.length <= MAX_VISIBLES) return; // no hay nada que traer
+    if (otrasTodas.length < 2) return; // con una sola no hay giro posible
     setInicio((i) => i + dir);
   }
 
@@ -194,12 +199,14 @@ export default function DialCampanas() {
         />
       ))}
 
-      {/* flechas para deslizar la ventana de campañas */}
-      {otrasTodas.length > MAX_VISIBLES && (
+      {/* flechas para girar el dial (y traer las campañas que no caben) */}
+      {otrasTodas.length > 1 && (
         <div className="dial-flechas">
-          <button className="dial-btn" onClick={() => deslizar(-1)} aria-label="Ver campañas anteriores">&lsaquo;</button>
-          <span className="dial-ocultas mono">{cuantas} de {otrasTodas.length}</span>
-          <button className="dial-btn" onClick={() => deslizar(1)} aria-label="Ver campañas siguientes">&rsaquo;</button>
+          <button className="dial-btn" onClick={() => deslizar(-1)} aria-label="Girar a la izquierda">&lsaquo;</button>
+          {otrasTodas.length > MAX_VISIBLES && (
+            <span className="dial-ocultas mono">{cuantas} de {otrasTodas.length}</span>
+          )}
+          <button className="dial-btn" onClick={() => deslizar(1)} aria-label="Girar a la derecha">&rsaquo;</button>
         </div>
       )}
 

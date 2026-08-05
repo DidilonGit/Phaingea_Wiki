@@ -5,6 +5,7 @@ import { iniciarCampanas, $campaign } from '../stores/campaign.js';
 import { suscribirPersonajes } from '../lib/db/personajes.js';
 import { login, registrar } from '../lib/auth.js';
 import PerfilModal from './PerfilModal.jsx';
+import AvisoBuzon from './AvisoBuzon.jsx';
 
 // Puerta de acceso: mientras no hay sesión, muestra un overlay de login/registro
 // que cubre la web. Con sesión, muestra una chapita de usuario (arriba dcha) con "Salir".
@@ -127,6 +128,8 @@ export default function AuthGate() {
     return (
       <>
         <div style={chip.wrap}>
+          {/* el sobre del Buzón, dentro de la chapa para que no la pise */}
+          <AvisoBuzon />
           <button
             style={chip.avatarBtn}
             onClick={() => setPerfilAbierto(true)}

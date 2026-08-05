@@ -5,7 +5,6 @@ import '../styles/views.css';
 import TopBar from '../components/TopBar.astro';
 import VersionWatcher from '../components/VersionWatcher.jsx';
 import AuthGate from '../components/AuthGate.jsx';
-import AvisoBuzon from '../components/AvisoBuzon.jsx';
 
 const { title = 'Phaingea' } = Astro.props;
 ---
@@ -37,7 +36,6 @@ const { title = 'Phaingea' } = Astro.props;
     <main class="escena">
       <slot />
     </main>
-    <AvisoBuzon client:load />
     <AuthGate client:load />
     <VersionWatcher client:idle />
   </body>
