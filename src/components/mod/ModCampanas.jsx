@@ -14,6 +14,14 @@ import {
 // Gestión mínima de campañas (T08, guía §25 parcial): crear, editar, cambiar
 // estado y reordenar. Solo owner/admin (los másteres gestionarán lo suyo en
 // T60). Eliminar pide doble confirmación (guía §4).
+//
+// COLORES DE UNA CAMPAÑA (guía §5, §8.5):
+//   planeta.colorA/colorB -> la bola del dial y del Observatorio
+//   colorTexto            -> el título de la campaña y el nombre de sus
+//                            personajes en los Podios
+//   colorContorno         -> el contorno de ese título
+//   fuenteTitulo          -> con qué letra se escribe
+// El recuadro de muestra del formulario los enseña tal cual quedarán.
 export default function ModCampanas() {
   const user = useStore($user);
   const campanas = useStore($campaigns);
@@ -38,7 +46,11 @@ export default function ModCampanas() {
   });
 
   function abrirNueva() {
-    setForm({ nombre: '', descripcion: '', estado: 'activa', progresionXP: 'media', colorA: '#5b6a8a', colorB: '#2b3350' });
+    setForm({
+      nombre: '', descripcion: '', estado: 'activa', progresionXP: 'media',
+      colorA: '#5b6a8a', colorB: '#2b3350',
+      colorTexto: '#efe6d2', colorContorno: '#c9a45a', fuenteTitulo: FUENTES[0].valor,
+    });
     setEditando('nueva');
     setError('');
   }
@@ -48,6 +60,9 @@ export default function ModCampanas() {
       nombre: c.nombre, descripcion: c.descripcion || '', estado: c.estado,
       progresionXP: c.progresionXP || 'media',
       colorA: c.planeta?.colorA || '#5b6a8a', colorB: c.planeta?.colorB || '#2b3350',
+      colorTexto: c.colorTexto || '#efe6d2',
+      colorContorno: c.colorContorno || '#c9a45a',
+      fuenteTitulo: c.fuenteTitulo || FUENTES[0].valor,
     });
     setEditando(c.id);
     setError('');
@@ -62,6 +77,9 @@ export default function ModCampanas() {
       estado: form.estado,
       progresionXP: form.progresionXP,
       planeta: { colorA: form.colorA, colorB: form.colorB },
+      colorTexto: form.colorTexto,
+      colorContorno: form.colorContorno,
+      fuenteTitulo: form.fuenteTitulo,
     };
     try {
       if (editando === 'nueva') await crearCampana(datos);
@@ -140,8 +158,41 @@ function FormCampana({ campo, form, setForm, onSubmit, onCancelar, error, esBase
         <label style={lbl}>Progresión XP
           <select style={inp} {...campo('progresionXP')}>{PROGRESIONES.map((p) => <option key={p} value={p}>{p}</option>)}</select>
         </label>
+        <label style={lbl}>Letra del título
+          <select style={inp} value={form.fuenteTitulo || FUENTES[0].valor} onChange={(e) => setForm({ ...form, fuenteTitulo: e.target.value })}>
+            {FUENTES.map((f) => <option key={f.valor} value={f.valor} style={{ fontFamily: f.valor }}>{f.nombre}</option>)}
+          </select>
+        </label>
+      </div>
+
+      <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
         <label style={lbl}>Planeta A <input type="color" value={form.colorA} onChange={(e) => setForm({ ...form, colorA: e.target.value })} /></label>
         <label style={lbl}>Planeta B <input type="color" value={form.colorB} onChange={(e) => setForm({ ...form, colorB: e.target.value })} /></label>
+        <label style={lbl}>Texto <input type="color" value={form.colorTexto || '#efe6d2'} onChange={(e) => setForm({ ...form, colorTexto: e.target.value })} /></label>
+        <label style={lbl}>Contorno <input type="color" value={form.colorContorno || '#c9a45a'} onChange={(e) => setForm({ ...form, colorContorno: e.target.value })} /></label>
+      </div>
+
+      {/* muestra: así se verá el título de la campaña y sus personajes */}
+      <div style={muestra}>
+        <span
+          style={{
+            fontFamily: form.fuenteTitulo || FUENTES[0].valor,
+            color: form.colorTexto || '#efe6d2',
+            WebkitTextStrokeColor: form.colorContorno || '#c9a45a',
+            WebkitTextStrokeWidth: '1px',
+            paintOrder: 'stroke fill',
+            fontSize: '1.6rem',
+          }}
+        >
+          {form.nombre?.trim() || 'Nombre de la campaña'}
+        </span>
+        <span
+          style={{
+            ...bolita,
+            width: '30px', height: '30px',
+            background: `radial-gradient(circle at 32% 28%, rgba(255,255,255,.4), transparent 45%), linear-gradient(140deg, ${form.colorA}, ${form.colorB} 72%)`,
+          }}
+        />
       </div>
       {error && <p style={{ color: '#f0a29c', margin: 0 }}>{error}</p>}
       <div style={{ display: 'flex', gap: '0.6rem' }}>
@@ -151,6 +202,25 @@ function FormCampana({ campo, form, setForm, onSubmit, onCancelar, error, esBase
     </form>
   );
 }
+
+// Letras entre las que elegir para el título (todas están en cualquier equipo).
+const FUENTES = [
+  { nombre: 'Georgia (serif clásica)', valor: 'Georgia, serif' },
+  { nombre: 'Times / serif', valor: '"Times New Roman", Times, serif' },
+  { nombre: 'Palatino (serif suave)', valor: '"Palatino Linotype", Palatino, serif' },
+  { nombre: 'Garamond (serif fina)', valor: 'Garamond, Georgia, serif' },
+  { nombre: 'Trebuchet (sin serifa)', valor: '"Trebuchet MS", sans-serif' },
+  { nombre: 'Impact (titular)', valor: 'Impact, "Arial Black", sans-serif' },
+  { nombre: 'Courier (máquina de escribir)', valor: '"Courier New", monospace' },
+  { nombre: 'La de la web', valor: 'var(--font-title)' },
+];
+
+const muestra = {
+  display: 'flex', alignItems: 'center', gap: '0.9rem', flexWrap: 'wrap',
+  padding: '0.7rem 0.9rem', borderRadius: '10px',
+  background: 'radial-gradient(90% 120% at 20% 0%, rgba(60,80,120,.25), transparent 60%), rgba(0,0,0,.35)',
+  border: '1px dashed rgba(201,164,90,.35)',
+};
 
 const fila = { display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' };
 const bolita = { width: '18px', height: '18px', borderRadius: '50%', flex: 'none', boxShadow: '0 0 0 1px rgba(201,164,90,.6)' };
