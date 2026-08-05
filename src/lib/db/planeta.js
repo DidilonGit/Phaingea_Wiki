@@ -32,9 +32,10 @@ export async function leerPinesPlaneta(campanaId) {
 
 /** Pone (o mueve) el pin de un lugar en el planeta de esta campaña. */
 export async function fijarPinPlaneta(campanaId, lugarId, { lat, lon }) {
+  const grados = (n) => Math.round(n * 10) / 10; // una décima basta y evita colas de decimales
   await set(ref(db, ruta(campanaId, lugarId)), {
-    lat: Math.max(-90, Math.min(90, Number(lat) || 0)),
-    lon: ((((Number(lon) || 0) + 180) % 360) + 360) % 360 - 180,
+    lat: grados(Math.max(-90, Math.min(90, Number(lat) || 0))),
+    lon: grados(((((Number(lon) || 0) + 180) % 360) + 360) % 360 - 180),
   });
 }
 

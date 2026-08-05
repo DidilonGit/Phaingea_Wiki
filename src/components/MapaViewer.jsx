@@ -460,7 +460,8 @@ const css = `
    con el teclado) sobre una placa oscura, para que se lea bien sobre el
    pergamino claro del mapa (§10.3). */
 .pin { position: absolute; transform: translate(-50%,-50%); display: flex; align-items: center; background: none; border: 0; cursor: pointer; padding: 4px; }
-.pin b { width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f4dfa6, var(--gold)); box-shadow: 0 0 0 3px rgba(201,164,90,.22), 0 2px 6px rgba(0,0,0,.55); transition: transform .15s var(--ease); }
+/* marrón oscuro: se lee sobre el pergamino claro del mapa */
+.pin b { width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #6b452a, #2e1c0e 70%); box-shadow: 0 0 0 3px rgba(46,28,14,.18), 0 2px 5px rgba(0,0,0,.45); transition: transform .15s var(--ease); }
 .pin:hover b, .pin:focus-visible b { transform: scale(1.25); }
 .pin em {
   position: absolute; left: 50%; top: calc(100% + 2px); transform: translateX(-50%);
@@ -472,7 +473,7 @@ const css = `
 }
 .pin:hover em, .pin:focus-visible em { opacity: 1; }
 /* el lugar en el que estás, señalado sobre el mapa prestado del que lo contiene */
-.pin.actual b { background: radial-gradient(circle at 35% 30%, #fff, #e8b45a); box-shadow: 0 0 0 4px rgba(201,164,90,.5), 0 0 12px rgba(228,183,91,.9); }
+.pin.actual b { background: radial-gradient(circle at 35% 30%, #a5713f, #4a2a12 70%); box-shadow: 0 0 0 4px rgba(201,164,90,.55), 0 0 10px rgba(120,72,30,.8); }
 .pin.actual em { opacity: 1; }
 .lente { position: absolute; width: 160px; height: 160px; border-radius: 50%; transform: translate(-50%,-50%);
   border: 3px solid #b9a27a; box-shadow: 0 8px 24px rgba(0,0,0,.6), inset 0 0 30px rgba(255,255,255,.15); pointer-events: none; background-repeat: no-repeat; }

@@ -1,6 +1,14 @@
+// Phaingea · reglas de Realtime Database.
+//
+// Lectura abierta; la escritura va nodo a nodo validando la FORMA de los datos.
+// No hay autenticacion real de Firebase (el login es propio, con hash), asi que
+// las reglas no pueden comprobar el rol: quien gatea por rol es la interfaz.
+// Es un modelo de confianza, adecuado para una wiki de rol entre amigos.
+//
+// OJO: esto se publica A MANO en la consola (Realtime Database > Reglas) cada
+// vez que cambia este archivo. El editor de la consola acepta comentarios //.
 {
   "rules": {
-    "//": "Phaingea · reglas RTDB completas (cubren todas las tareas de datos T13-T65). Lectura abierta; escritura por nodos con validacion de FORMA. Sin auth real de Firebase (login propio con hash): la UI gatea por rol, esto es un modelo de confianza. Publicar a mano en la consola al cambiar este archivo.",
     ".read": true,
     ".write": false,
 
@@ -17,8 +25,8 @@
       }
     },
 
+    // Guia 5-6. base-phaingea se puede editar pero no borrar.
     "campanas": {
-      "//": "Guia 5-6. base-phaingea no se puede borrar (solo editar).",
       "base-phaingea": { ".write": "newData.exists()" },
       "$camp": {
         ".write": true,
@@ -30,8 +38,8 @@
       }
     },
 
+    // Guia 22. /comentarios/{campana}/{tipo}/{ref}/{id}
     "comentarios": {
-      "//": "Guia 22. /comentarios/{campana}/{tipo}/{ref}/{id}",
       "$camp": { "$tipo": { "$ref": { "$id": {
         ".write": true,
         ".validate": "newData.hasChildren(['autor', 'texto', 'fecha'])",
@@ -40,15 +48,17 @@
       } } } }
     },
 
+    // Guia 8.4. /planeta/{campana}/{lugar} = {lat, lon}
+    // Los pines del globo son de CADA campana, aunque la cartografia se herede.
     "planeta": {
-      "//": "Guia 8.4. /planeta/{campana}/{lugar} = {lat, lon}. Los pines del globo son de CADA campana, aunque la cartografia se herede.",
       "$camp": { "$lugar": {
         ".write": true,
         ".validate": "!newData.exists() || (newData.hasChildren(['lat','lon']) && newData.child('lat').isNumber() && newData.child('lon').isNumber())"
       } }
     },
+
+    // Guia 10. /lugares/{campana}/{id}, con jerarquia via 'superior'.
     "lugares": {
-      "//": "Guia 10. /lugares/{campana}/{id} con jerarquia via 'superior'.",
       "$camp": { "$id": {
         ".write": true,
         ".validate": "newData.hasChildren(['nombre'])",
@@ -56,8 +66,8 @@
       } }
     },
 
+    // Guia 11, 19-20. /personajes/{campana}/{id}
     "personajes": {
-      "//": "Guia 11, 19-20. /personajes/{campana}/{id}",
       "$camp": { "$id": {
         ".write": true,
         ".validate": "newData.hasChildren(['propietario', 'nombre', 'estado'])",
@@ -66,8 +76,8 @@
       } }
     },
 
+    // Guia 13. Imagenes en base64 comprimido o URL; tags por campana.
     "galeria": {
-      "//": "Guia 13. Imagenes en base64 comprimido o URL; tags por campana.",
       "$camp": {
         "imagenes": { "$id": {
           ".write": true,
@@ -79,8 +89,8 @@
       }
     },
 
+    // Guia 14. /sesiones/{campana}/{id} con XP general y extra.
     "sesiones": {
-      "//": "Guia 14. /sesiones/{campana}/{id} con XP general y extra.",
       "$camp": { "$id": {
         ".write": true,
         ".validate": "newData.hasChildren(['num', 'titulo'])",
@@ -89,8 +99,8 @@
       } }
     },
 
+    // Guia 15. Acontecimientos historicos de Base (sin XP).
     "eventos": {
-      "//": "Guia 15. Acontecimientos historicos de Base (sin XP).",
       "$camp": { "$id": {
         ".write": true,
         ".validate": "newData.hasChildren(['titulo'])",
@@ -98,18 +108,18 @@
       } }
     },
 
+    // Guia 9. Libro de deidades por campana (documento o markdown).
     "capilla": {
-      "//": "Guia 9. Config del libro de deidades por campana.",
       "$camp": { ".write": true }
     },
 
+    // Guia 16. Reglas, tips y mascota por campana.
     "taller": {
-      "//": "Guia 16. Reglas (md o doc), tips y mascota por campana.",
       "$camp": { ".write": true }
     },
 
+    // Guia 18. /notificaciones/{campana}/{usuario}/{id}
     "notificaciones": {
-      "//": "Guia 18. /notificaciones/{campana}/{usuario}/{id}",
       "$camp": { "$usuario": { "$id": {
         ".write": true,
         ".validate": "newData.hasChildren(['asunto', 'fecha', 'estado'])",
@@ -117,8 +127,8 @@
       } } }
     },
 
+    // Guia 26. Registro de acciones importantes. /registros/{campana}/{id}
     "registros": {
-      "//": "Guia 26. Acciones importantes. /registros/{campana}/{id}",
       "$camp": { "$id": {
         ".write": true,
         ".validate": "newData.hasChildren(['tipo', 'fecha'])"
