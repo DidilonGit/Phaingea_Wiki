@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Demo Libro</title><script>
+      try {
+        if (JSON.parse(localStorage.getItem('phaingea_session') || 'null')?.nombre) {
+          document.documentElement.dataset.sesion = 'si';
+        }
+      } catch (e) {}
+    </script><link rel="stylesheet" href="/Phaingea_Wiki/_astro/BotonMod.CDLwSIyt.css"></head><body><header class="topbar" style="--wood: url(&quot;/Phaingea_Wiki/textures/wood.png&quot;)" data-astro-cid-nazmfhjt><div class="marca" data-astro-cid-nazmfhjt><span class="brand" data-astro-cid-nazmfhjt>PHAINGEA</span><!-- Logo de la campaña activa (guía §8.5). Placeholder de Base de Phaingea
+         hasta que exista el store de campañas: T07 conecta el store y T19 pinta
+         el logo real. Para actualizarlo: escribir en #logoCampana (img o
+         inicial) y el title/aria-label con el nombre de la campaña. --><span id="logoCampana" class="logo-campana" title="Base de Phaingea" aria-label="Campaña activa: Base de Phaingea" data-campana="base-phaingea" data-astro-cid-nazmfhjt>B</span></div><nav class="bookmarks" aria-label="Categorías" data-astro-cid-nazmfhjt><button class="bm" data-view="inicio" style="--c:#d9b45c" title="Observatorio" aria-label="Observatorio" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth punta" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><circle cx="12" cy="11" r="5.4"/><ellipse cx="12" cy="11" rx="11" ry="3.4" fill="none" stroke="#20160d" stroke-width="1.7" transform="rotate(-18 12 11)"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Observatorio</span></button><button class="bm" data-view="capilla" style="--c:#9d7bc0" title="Capilla" aria-label="Capilla" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth redondo" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><circle cx="12" cy="12" r="4"/><g stroke="#20160d" stroke-width="1.7" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.6" y1="4.6" x2="6.7" y2="6.7"/><line x1="17.3" y1="17.3" x2="19.4" y2="19.4"/><line x1="19.4" y1="4.6" x2="17.3" y2="6.7"/><line x1="6.7" y1="17.3" x2="4.6" y2="19.4"/></g></svg></span><span class="name" data-astro-cid-nazmfhjt>Capilla</span></button><button class="bm" data-view="cartografia" style="--c:#6f9e5c" title="Cartografía" aria-label="Cartografía" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth recto" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><circle cx="12" cy="12" r="10" fill="none" stroke="#20160d" stroke-width="1.5"/><path d="M12 4 L14 11 L20 12 L14 13 L12 20 L10 13 L4 12 L10 11 Z"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Cartografía</span></button><button class="bm" data-view="podios" style="--c:#c9803f" title="Podios" aria-label="Podios" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth cola" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><circle cx="12" cy="8" r="4.2"/><path d="M4 21 Q4 13 12 13 Q20 13 20 21 Z"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Podios</span></button><button class="bm" data-view="galeria" style="--c:#5f93b8" title="Galería" aria-label="Galería" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth punta" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="#20160d" stroke-width="1.7"/><circle cx="8" cy="10" r="1.7"/><path d="M6 17 L11 12 L14 15 L17 11 L19 17 Z"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Galería</span></button><button class="bm" data-view="sesiones" style="--c:#b8603f" title="Sesiones" aria-label="Sesiones" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth redondo" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><path d="M12 6 Q7 3.5 3 5.2 V18 Q7 16.2 12 19 Q17 16.2 21 18 V5.2 Q17 3.5 12 6 Z" fill="none" stroke="#20160d" stroke-width="1.7"/><line x1="12" y1="6" x2="12" y2="19" stroke="#20160d" stroke-width="1.5"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Sesiones</span></button><button class="bm" data-view="taller" style="--c:#b58a4a" title="Taller" aria-label="Taller" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth punta" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><rect x="5" y="3.5" width="14" height="17" rx="1.8" fill="none" stroke="#20160d" stroke-width="1.7"/><line x1="8" y1="8" x2="16" y2="8" stroke="#20160d" stroke-width="1.5"/><line x1="8" y1="11.5" x2="16" y2="11.5" stroke="#20160d" stroke-width="1.5"/><line x1="8" y1="15" x2="13" y2="15" stroke="#20160d" stroke-width="1.5"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Taller</span></button><button class="bm" data-view="pociones" style="--c:#7fa86a" title="Sala de Pociones" aria-label="Sala de Pociones" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth redondo" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><path d="M10.5 3 h3 v4.4 l3.7 6.3 a3.2 3.2 0 0 1 -2.8 4.8 H9.6 a3.2 3.2 0 0 1 -2.8 -4.8 L10.5 7.4 Z" fill="none" stroke="#20160d" stroke-width="1.6"/><path d="M8.1 14 h7.8" stroke="#20160d" stroke-width="1.4"/><line x1="9.4" y1="2.7" x2="14.6" y2="2.7" stroke="#20160d" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Sala de Pociones</span></button><button class="bm" data-view="buzon" style="--c:#c0b24a" title="Buzón" aria-label="Buzón" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth recto" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><path d="M12 3 Q6 3 6 11 L4.2 16 H19.8 L18 11 Q18 3 12 3 Z"/><path d="M9.8 18 Q12 21 14.2 18 Z"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Buzón</span></button><button class="bm" data-view="moderacion" data-gated="mod" style="--c:#7d3b3b;display:none" title="Moderación" aria-label="Moderación" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth cola" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><path d="M12 2.5 L20 5.5 V11 Q20 18 12 21.5 Q4 18 4 11 V5.5 Z" fill="none" stroke="#20160d" stroke-width="1.7"/><circle cx="12" cy="9.6" r="2"/><path d="M11.1 11 h1.8 l.5 4.4 h-2.8 Z"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Moderación</span></button></nav></header><script>
+  // Permisos en la barra (guía §3, §21):
+  //  · Moderación: visible solo para máster/owner/admin.
+  //  · Categorías sin acceso (campaña privada en la que no participas):
+  //    banderín apagado y no interactuable.
+  // Escucha 'phaingea:user' (stores/user.js) y 'phaingea:campana'
+  // (stores/campaign.js) para recalcular en vivo.
+  (function () {
+    var usuario = null;
+    var campana = null;
+
+    try {
+      usuario = JSON.parse(localStorage.getItem('phaingea_session') || 'null');
+    } catch (e) {}
+
+    function esOwner(u) { return !!u && (u.rol === 'owner' || u.rol === 'admin'); }
+    function esMaster(u, c) {
+      return esOwner(u) || (!!u && !!c && !!(c.masters || {})[u.nombre]);
+    }
+    function participa(u, c) {
+      return esMaster(u, c) || (!!u && !!c && !!(c.jugadores || {})[u.nombre]);
+    }
+    function puedeVerCampana(u, c) {
+      if (!c) return true; // aún cargando
+      if (esOwner(u)) return true;
+      if (c.estado === 'privada') return participa(u, c);
+      return true;
+    }
+
+    function aplicar() {
+      var verMod = esMaster(usuario, campana);
+      var verCampana = puedeVerCampana(usuario, campana);
+      document.querySelectorAll('.bm[data-view]').forEach(function (b) {
+        var esMod = b.getAttribute('data-gated') === 'mod';
+        if (esMod) {
+          b.style.display = verMod ? '' : 'none';
+          b.classList.remove('bloqueado');
+          return;
+        }
+        // El Observatorio siempre accesible (es el selector de campañas).
+        var siempre = b.getAttribute('data-view') === 'inicio';
+        b.classList.toggle('bloqueado', !siempre && !verCampana);
+      });
+    }
+
+    aplicar();
+    window.addEventListener('phaingea:user', function (e) {
+      usuario = e.detail || null;
+      aplicar();
+    });
+    window.addEventListener('phaingea:campana', function (e) {
+      campana = e.detail || null;
+      aplicar();
+    });
+  })();
+</script><script>
+  // Logo de la campaña activa (guía §8.5): escucha 'phaingea:campana' que
+  // emite src/stores/campaign.js al cambiar de campaña. Muestra logoUrl si
+  // existe; si no, la inicial del nombre sobre los colores de su planeta.
+  (function () {
+    window.addEventListener('phaingea:campana', function (e) {
+      var c = e.detail;
+      var el = document.getElementById('logoCampana');
+      if (!c || !el) return;
+      el.setAttribute('title', c.nombre);
+      el.setAttribute('aria-label', 'Campaña activa: ' + c.nombre);
+      el.setAttribute('data-campana', c.id);
+      if (c.logoUrl) {
+        el.innerHTML = '<img src="' + c.logoUrl + '" alt="">';
+        el.style.background = '';
+      } else {
+        var p = c.planeta || {};
+        el.textContent = (c.nombre || '?').charAt(0).toUpperCase();
+        el.style.background =
+          'radial-gradient(circle at 32% 28%, rgba(255,255,255,.35), transparent 45%), ' +
+          'linear-gradient(140deg, ' + (p.colorA || '#5b6a8a') + ', ' + (p.colorB || '#2b3350') + ' 70%)';
+      }
+    });
+  })();
+</script><main class="escena"><div class="room"><style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var g=Object.defineProperty;var w=(a,s,c)=>s in a?g(a,s,{enumerable:!0,configurable:!0,writable:!0,value:c}):a[s]=c;var l=(a,s,c)=>w(a,typeof s!="symbol"?s+"":s,c);var E=new Set(["__proto__","constructor","prototype"]);{let a={0:t=>y(t),1:t=>c(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(c(t)),5:t=>new Set(c(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},s=t=>{let[p,e]=t;return p in a?a[p](e):void 0},c=t=>t.map(s),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,s(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),n={},d=this.querySelectorAll("template[data-astro-template]");for(let o of d){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of r){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("name")||"default"]=o.innerHTML)}let u;try{u=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let i=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(i+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${i}`,this.getAttribute("props"),o),o}let h;await this.hydrator(this)(this.Component,u,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}getRetryImportUrl(e){let r=new URL(e,document.baseURI);return r.searchParams.set("astro-retry",Date.now().toString()),r.toString()}async importWithRetry(e){try{return await import(e)}catch(r){return await new Promise(n=>setTimeout(n,1e3)),import(this.getRetryImportUrl(e))}}handleHydrationError(e){let r=this.getAttribute("component-url"),n=new CustomEvent("astro:hydration-error",{cancelable:!0,bubbles:!0,composed:!0,detail:{error:e,componentUrl:r}});this.dispatchEvent(n)&&console.error(`[astro-island] Error hydrating ${r}`,e)}async start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}try{await Astro[r](async()=>{let n=this.getAttribute("renderer-url");try{let[d,{default:u}]=await Promise.all([this.importWithRetry(this.getAttribute("component-url")),n?this.importWithRetry(n):Promise.resolve({default:()=>()=>{}})]),h=this.getAttribute("component-export")||"default";if(h.includes(".")){this.Component=d;for(let m of h.split(".")){if(E.has(m)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,m))throw new Error(`Invalid component export path: ${h}`);this.Component=this.Component[m]}}else{if(E.has(h))throw new Error(`Invalid component export path: ${h}`);this.Component=d[h]}return this.hydrator=u,this.hydrate}catch(d){return this.handleHydrationError(d),()=>{}}},e,this)}catch(n){this.handleHydrationError(n)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="2aQCo5" prefix="r3" component-url="/Phaingea_Wiki/_astro/DemoLibro.CZXowfbX.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;DemoLibro&quot;,&quot;value&quot;:true}" await-children><div class="stack"><div class="libro-wrap " style="--prop:1.38"><button class="btn-ampliar" aria-label="Pantalla completa">⛶<span class="tip-ampliar">Pantalla completa</span></button><div class="libro cubierta-cuero-verde" style="aspect-ratio:1 / 1.38"><div class="hoja tapa" data-density="hard"><div class="tapa-interior"><span class="esquina a"></span><span class="esquina b"></span><span class="esquina c"></span><span class="esquina d"></span><span class="portada-titulo">Tomo de Pruebas</span><span class="portada-sub">demo local</span><span class="portada-abrir mono">ABRIR</span></div></div><div class="hoja"><div class="pagina indice"><h4 class="pagina-titulo">Índice</h4><ol class="indice-lista"><li><button><span class="indice-titulo">El amanecer</span><span class="indice-num mono">1</span></button></li><li><button><span class="indice-titulo">Los tres reinos</span><span class="indice-num mono">2</span></button></li><li><button><span class="indice-titulo">La palabra sellada</span><span class="indice-num mono">3</span></button></li><li><button><span class="indice-titulo">El mar interior</span><span class="indice-num mono">4</span></button></li><li><button><span class="indice-titulo">Cantos del yermo</span><span class="indice-num mono">5</span></button></li><li><button><span class="indice-titulo">La última vigilia</span><span class="indice-num mono">6</span></button></li></ol></div></div><div class="hoja"><div class="pagina"><div class="pagina-contenido"><div><h4 style="font-family:var(--font-title);color:#5a3d26;margin-top:0">El amanecer</h4><p>Página <!-- -->1<!-- -->. Palabra clave: <!-- -->pergamino<!-- -->.</p></div></div><div class="pagina-pie mono"><button class="lnk">⌂ Índice</button><span>1<!-- --> / <!-- -->6</span></div></div></div><div class="hoja"><div class="pagina"><div class="pagina-contenido"><div><h4 style="font-family:var(--font-title);color:#5a3d26;margin-top:0">Los tres reinos</h4><p>Página <!-- -->2<!-- -->. Palabra clave: <!-- -->pergamino<!-- -->.</p></div></div><div class="pagina-pie mono"><button class="lnk">⌂ Índice</button><span>2<!-- --> / <!-- -->6</span></div></div></div><div class="hoja"><div class="pagina"><div class="pagina-contenido"><div><h4 style="font-family:var(--font-title);color:#5a3d26;margin-top:0">La palabra sellada</h4><p>Página <!-- -->3<!-- -->. Palabra clave: <!-- -->grimorio<!-- -->.</p></div></div><div class="pagina-pie mono"><button class="lnk">⌂ Índice</button><span>3<!-- --> / <!-- -->6</span></div></div></div><div class="hoja"><div class="pagina"><div class="pagina-contenido"><div><h4 style="font-family:var(--font-title);color:#5a3d26;margin-top:0">El mar interior</h4><p>Página <!-- -->4<!-- -->. Palabra clave: <!-- -->pergamino<!-- -->.</p></div></div><div class="pagina-pie mono"><button class="lnk">⌂ Índice</button><span>4<!-- --> / <!-- -->6</span></div></div></div><div class="hoja"><div class="pagina"><div class="pagina-contenido"><div><h4 style="font-family:var(--font-title);color:#5a3d26;margin-top:0">Cantos del yermo</h4><p>Página <!-- -->5<!-- -->. Palabra clave: <!-- -->grimorio antiguo<!-- -->.</p></div></div><div class="pagina-pie mono"><button class="lnk">⌂ Índice</button><span>5<!-- --> / <!-- -->6</span></div></div></div><div class="hoja"><div class="pagina"><div class="pagina-contenido"><div><h4 style="font-family:var(--font-title);color:#5a3d26;margin-top:0">La última vigilia</h4><p>Página <!-- -->6<!-- -->. Palabra clave: <!-- -->pergamino<!-- -->.</p></div></div><div class="pagina-pie mono"><button class="lnk">⌂ Índice</button><span>6<!-- --> / <!-- -->6</span></div></div></div><div class="hoja tapa" data-density="hard"><div class="tapa-interior"><span class="esquina a"></span><span class="esquina b"></span><span class="esquina c"></span><span class="esquina d"></span><span class="portada-sub">Fin</span></div></div></div><div class="libro-controles"><button class="ctrl" disabled="" aria-label="Página anterior">‹</button><button class="ctrl indice-btn" disabled="" aria-label="Ir al índice" title="Índice">⌂</button><form class="ira mono"><input placeholder="pág." aria-label="Ir a página" inputMode="numeric" value=""/></form><button class="ctrl" disabled="" aria-label="Página siguiente">›</button><div class="buscador"><input placeholder="🔎 buscar en el libro…" aria-label="Buscar en el libro" value=""/></div></div><style>
+.libro-wrap { display: grid; justify-items: center; gap: .7rem; width: 100%; }
+.libro { width: min(560px, 92vw); max-height: 74vh; margin: 0 auto; }
+.libro .hoja { background: linear-gradient(120deg, var(--paper), var(--parchment) 85%); overflow: hidden; }
+.libro .hoja.tapa { background: none; }
+/* portada tomada del propio documento: llena la tapa de borde a borde */
+.tapa-doc { position: absolute; inset: 0; overflow: hidden; border-radius: 4px; }
+.tapa-doc img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* tapas de cuero con esquinas decorativas (guía §27.2) */
+.cubierta-cuero-rojo  .tapa-interior { --cuero: var(--leather-red);   --fondo: #241610; }
+.cubierta-cuero-verde .tapa-interior { --cuero: var(--leather-green); --fondo: #16200f; }
+.cubierta-cuero-negro .tapa-interior { --cuero: var(--leather-black); --fondo: #0d0b09; }
+.tapa-interior {
+  position: absolute; inset: 0; display: grid; place-content: center; gap: .5rem; text-align: center; padding: 1.4rem;
+  background: radial-gradient(120% 100% at 30% 20%, rgba(255,255,255,.08), transparent 55%),
+              linear-gradient(135deg, var(--cuero, var(--leather-red)), var(--fondo, #241610));
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.05);
+}
+.tapa-interior .esquina { position: absolute; width: 22px; height: 22px; border: 2px solid rgba(201,164,90,.55); }
+.tapa-interior .esquina.a { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+.tapa-interior .esquina.b { top: 10px; right: 10px; border-left: 0; border-bottom: 0; }
+.tapa-interior .esquina.c { bottom: 10px; left: 10px; border-right: 0; border-top: 0; }
+.tapa-interior .esquina.d { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+.portada-titulo { font-family: var(--font-title); font-size: clamp(1.2rem, 3.4vw, 1.8rem); color: var(--gold-soft); letter-spacing: .05em; }
+.portada-sub { font-family: var(--font-body); color: var(--parchment); opacity: .8; font-size: .85rem; }
+.portada-abrir { margin-top: .8rem; color: var(--gold); font-size: .64rem; letter-spacing: .3em; border: 1px solid rgba(201,164,90,.5); border-radius: 999px; padding: .35rem .8rem; justify-self: center; }
+
+/* páginas de papel */
+.pagina { position: absolute; inset: 0; color: var(--ink); padding: 1.1rem 1.2rem 2rem; overflow-y: auto; }
+/* Documento maquetado: la imagen llena la hoja de borde a borde (sin el
+   margen de papel), tal como se ve el original. */
+.pagina:has(.pagina-doc) { padding: 0; overflow: hidden; }
+.pagina:has(.pagina-doc) .pagina-contenido { height: 100%; }
+.pagina-doc { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pagina:has(.pagina-doc) .pagina-pie {
+  background: linear-gradient(transparent, rgba(20,12,4,.55));
+  color: rgba(255,245,225,.9);
+}
+.pagina:has(.pagina-doc) .pagina-pie .lnk { color: rgba(255,235,190,.95); }
+.pagina-titulo { font-family: var(--font-title); color: #5a3d26; font-size: 1.2rem; margin: 0 0 .7rem; }
+.indice-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
+.indice-lista button {
+  width: 100%; display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
+  background: none; border: 0; cursor: pointer; padding: .32rem .3rem;
+  font-family: var(--font-body); color: var(--ink); font-size: .92rem;
+  border-bottom: 1px dotted rgba(90,61,38,.35);
+}
+.indice-lista button:hover .indice-titulo { color: #7a4a1a; }
+.indice-num { color: #8a7350; font-size: .74rem; }
+.pagina-contenido { font-family: var(--font-body); line-height: 1.55; }
+.pagina-contenido img { width: 100%; height: auto; display: block; }
+.pagina-pie {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .3rem .9rem; font-size: .68rem; color: #8a7350;
+  background: linear-gradient(transparent, rgba(90,61,38,.08));
+}
+.pagina-pie .lnk { background: none; border: 0; cursor: pointer; color: #7a4a1a; font: inherit; }
+.pagina-pie .lnk:hover { text-decoration: underline; }
+
+/* controles */
+.libro-controles { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+.libro-controles .ctrl {
+  width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.1rem;
+  border: 1px solid rgba(201,164,90,.5); background: rgba(14,17,22,.7); color: var(--gold);
+  transition: transform .15s var(--ease);
+}
+.libro-controles .ctrl:hover:not(:disabled) { transform: scale(1.08); }
+.libro-controles .ctrl:disabled { opacity: .35; cursor: default; }
+.libro-controles .ira input {
+  width: 56px; text-align: center; padding: .32rem .3rem; border-radius: 999px;
+  border: 1px solid rgba(201,164,90,.4); background: rgba(0,0,0,.3); color: var(--paper); font-size: .74rem;
+}
+.posicion { color: var(--stone); font-size: .68rem; }
+.buscador { position: relative; }
+.buscador input {
+  width: 160px; padding: .38rem .7rem; border-radius: 999px;
+  border: 1px solid rgba(201,164,90,.4); background: rgba(0,0,0,.3); color: var(--paper);
+  font-size: .76rem; font-family: var(--font-body);
+}
+.buscador-resultados {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 40;
+  width: min(320px, 80vw); max-height: 260px; overflow-y: auto;
+  background: linear-gradient(180deg, #2a1e13, #1a120b);
+  border: 1px solid rgba(201,164,90,.45); border-radius: 10px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.6); padding: .35rem;
+}
+.buscador-resultados button {
+  display: grid; gap: .12rem; width: 100%; text-align: left; cursor: pointer;
+  background: none; border: 0; padding: .42rem .5rem; border-radius: 6px;
+}
+.buscador-resultados button:hover { background: rgba(201,164,90,.12); }
+.br-pag { color: var(--gold); font-size: .6rem; letter-spacing: .06em; }
+.br-ctx { color: var(--parchment); font-size: .76rem; font-family: var(--font-body); }
+.sin-resultados { color: var(--stone); font-size: .7rem; text-align: center; margin: .4rem 0; }
+
+/* pantalla completa (§9.3) */
+.btn-ampliar {
+  position: relative; justify-self: end;
+  width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1rem;
+  border: 1px solid rgba(201,164,90,.5); background: rgba(14,17,22,.7); color: var(--gold);
+}
+.btn-ampliar:hover { background: rgba(201,164,90,.18); }
+.tip-ampliar {
+  position: absolute; right: 0; bottom: calc(100% + 6px);
+  background: linear-gradient(#3a2415, #241609); color: var(--paper);
+  border: 1px solid rgba(201,164,90,.5); border-radius: 6px;
+  font-family: ui-monospace, monospace; font-size: .6rem; letter-spacing: .1em;
+  text-transform: uppercase; padding: .25rem .5rem; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .15s ease;
+}
+.btn-ampliar:hover .tip-ampliar { opacity: 1; }
+.libro-wrap.fs { position: fixed; inset: 0; z-index: 140; display: grid; place-content: center; gap: .5rem; justify-items: center; padding: 1.5vh 2vw; }
+.fs-fondo { position: fixed; inset: 0; z-index: -1; background: rgba(5,6,10,.72); backdrop-filter: blur(5px); }
+/* En pantalla completa manda el ALTO: el libro llena casi toda la ventana.
+   OJO: StPageFlip escribe width:100% en el propio libro, así que su tamaño se
+   controla desde AQUÍ, dando ancho a la columna. El ancho sale de la proporción
+   de la hoja (--prop = alto ÷ ancho), para que quepa entero de alto. */
+.libro-wrap.fs { grid-template-columns: min(94vw, calc(84vh / var(--prop, 1.38))); }
+.libro-wrap.fs .libro { max-height: 88vh; }
+.fs-cerrar {
+  justify-self: end; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-weight: 700;
+  background: linear-gradient(180deg, #f2dc94, #c9a45a 55%, #87692f);
+  border: 1px solid #1c120a; color: #241a12; box-shadow: 0 4px 10px rgba(0,0,0,.5);
+}
+</style></div><div style="display:flex;gap:.6rem;justify-content:center;margin-top:1.5rem"><button class="btn" id="abrir-normal">Modal normal</button><button class="btn" id="abrir-destructivo">Modal destructivo</button></div><p class="center mono" id="estado-borrado">sin borrar</p><div class="panel" id="demo-xp" style="max-width:420px;margin:1rem auto"><div class="barraxp"><div class="barraxp-pista" role="progressbar" aria-label="Experiencia" aria-valuenow="766" aria-valuemin="0" aria-valuemax="1300" title="General: 600 · Extra: 166 · Total: 766"><i class="xp-general" style="width:46.15384615384615%"></i><i class="xp-extra" style="width:12.769230769230768%"></i></div><div class="barraxp-pie mono"><span>766 / 1300 — Nivel 1</span><span class="barraxp-leyenda"><b class="pt general"></b> general <!-- -->600<b class="pt extra"></b> extra <!-- -->166</span></div><style>
+.barraxp { display: grid; gap: .3rem; }
+.barraxp-pista {
+  display: flex; height: 12px; border-radius: 999px; overflow: hidden;
+  background: rgba(0,0,0,.4); border: 1px solid rgba(201,164,90,.3);
+}
+.barraxp-pista i { display: block; height: 100%; transition: width .4s var(--ease); }
+.xp-general { background: linear-gradient(90deg, #b98a3c, var(--gold)); }
+.xp-extra   { background: linear-gradient(90deg, #6f9e5c, #9fd07a); }
+.barraxp-pie {
+  display: flex; justify-content: space-between; gap: .8rem; flex-wrap: wrap;
+  font-size: .72rem; color: var(--parchment);
+}
+.barraxp-leyenda { display: inline-flex; align-items: center; gap: .3rem; color: var(--stone); font-size: .66rem; }
+.barraxp-leyenda .pt { width: 9px; height: 9px; border-radius: 2px; display: inline-block; margin-left: .5rem; }
+.barraxp-leyenda .pt.general { background: var(--gold); }
+.barraxp-leyenda .pt.extra { background: #9fd07a; }
+</style></div></div><div class="panel" id="demo-mod" style="position:relative;max-width:420px;margin:1rem auto"><p class="muted">Elemento moderable (con permiso).</p><button class="btn-mod" style="right:0.5rem" title="Moderar elemento" aria-label="Moderar elemento"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M20.7 5.6 18.4 3.3a1 1 0 0 0-1.4 0l-1.7 1.7 3.7 3.7 1.7-1.7a1 1 0 0 0 0-1.4ZM3 17.2V21h3.8L17.9 9.9l-3.7-3.7L3 17.2Z" fill="currentColor"></path></svg><span class="btn-mod-tip">Moderar elemento</span></button><style>
+.btn-mod {
+  position: absolute; top: .5rem; z-index: 5;
+  width: 28px; height: 28px; border-radius: 7px; cursor: pointer;
+  display: grid; place-items: center;
+  background: rgba(14,17,22,.72); border: 1px solid rgba(201,164,90,.45);
+  color: var(--gold); opacity: .55;
+  transition: opacity .15s var(--ease), background .15s var(--ease);
+}
+.btn-mod:hover, .btn-mod:focus-visible { opacity: 1; background: rgba(201,164,90,.2); }
+.btn-mod-tip {
+  position: absolute; right: 0; top: calc(100% + 5px);
+  background: linear-gradient(#3a2415, #241609); color: var(--paper);
+  border: 1px solid rgba(201,164,90,.5); border-radius: 6px;
+  font-family: ui-monospace, monospace; font-size: .6rem; letter-spacing: .1em;
+  text-transform: uppercase; padding: .22rem .5rem; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .15s ease;
+}
+.btn-mod:hover .btn-mod-tip { opacity: 1; }
+
+/* variante de SALA: pastilla con texto, siempre visible y en la ranura fija */
+.btn-mod.sala {
+  position: static; width: auto; height: 30px; padding: 0 .7rem; gap: .4rem;
+  grid-auto-flow: column; opacity: 1;
+  font-family: ui-monospace, monospace; font-size: .62rem;
+  letter-spacing: .12em; text-transform: uppercase;
+}
+</style></div><div class="panel" id="demo-mod-sin" style="position:relative;max-width:420px;margin:1rem auto"><p class="muted">Elemento sin permiso: no debe aparecer el botón.</p></div></div><!--astro:end--></astro-island></div></main><astro-island uid="GaBML" prefix="r4" component-url="/Phaingea_Wiki/_astro/AuthGate.Br7RpsrS.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;AuthGate&quot;,&quot;value&quot;:true}" await-children><div style="position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:1.5rem;background:radial-gradient(120% 100% at 50% 30%, rgba(20,20,40,.75), rgba(6,7,10,.92));backdrop-filter:blur(4px)" data-login="true" role="dialog" aria-modal="true" aria-label="Acceso a Phaingea"><form style="width:min(380px, 100%);display:grid;gap:0.9rem;color:var(--paper);border:2px solid #1c120a;border-radius:12px;padding:1.8rem 1.6rem 1.6rem;box-shadow:0 30px 80px rgba(0,0,0,.6), inset 0 0 0 1px rgba(201,164,90,.35);background-color:#6b4a2c;background-image:linear-gradient(180deg, rgba(74,50,30,.5), rgba(32,21,11,.78)), url(&quot;/Phaingea_Wiki/textures/wood.png&quot;);background-size:cover, cover;background-position:center, center;background-blend-mode:normal, multiply"><div style="font-family:var(--font-title);font-weight:700;letter-spacing:0.25em;text-align:center;color:var(--gold);font-size:1.5rem;text-shadow:0 1px 2px #000">PHAINGEA</div><p style="text-align:center;font-family:ui-monospace, monospace;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--parchment);opacity:0.85;margin-top:-0.4rem">Entrar en el archivo</p><label style="display:grid;gap:0.3rem;font-family:var(--font-ui);font-size:0.8rem;color:var(--parchment)">Usuario<input style="padding:0.6rem 0.7rem;border-radius:8px;border:1px solid rgba(201,164,90,.45);background:rgba(239,230,210,.92);color:var(--ink);font-size:1rem" autoComplete="username" autofocus="" value=""/></label><label style="display:grid;gap:0.3rem;font-family:var(--font-ui);font-size:0.8rem;color:var(--parchment)">Contraseña<input style="padding:0.6rem 0.7rem;border-radius:8px;border:1px solid rgba(201,164,90,.45);background:rgba(239,230,210,.92);color:var(--ink);font-size:1rem" type="password" autoComplete="current-password" value=""/></label><button style="margin-top:0.3rem;padding:0.7rem;border-radius:8px;border:1px solid #8a6d34;cursor:pointer;background:linear-gradient(180deg, var(--gold-soft), var(--gold));color:var(--ink);font-family:var(--font-ui);font-weight:700;letter-spacing:0.05em;font-size:1rem;text-shadow:0 1px 0 rgba(255,255,255,.25)" type="submit">Entrar</button><button style="background:none;border:0;cursor:pointer;color:var(--gold-soft);font-family:var(--font-body);font-size:0.82rem;text-decoration:underline" type="button">¿No tienes cuenta? Regístrate</button></form></div><!--astro:end--></astro-island><astro-island uid="ZaNq6m" prefix="r5" component-url="/Phaingea_Wiki/_astro/VersionWatcher.DtPTol-1.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;VersionWatcher&quot;,&quot;value&quot;:true}" await-children><div class="version-pie"><span class="version-eco" title="Versión que está viendo esta pestaña">v <!-- -->d8a3ddb</span><style>
+        .version-pie {
+          position: fixed; left: .5rem; bottom: .4rem; z-index: 130;
+          font-family: ui-monospace, monospace; pointer-events: none;
+        }
+        .version-eco { font-size: .56rem; letter-spacing: .1em; color: rgba(151,160,171,.5); }
+        .version-boton {
+          pointer-events: auto; cursor: pointer;
+          font-family: ui-monospace, monospace; font-size: .62rem; letter-spacing: .08em;
+          background: linear-gradient(180deg, #f2dc94, #c9a45a 55%, #87692f);
+          color: #241a12; border: 1px solid #1c120a; border-radius: 999px;
+          padding: .3rem .7rem; box-shadow: 0 4px 12px rgba(0,0,0,.5);
+        }
+        .version-boton:hover { filter: brightness(1.08); }
+      </style></div><!--astro:end--></astro-island></body></html>

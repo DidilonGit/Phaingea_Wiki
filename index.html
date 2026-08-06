@@ -1,0 +1,852 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Phaingea</title><script>
+      try {
+        if (JSON.parse(localStorage.getItem('phaingea_session') || 'null')?.nombre) {
+          document.documentElement.dataset.sesion = 'si';
+        }
+      } catch (e) {}
+    </script><link rel="stylesheet" href="/Phaingea_Wiki/_astro/BotonMod.CDLwSIyt.css"><link rel="stylesheet" href="/Phaingea_Wiki/_astro/index.C5aj5bD0.css"></head><body><header class="topbar" style="--wood: url(&quot;/Phaingea_Wiki/textures/wood.png&quot;)" data-astro-cid-nazmfhjt><div class="marca" data-astro-cid-nazmfhjt><span class="brand" data-astro-cid-nazmfhjt>PHAINGEA</span><!-- Logo de la campaña activa (guía §8.5). Placeholder de Base de Phaingea
+         hasta que exista el store de campañas: T07 conecta el store y T19 pinta
+         el logo real. Para actualizarlo: escribir en #logoCampana (img o
+         inicial) y el title/aria-label con el nombre de la campaña. --><span id="logoCampana" class="logo-campana" title="Base de Phaingea" aria-label="Campaña activa: Base de Phaingea" data-campana="base-phaingea" data-astro-cid-nazmfhjt>B</span></div><nav class="bookmarks" aria-label="Categorías" data-astro-cid-nazmfhjt><button class="bm" data-view="inicio" style="--c:#d9b45c" title="Observatorio" aria-label="Observatorio" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth punta" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><circle cx="12" cy="11" r="5.4"/><ellipse cx="12" cy="11" rx="11" ry="3.4" fill="none" stroke="#20160d" stroke-width="1.7" transform="rotate(-18 12 11)"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Observatorio</span></button><button class="bm" data-view="capilla" style="--c:#9d7bc0" title="Capilla" aria-label="Capilla" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth redondo" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><circle cx="12" cy="12" r="4"/><g stroke="#20160d" stroke-width="1.7" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.6" y1="4.6" x2="6.7" y2="6.7"/><line x1="17.3" y1="17.3" x2="19.4" y2="19.4"/><line x1="19.4" y1="4.6" x2="17.3" y2="6.7"/><line x1="6.7" y1="17.3" x2="4.6" y2="19.4"/></g></svg></span><span class="name" data-astro-cid-nazmfhjt>Capilla</span></button><button class="bm" data-view="cartografia" style="--c:#6f9e5c" title="Cartografía" aria-label="Cartografía" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth recto" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><circle cx="12" cy="12" r="10" fill="none" stroke="#20160d" stroke-width="1.5"/><path d="M12 4 L14 11 L20 12 L14 13 L12 20 L10 13 L4 12 L10 11 Z"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Cartografía</span></button><button class="bm" data-view="podios" style="--c:#c9803f" title="Podios" aria-label="Podios" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth cola" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><circle cx="12" cy="8" r="4.2"/><path d="M4 21 Q4 13 12 13 Q20 13 20 21 Z"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Podios</span></button><button class="bm" data-view="galeria" style="--c:#5f93b8" title="Galería" aria-label="Galería" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth punta" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="#20160d" stroke-width="1.7"/><circle cx="8" cy="10" r="1.7"/><path d="M6 17 L11 12 L14 15 L17 11 L19 17 Z"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Galería</span></button><button class="bm" data-view="sesiones" style="--c:#b8603f" title="Sesiones" aria-label="Sesiones" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth redondo" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><path d="M12 6 Q7 3.5 3 5.2 V18 Q7 16.2 12 19 Q17 16.2 21 18 V5.2 Q17 3.5 12 6 Z" fill="none" stroke="#20160d" stroke-width="1.7"/><line x1="12" y1="6" x2="12" y2="19" stroke="#20160d" stroke-width="1.5"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Sesiones</span></button><button class="bm" data-view="taller" style="--c:#b58a4a" title="Taller" aria-label="Taller" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth punta" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><rect x="5" y="3.5" width="14" height="17" rx="1.8" fill="none" stroke="#20160d" stroke-width="1.7"/><line x1="8" y1="8" x2="16" y2="8" stroke="#20160d" stroke-width="1.5"/><line x1="8" y1="11.5" x2="16" y2="11.5" stroke="#20160d" stroke-width="1.5"/><line x1="8" y1="15" x2="13" y2="15" stroke="#20160d" stroke-width="1.5"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Taller</span></button><button class="bm" data-view="pociones" style="--c:#7fa86a" title="Sala de Pociones" aria-label="Sala de Pociones" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth redondo" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><path d="M10.5 3 h3 v4.4 l3.7 6.3 a3.2 3.2 0 0 1 -2.8 4.8 H9.6 a3.2 3.2 0 0 1 -2.8 -4.8 L10.5 7.4 Z" fill="none" stroke="#20160d" stroke-width="1.6"/><path d="M8.1 14 h7.8" stroke="#20160d" stroke-width="1.4"/><line x1="9.4" y1="2.7" x2="14.6" y2="2.7" stroke="#20160d" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Sala de Pociones</span></button><button class="bm" data-view="buzon" style="--c:#c0b24a" title="Buzón" aria-label="Buzón" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth recto" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><path d="M12 3 Q6 3 6 11 L4.2 16 H19.8 L18 11 Q18 3 12 3 Z"/><path d="M9.8 18 Q12 21 14.2 18 Z"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Buzón</span></button><button class="bm" data-view="moderacion" data-gated="mod" style="--c:#7d3b3b;display:none" title="Moderación" aria-label="Moderación" data-astro-cid-nazmfhjt><span class="rod" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="roller" aria-hidden="true" data-astro-cid-nazmfhjt></span><span class="cloth cola" aria-hidden="true" data-astro-cid-nazmfhjt><svg class="icono" viewBox="0 0 24 24" data-astro-cid-nazmfhjt><path d="M12 2.5 L20 5.5 V11 Q20 18 12 21.5 Q4 18 4 11 V5.5 Z" fill="none" stroke="#20160d" stroke-width="1.7"/><circle cx="12" cy="9.6" r="2"/><path d="M11.1 11 h1.8 l.5 4.4 h-2.8 Z"/></svg></span><span class="name" data-astro-cid-nazmfhjt>Moderación</span></button></nav></header><script>
+  // Permisos en la barra (guía §3, §21):
+  //  · Moderación: visible solo para máster/owner/admin.
+  //  · Categorías sin acceso (campaña privada en la que no participas):
+  //    banderín apagado y no interactuable.
+  // Escucha 'phaingea:user' (stores/user.js) y 'phaingea:campana'
+  // (stores/campaign.js) para recalcular en vivo.
+  (function () {
+    var usuario = null;
+    var campana = null;
+
+    try {
+      usuario = JSON.parse(localStorage.getItem('phaingea_session') || 'null');
+    } catch (e) {}
+
+    function esOwner(u) { return !!u && (u.rol === 'owner' || u.rol === 'admin'); }
+    function esMaster(u, c) {
+      return esOwner(u) || (!!u && !!c && !!(c.masters || {})[u.nombre]);
+    }
+    function participa(u, c) {
+      return esMaster(u, c) || (!!u && !!c && !!(c.jugadores || {})[u.nombre]);
+    }
+    function puedeVerCampana(u, c) {
+      if (!c) return true; // aún cargando
+      if (esOwner(u)) return true;
+      if (c.estado === 'privada') return participa(u, c);
+      return true;
+    }
+
+    function aplicar() {
+      var verMod = esMaster(usuario, campana);
+      var verCampana = puedeVerCampana(usuario, campana);
+      document.querySelectorAll('.bm[data-view]').forEach(function (b) {
+        var esMod = b.getAttribute('data-gated') === 'mod';
+        if (esMod) {
+          b.style.display = verMod ? '' : 'none';
+          b.classList.remove('bloqueado');
+          return;
+        }
+        // El Observatorio siempre accesible (es el selector de campañas).
+        var siempre = b.getAttribute('data-view') === 'inicio';
+        b.classList.toggle('bloqueado', !siempre && !verCampana);
+      });
+    }
+
+    aplicar();
+    window.addEventListener('phaingea:user', function (e) {
+      usuario = e.detail || null;
+      aplicar();
+    });
+    window.addEventListener('phaingea:campana', function (e) {
+      campana = e.detail || null;
+      aplicar();
+    });
+  })();
+</script><script>
+  // Logo de la campaña activa (guía §8.5): escucha 'phaingea:campana' que
+  // emite src/stores/campaign.js al cambiar de campaña. Muestra logoUrl si
+  // existe; si no, la inicial del nombre sobre los colores de su planeta.
+  (function () {
+    window.addEventListener('phaingea:campana', function (e) {
+      var c = e.detail;
+      var el = document.getElementById('logoCampana');
+      if (!c || !el) return;
+      el.setAttribute('title', c.nombre);
+      el.setAttribute('aria-label', 'Campaña activa: ' + c.nombre);
+      el.setAttribute('data-campana', c.id);
+      if (c.logoUrl) {
+        el.innerHTML = '<img src="' + c.logoUrl + '" alt="">';
+        el.style.background = '';
+      } else {
+        var p = c.planeta || {};
+        el.textContent = (c.nombre || '?').charAt(0).toUpperCase();
+        el.style.background =
+          'radial-gradient(circle at 32% 28%, rgba(255,255,255,.35), transparent 45%), ' +
+          'linear-gradient(140deg, ' + (p.colorA || '#5b6a8a') + ', ' + (p.colorB || '#2b3350') + ' 70%)';
+      }
+    });
+  })();
+</script><main class="escena"><style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var g=Object.defineProperty;var w=(a,s,c)=>s in a?g(a,s,{enumerable:!0,configurable:!0,writable:!0,value:c}):a[s]=c;var l=(a,s,c)=>w(a,typeof s!="symbol"?s+"":s,c);var E=new Set(["__proto__","constructor","prototype"]);{let a={0:t=>y(t),1:t=>c(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(c(t)),5:t=>new Set(c(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},s=t=>{let[p,e]=t;return p in a?a[p](e):void 0},c=t=>t.map(s),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,s(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),n={},d=this.querySelectorAll("template[data-astro-template]");for(let o of d){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of r){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("name")||"default"]=o.innerHTML)}let u;try{u=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let i=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(i+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${i}`,this.getAttribute("props"),o),o}let h;await this.hydrator(this)(this.Component,u,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}getRetryImportUrl(e){let r=new URL(e,document.baseURI);return r.searchParams.set("astro-retry",Date.now().toString()),r.toString()}async importWithRetry(e){try{return await import(e)}catch(r){return await new Promise(n=>setTimeout(n,1e3)),import(this.getRetryImportUrl(e))}}handleHydrationError(e){let r=this.getAttribute("component-url"),n=new CustomEvent("astro:hydration-error",{cancelable:!0,bubbles:!0,composed:!0,detail:{error:e,componentUrl:r}});this.dispatchEvent(n)&&console.error(`[astro-island] Error hydrating ${r}`,e)}async start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}try{await Astro[r](async()=>{let n=this.getAttribute("renderer-url");try{let[d,{default:u}]=await Promise.all([this.importWithRetry(this.getAttribute("component-url")),n?this.importWithRetry(n):Promise.resolve({default:()=>()=>{}})]),h=this.getAttribute("component-export")||"default";if(h.includes(".")){this.Component=d;for(let m of h.split(".")){if(E.has(m)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,m))throw new Error(`Invalid component export path: ${h}`);this.Component=this.Component[m]}}else{if(E.has(h))throw new Error(`Invalid component export path: ${h}`);this.Component=d[h]}return this.hydrator=u,this.hydrate}catch(d){return this.handleHydrationError(d),()=>{}}},e,this)}catch(n){this.handleHydrationError(n)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="1Hof0x" prefix="r19" component-url="/Phaingea_Wiki/_astro/StarsCanvas.DsH4rmtU.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{&quot;speedMultiplier&quot;:[0,0.22]}" ssr client="load" opts="{&quot;name&quot;:&quot;StarsCanvas&quot;,&quot;value&quot;:true}" await-children><canvas class="" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;display:block"></canvas><!--astro:end--></astro-island><section class="view obs" data-view="inicio" aria-label="Observatorio"><!-- ranura fija de moderación de la sala (aquí se gestionan las campañas) --><div class="room-mod"></div><astro-island uid="1OWbU9" prefix="r20" component-url="/Phaingea_Wiki/_astro/ModObservatorio.4hTFJ6YO.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;ModObservatorio&quot;,&quot;value&quot;:true}" await-children><span hidden=""></span><style>
+.btn-mod {
+  position: absolute; top: .5rem; z-index: 5;
+  width: 28px; height: 28px; border-radius: 7px; cursor: pointer;
+  display: grid; place-items: center;
+  background: rgba(14,17,22,.72); border: 1px solid rgba(201,164,90,.45);
+  color: var(--gold); opacity: .55;
+  transition: opacity .15s var(--ease), background .15s var(--ease);
+}
+.btn-mod:hover, .btn-mod:focus-visible { opacity: 1; background: rgba(201,164,90,.2); }
+.btn-mod-tip {
+  position: absolute; right: 0; top: calc(100% + 5px);
+  background: linear-gradient(#3a2415, #241609); color: var(--paper);
+  border: 1px solid rgba(201,164,90,.5); border-radius: 6px;
+  font-family: ui-monospace, monospace; font-size: .6rem; letter-spacing: .1em;
+  text-transform: uppercase; padding: .22rem .5rem; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .15s ease;
+}
+.btn-mod:hover .btn-mod-tip { opacity: 1; }
+
+/* variante de SALA: pastilla con texto, siempre visible y en la ranura fija */
+.btn-mod.sala {
+  position: static; width: auto; height: 30px; padding: 0 .7rem; gap: .4rem;
+  grid-auto-flow: column; opacity: 1;
+  font-family: ui-monospace, monospace; font-size: .62rem;
+  letter-spacing: .12em; text-transform: uppercase;
+}
+</style><!--astro:end--></astro-island><div class="globo-wrap" id="globoWrap"><div class="halo" aria-hidden="true"></div><svg id="montura" viewBox="0 0 100 100" aria-hidden="true"></svg><canvas id="globo" aria-label="Globo de puntos del mundo. Arrastra para girarlo."></canvas><div class="sombra" aria-hidden="true"></div><div id="capaMarcadores"></div><astro-island uid="ZBxeby" prefix="r21" component-url="/Phaingea_Wiki/_astro/PinesPlaneta.Bu_W2IE4.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;PinesPlaneta&quot;,&quot;value&quot;:true}"></astro-island><astro-island uid="1GR0z6" prefix="r22" component-url="/Phaingea_Wiki/_astro/DialCampanas.Ls1_tMu9.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;DialCampanas&quot;,&quot;value&quot;:true}"></astro-island><p id="cargando" role="status">calibrando lentes…</p><div id="tarjeta" role="dialog" aria-modal="false" aria-labelledby="tarjetaTitulo" hidden><p class="chip" id="tarjetaRegion"></p><h3 id="tarjetaTitulo"></h3><p class="lore" id="tarjetaL1"></p><p class="lore" id="tarjetaL2"></p><button class="cerrar" id="tarjetaCerrar" type="button" aria-label="Cerrar tarjeta">✕</button></div></div><astro-island uid="Z1TCPEf" prefix="r23" component-url="/Phaingea_Wiki/_astro/NotaCampana.2tvFkEyu.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;NotaCampana&quot;,&quot;value&quot;:true}"></astro-island></section><section class="view capilla" data-view="capilla" hidden aria-label="Capilla" data-astro-cid-53v6nlad><!-- decorado de la sala --><div class="capilla-sala" aria-hidden="true" data-astro-cid-53v6nlad><div class="vidriera izq" data-astro-cid-53v6nlad></div><div class="vidriera der" data-astro-cid-53v6nlad></div><div class="luz izq" data-astro-cid-53v6nlad></div><div class="luz der" data-astro-cid-53v6nlad></div><div class="suelo" data-astro-cid-53v6nlad></div></div><div class="room" data-astro-cid-53v6nlad><!-- ranura fija de moderación de la sala (BotonMod sala) --><div class="room-mod" data-astro-cid-53v6nlad></div><header class="room-head" data-astro-cid-53v6nlad><p class="room-sub" data-astro-cid-53v6nlad>El panteón de Phaingea, custodiado en la penumbra de la capilla.</p></header><!-- El libro de deidades, y debajo el atril de mármol con el medallón
+         del logo de la campaña. --><div class="atril-conjunto" data-astro-cid-53v6nlad><div class="atril-hueco" data-astro-cid-53v6nlad><astro-island uid="Z2dfIrX" prefix="r26" component-url="/Phaingea_Wiki/_astro/CapillaLibro.CsVRJ3O7.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{&quot;data-astro-cid-53v6nlad&quot;:[0,true]}" ssr client="load" opts="{&quot;name&quot;:&quot;CapillaLibro&quot;,&quot;value&quot;:true}"></astro-island></div><astro-island uid="1W8Gyr" prefix="r27" component-url="/Phaingea_Wiki/_astro/AtrilMarmol.COnuPXOB.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{&quot;data-astro-cid-53v6nlad&quot;:[0,true]}" ssr client="load" opts="{&quot;name&quot;:&quot;AtrilMarmol&quot;,&quot;value&quot;:true}" await-children><div class="atril" aria-hidden="true"><div class="atril-tablero-zona"><span class="remache izq"></span><span class="remache der"></span><div class="atril-tablero"><div class="atril-tablero-cara"></div><span class="atril-lomo"></span></div></div><div class="atril-banda"></div><div class="atril-cuerpo-zona"><span class="voluta izq"></span><span class="voluta der"></span><div class="atril-cuerpo"><span class="filete arriba"></span><span class="filete abajo"></span><div class="medallon"><div class="medallon-hueco"><span class="medallon-inicial">P</span></div></div></div></div><div class="atril-fuste"><span class="anilla arriba"></span><span class="anilla medio"></span><span class="anilla abajo"></span></div><div class="atril-peana"><span class="grada uno"></span><span class="grada dos"></span><span class="grada tres"></span></div><style>
+.atril {
+  --atril-ancho: min(460px, 86vw);
+  --marmol: linear-gradient(125deg, transparent 40%, rgba(170,160,140,.18) 41%, transparent 42%),
+            linear-gradient(95deg, transparent 58%, rgba(150,140,120,.14) 59%, transparent 61%),
+            linear-gradient(160deg, #f6f1e8, #e8dcc8 45%, #f3eee3 75%, #ddd0b8 100%);
+  --laton: linear-gradient(135deg, #b8860b 0%, #e8c25f 25%, #fdf0c0 45%, #d4a437 60%, #a67c1e 80%, #f0d78a 100%);
+  --laton-filete: linear-gradient(90deg, #a67c1e, #f0d78a, #a67c1e);
+  width: var(--atril-ancho);
+  margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center;
+  position: relative; user-select: none; pointer-events: none;
+}
+
+/* ---- tablero inclinado ---- */
+.atril-tablero-zona { position: relative; width: 100%; }
+.atril .remache {
+  position: absolute; top: -14px; width: 16px; height: 16px; border-radius: 50%;
+  background: linear-gradient(135deg, #f5d98a, #b8860b);
+  box-shadow: 0 1px 3px rgba(0,0,0,.35); transform: translateX(-50%); z-index: 3;
+}
+.atril .remache.izq { left: 18%; }
+.atril .remache.der { left: 82%; }
+.atril-tablero {
+  position: relative; width: 100%; height: calc(var(--atril-ancho) * .19);
+  clip-path: polygon(18% 0%, 82% 0%, 100% 100%, 0% 100%);
+  background: var(--laton);
+  box-shadow: 0 6px 14px rgba(0,0,0,.25);
+}
+.atril-tablero-cara {
+  position: absolute; inset: 7px 14px;
+  clip-path: polygon(16% 0%, 84% 0%, 100% 100%, 0% 100%);
+  background-image: var(--marmol);
+}
+.atril-lomo {
+  position: absolute; left: 50%; top: 7px; bottom: 7px; width: 2px;
+  background: rgba(150,110,35,.35); transform: translateX(-50%);
+}
+
+/* ---- banda de latón ---- */
+.atril-banda {
+  width: 100%; height: 14px; margin-top: -1px;
+  background: linear-gradient(180deg, #e8c25f, #a67c1e);
+  box-shadow: 0 3px 6px rgba(0,0,0,.3);
+}
+
+/* ---- cuerpo con el medallón ---- */
+.atril-cuerpo-zona { position: relative; width: 56%; height: 110px; margin-top: 2px; }
+.atril .voluta {
+  position: absolute; top: 0; width: 26px; height: 44px;
+  background-image: var(--marmol);
+}
+.atril .voluta.izq { left: -22px; border-top-right-radius: 100%; box-shadow: 2px 2px 5px rgba(0,0,0,.2); }
+.atril .voluta.der { right: -22px; border-top-left-radius: 100%; box-shadow: -2px 2px 5px rgba(0,0,0,.2); }
+.atril-cuerpo {
+  position: relative; width: 100%; height: 100%;
+  background-image: var(--marmol);
+  box-shadow: 0 4px 10px rgba(0,0,0,.15);
+}
+.atril .filete { position: absolute; left: 0; right: 0; height: 3px; background: var(--laton-filete); }
+.atril .filete.arriba { top: 0; }
+.atril .filete.abajo { bottom: 0; }
+.medallon {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 92px; height: 92px; border-radius: 50%;
+  background: linear-gradient(135deg, #b8860b, #f5d98a, #a3781c);
+  box-shadow: 0 2px 8px rgba(0,0,0,.3), inset 0 0 0 2px rgba(255,255,255,.3);
+  display: grid; place-items: center;
+}
+.medallon-hueco {
+  width: 76px; height: 76px; border-radius: 50%; overflow: hidden;
+  display: grid; place-items: center; background: #2a1d10;
+}
+.medallon-hueco img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.medallon-inicial { font-family: var(--font-title); font-size: 2.2rem; color: #f3e2b4; }
+
+/* ---- fuste ---- */
+.atril-fuste {
+  position: relative; width: 26%; height: 150px; margin-top: 2px;
+  background-image:
+    linear-gradient(100deg, transparent 30%, rgba(160,150,130,.15) 31%, transparent 33%),
+    linear-gradient(80deg, transparent 55%, rgba(150,140,120,.12) 56%, transparent 58%),
+    linear-gradient(90deg, #d8cbb4 0%, #f3eee3 20%, #f8f4ec 35%, #eee5d4 55%, #d2c4a9 80%, #e6d9c1 100%);
+  box-shadow: 0 4px 10px rgba(0,0,0,.15);
+}
+.atril .anilla { position: absolute; left: 0; right: 0; background: linear-gradient(180deg, #f0d78a, #a67c1e); }
+.atril .anilla.arriba { top: 0; height: 10px; }
+.atril .anilla.medio { top: 44%; height: 6px; }
+.atril .anilla.abajo { bottom: 0; height: 10px; }
+
+/* ---- peana escalonada ---- */
+.atril-peana { display: flex; flex-direction: column; align-items: center; width: 100%; }
+.atril .grada { position: relative; background-image: var(--marmol); }
+.atril .grada::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--laton-filete);
+}
+.atril .grada.uno { width: 34%; height: 16px; box-shadow: 0 2px 4px rgba(0,0,0,.15); }
+.atril .grada.dos { width: 46%; height: 18px; box-shadow: 0 3px 5px rgba(0,0,0,.18); }
+.atril .grada.tres { width: 60%; height: 20px; box-shadow: 0 4px 8px rgba(0,0,0,.22); }
+</style></div><!--astro:end--></astro-island></div><astro-island uid="1k4k8B" prefix="r28" component-url="/Phaingea_Wiki/_astro/Comentarios.Ctd6_Nfv.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{&quot;tipo&quot;:[0,&quot;capilla&quot;],&quot;refId&quot;:[0,&quot;general&quot;],&quot;data-astro-cid-53v6nlad&quot;:[0,true]}" ssr client="load" opts="{&quot;name&quot;:&quot;Comentarios&quot;,&quot;value&quot;:true}"></astro-island></div></section><section class="view carto" data-view="cartografia" hidden aria-label="Cartografía"><div class="room"><!-- ranura fija de moderación de la sala (BotonMod sala) --><div class="room-mod"></div><header class="room-head"><p class="room-sub">El mapamundi de Phaingea, desplegado sobre la mesa de cartografía. Sigue los pines para adentrarte en cada tierra.</p></header><astro-island uid="Z1ieHcC" prefix="r29" component-url="/Phaingea_Wiki/_astro/MapaViewer.DgGehlt0.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;MapaViewer&quot;,&quot;value&quot;:true}"></astro-island></div></section><section class="view" data-view="podios" hidden aria-label="Podios"><div class="room"><!-- ranura fija de moderación de la sala (BotonMod sala) --><div class="room-mod"></div><header class="room-head"><p class="room-sub">Los héroes de la campaña, uno a uno sobre el podio.</p></header><astro-island uid="1qWsRW" prefix="r30" component-url="/Phaingea_Wiki/_astro/PodiosView.PZn1Adpv.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;PodiosView&quot;,&quot;value&quot;:true}"></astro-island></div></section><section class="view" data-view="galeria" hidden aria-label="Galería"><div class="room"><!-- ranura fija de moderación de la sala (BotonMod sala) --><div class="room-mod"></div><header class="room-head"><p class="room-sub">Un museo de ilustraciones del mundo: retratos, paisajes y reliquias. Filtra por tema o toca un cuadro para ampliarlo.</p></header><astro-island uid="2pGaWk" prefix="r31" component-url="/Phaingea_Wiki/_astro/GaleriaView.BfNG5xFS.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;GaleriaView&quot;,&quot;value&quot;:true}"></astro-island></div></section><section class="view" data-view="sesiones" hidden aria-label="Sesiones"><div class="room"><!-- ranura fija de moderación de la sala (BotonMod sala) --><div class="room-mod"></div><header class="room-head"><p class="room-sub">Cada página de este tomo recoge una sesión: lo vivido, la experiencia repartida y las heridas que dejó.</p></header><astro-island uid="Z17oih2" prefix="r32" component-url="/Phaingea_Wiki/_astro/SesionesView.xalwtG6F.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;SesionesView&quot;,&quot;value&quot;:true}"></astro-island></div></section><section class="view taller" data-view="taller" hidden aria-label="Taller" data-astro-cid-t44q2j5i><!-- decorado de la sala --><div class="taller-sala" aria-hidden="true" data-astro-cid-t44q2j5i><div class="tablon" data-astro-cid-t44q2j5i><span class="nota-clavada a" data-astro-cid-t44q2j5i></span><span class="nota-clavada b" data-astro-cid-t44q2j5i></span><span class="nota-clavada c" data-astro-cid-t44q2j5i></span></div><div class="estante" data-astro-cid-t44q2j5i><span class="herr h1" data-astro-cid-t44q2j5i></span><span class="herr h2" data-astro-cid-t44q2j5i></span><span class="herr h3" data-astro-cid-t44q2j5i></span></div><div class="papeles" data-astro-cid-t44q2j5i></div></div><div class="room" data-astro-cid-t44q2j5i><!-- ranura fija de moderación de la sala (BotonMod sala) --><div class="room-mod" data-astro-cid-t44q2j5i></div><header class="room-head" data-astro-cid-t44q2j5i><p class="room-sub" data-astro-cid-t44q2j5i>El reglamento de la mesa, con sus mañas y costumbres.</p></header><div class="taller-mesa" data-astro-cid-t44q2j5i><astro-island uid="1KEw9a" prefix="r33" component-url="/Phaingea_Wiki/_astro/TallerLibro.CbXxnNlL.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{&quot;data-astro-cid-t44q2j5i&quot;:[0,true]}" ssr client="load" opts="{&quot;name&quot;:&quot;TallerLibro&quot;,&quot;value&quot;:true}"></astro-island><!-- jaula con la mascota del taller (§16.4) --><div class="jaula-hueco" data-astro-cid-t44q2j5i><div class="jaula" data-astro-cid-t44q2j5i><span class="barrote" data-astro-cid-t44q2j5i></span><span class="barrote" data-astro-cid-t44q2j5i></span><span class="barrote" data-astro-cid-t44q2j5i></span><span class="barrote" data-astro-cid-t44q2j5i></span><span class="jaula-base" data-astro-cid-t44q2j5i></span><div class="jaula-dentro" data-astro-cid-t44q2j5i><astro-island uid="29K2wo" prefix="r34" component-url="/Phaingea_Wiki/_astro/TallerTips.BaqlsECU.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{&quot;soloMascota&quot;:[0,true],&quot;data-astro-cid-t44q2j5i&quot;:[0,true]}" ssr client="load" opts="{&quot;name&quot;:&quot;TallerTips&quot;,&quot;value&quot;:true}"></astro-island></div></div></div></div><astro-island uid="Z1prXGG" prefix="r35" component-url="/Phaingea_Wiki/_astro/TallerTips.BaqlsECU.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{&quot;data-astro-cid-t44q2j5i&quot;:[0,true]}" ssr client="load" opts="{&quot;name&quot;:&quot;TallerTips&quot;,&quot;value&quot;:true}"></astro-island></div></section><section class="view pociones" data-view="pociones" aria-label="Sala de Pociones" hidden data-astro-cid-xw2z5uuc><!-- Se carga solo cuando la sala está activa (el conmutador pone src desde
+       data-src) y se descarga (about:blank) al salir, para que la app no siga
+       generando burbujas en segundo plano ni se acumulen. --><iframe data-src="/Phaingea_Wiki/pociones/index.html" src="about:blank" title="Mesa de alquimia interactiva" data-astro-cid-xw2z5uuc></iframe></section><section class="view" data-view="buzon" hidden aria-label="Buzón"><div class="room"><!-- ranura fija de moderación de la sala (BotonMod sala) --><div class="room-mod"></div><header class="room-head"><p class="room-sub">Las cartas de tus campañas, esperando junto al fuego.</p></header><astro-island uid="1l535L" prefix="r36" component-url="/Phaingea_Wiki/_astro/BuzonView.D9VPnQd0.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;BuzonView&quot;,&quot;value&quot;:true}"></astro-island></div></section><section class="view" data-view="moderacion" hidden aria-label="Moderación" data-astro-cid-a4c7q7nd><div class="room" data-astro-cid-a4c7q7nd><header class="room-head" data-astro-cid-a4c7q7nd><p class="room-kicker" data-astro-cid-a4c7q7nd>Sala de gestión</p><p class="room-sub" data-astro-cid-a4c7q7nd>Administración de la web y de las campañas. Los másteres ven solo lo suyo; el owner, todo.</p></header><astro-island uid="Zh6yS4" prefix="r37" component-url="/Phaingea_Wiki/_astro/ModPanel.BUds6YxF.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{&quot;data-astro-cid-a4c7q7nd&quot;:[0,true]}" ssr client="load" opts="{&quot;name&quot;:&quot;ModPanel&quot;,&quot;value&quot;:true}"></astro-island></div></section><nav id="listaRM" aria-label="Lugares señalados" hidden><h2>Lugares señalados</h2><ul id="listaRMul"></ul></nav></main><astro-island uid="GaBML" prefix="r24" component-url="/Phaingea_Wiki/_astro/AuthGate.Br7RpsrS.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;AuthGate&quot;,&quot;value&quot;:true}" await-children><div style="position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:1.5rem;background:radial-gradient(120% 100% at 50% 30%, rgba(20,20,40,.75), rgba(6,7,10,.92));backdrop-filter:blur(4px)" data-login="true" role="dialog" aria-modal="true" aria-label="Acceso a Phaingea"><form style="width:min(380px, 100%);display:grid;gap:0.9rem;color:var(--paper);border:2px solid #1c120a;border-radius:12px;padding:1.8rem 1.6rem 1.6rem;box-shadow:0 30px 80px rgba(0,0,0,.6), inset 0 0 0 1px rgba(201,164,90,.35);background-color:#6b4a2c;background-image:linear-gradient(180deg, rgba(74,50,30,.5), rgba(32,21,11,.78)), url(&quot;/Phaingea_Wiki/textures/wood.png&quot;);background-size:cover, cover;background-position:center, center;background-blend-mode:normal, multiply"><div style="font-family:var(--font-title);font-weight:700;letter-spacing:0.25em;text-align:center;color:var(--gold);font-size:1.5rem;text-shadow:0 1px 2px #000">PHAINGEA</div><p style="text-align:center;font-family:ui-monospace, monospace;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--parchment);opacity:0.85;margin-top:-0.4rem">Entrar en el archivo</p><label style="display:grid;gap:0.3rem;font-family:var(--font-ui);font-size:0.8rem;color:var(--parchment)">Usuario<input style="padding:0.6rem 0.7rem;border-radius:8px;border:1px solid rgba(201,164,90,.45);background:rgba(239,230,210,.92);color:var(--ink);font-size:1rem" autoComplete="username" autofocus="" value=""/></label><label style="display:grid;gap:0.3rem;font-family:var(--font-ui);font-size:0.8rem;color:var(--parchment)">Contraseña<input style="padding:0.6rem 0.7rem;border-radius:8px;border:1px solid rgba(201,164,90,.45);background:rgba(239,230,210,.92);color:var(--ink);font-size:1rem" type="password" autoComplete="current-password" value=""/></label><button style="margin-top:0.3rem;padding:0.7rem;border-radius:8px;border:1px solid #8a6d34;cursor:pointer;background:linear-gradient(180deg, var(--gold-soft), var(--gold));color:var(--ink);font-family:var(--font-ui);font-weight:700;letter-spacing:0.05em;font-size:1rem;text-shadow:0 1px 0 rgba(255,255,255,.25)" type="submit">Entrar</button><button style="background:none;border:0;cursor:pointer;color:var(--gold-soft);font-family:var(--font-body);font-size:0.82rem;text-decoration:underline" type="button">¿No tienes cuenta? Regístrate</button></form></div><!--astro:end--></astro-island><astro-island uid="ZaNq6m" prefix="r25" component-url="/Phaingea_Wiki/_astro/VersionWatcher.DtPTol-1.js" component-export="default" renderer-url="/Phaingea_Wiki/_astro/client.DiyRWrFo.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;VersionWatcher&quot;,&quot;value&quot;:true}" await-children><div class="version-pie"><span class="version-eco" title="Versión que está viendo esta pestaña">v <!-- -->d8a3ddb</span><style>
+        .version-pie {
+          position: fixed; left: .5rem; bottom: .4rem; z-index: 130;
+          font-family: ui-monospace, monospace; pointer-events: none;
+        }
+        .version-eco { font-size: .56rem; letter-spacing: .1em; color: rgba(151,160,171,.5); }
+        .version-boton {
+          pointer-events: auto; cursor: pointer;
+          font-family: ui-monospace, monospace; font-size: .62rem; letter-spacing: .08em;
+          background: linear-gradient(180deg, #f2dc94, #c9a45a 55%, #87692f);
+          color: #241a12; border: 1px solid #1c120a; border-radius: 999px;
+          padding: .3rem .7rem; box-shadow: 0 4px 12px rgba(0,0,0,.5);
+        }
+        .version-boton:hover { filter: brightness(1.08); }
+      </style></div><!--astro:end--></astro-island></body></html><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script><script>
+
+'use strict';
+/* ============================================================
+   EL PLANETA — motor del globo de puntos (canvas 2D, sin libs)
+   ============================================================ */
+const $  = s => document.querySelector(s);
+const RAD = Math.PI/180, TAU = Math.PI*2;
+const clamp = (v,a,b) => Math.min(b, Math.max(a,v));
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const G  = window.gsap || null;                 // GSAP solo para muelles de UI
+const URL_MAPA = 'https://jowy05.github.io/NovalisPage/mapa-mundial.jpg';
+
+/* --------- PRNG con semilla fija (fallback determinista) --------- */
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a>>>15, 1 | a);
+    t = t + Math.imul(t ^ t>>>7, 61 | t) ^ t;
+    return ((t ^ t>>>14) >>> 0) / 4294967296;
+  };
+}
+
+/* ============================================================
+   MARCADORES — lat/lon aproximadas, coherentes con el mapa:
+   Calixar al oeste · Cetus al noreste · Fortuna centro-sur ·
+   Vorath al sur. EDITA aquí para reubicar cualquier lugar.
+   ============================================================ */
+const MARCADORES = [
+  { id:'mehralt',    corto:'WIP',    nombre:'WIP', region:'WIP',
+    lat: 10, lon:-100,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+  { id:'heliopolis', corto:'WIP', nombre:'WIP',             region:'WIP',
+    lat: -8, lon:-20,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+  { id:'hjornheim',  corto:'WIP',  nombre:'WIP',              region:'WIP',
+    lat: 58, lon: 55,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+  { id:'kalmari',    corto:'WIP',    nombre:'WIP',                region:'WIP',
+    lat:-38, lon: 30,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+  { id:'pacthos',    corto:'WIP',    nombre:'WIP',                region:'WIP',
+    lat:-14, lon: 85,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+  { id:'karnatha',   corto:'WIP',   nombre:'WIP',               region:'WIP',
+    lat:-30, lon:-60,
+    lore:['Lorem ipsum dolor sit amet, consectetur adipiscing elit.','Sed do eiusmod tempor incididunt ut labore et dolore.'] },
+];
+/* Rutas del correo y del Astato (arcos de luz entre marcadores) */
+const RUTAS = [
+  ['mehralt','heliopolis'],
+  ['heliopolis','hjornheim'],
+  ['kalmari','karnatha'],
+  ['heliopolis','pacthos'],
+];
+
+/* --------- estado global del globo --------- */
+const st = {
+  rotY: 1.92,          // rotación acumulada (rad); arranca mirando Calixar/Fortuna
+  tilt: 0.14,          // inclinación (rad), + = polo norte hacia ti
+  vel: 0,              // inercia (rad/frame)
+  pausado: false,      // botón pausa
+  arrastrando: false,
+  animando: false,     // tween de centrado en curso
+  cargado: false,
+};
+const geo = { w:0, h:0, cx:0, cy:0, R:0, dpr:1 };
+let puntos = [];              // [{x,y,z,s,b}]  vector unitario + tamaño/brillo
+let usaFallback = false;
+let arcos = [];               // rutas precalculadas
+let marcadorAbierto = null;   // marcador con tarjeta abierta
+
+const lienzo = $('#globo');
+const ctx = lienzo.getContext('2d');
+const wrap = $('#globoWrap');
+
+/* --------- sprite de punto (pre-rasterizado: rápido y suave) --------- */
+function crearSprite(color, tam){
+  const c = document.createElement('canvas'); c.width = c.height = tam;
+  const x = c.getContext('2d');
+  const g = x.createRadialGradient(tam/2,tam/2,0, tam/2,tam/2,tam/2);
+  g.addColorStop(0, color); g.addColorStop(.55, color); g.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = g; x.fillRect(0,0,tam,tam);
+  return c;
+}
+const sprTierra = crearSprite('rgba(232,223,200,1)', 16);
+const sprArco   = crearSprite('rgba(159,232,112,1)', 16);
+
+/* --------- conversión lat/lon -> vector unitario --------- */
+function vecDe(lat, lon){
+  const f = lat*RAD, l = lon*RAD;
+  return { x: Math.cos(f)*Math.sin(l), y: Math.sin(f), z: Math.cos(f)*Math.cos(l) };
+}
+
+/* ============================================================
+   MUESTREO DEL MAPA REAL (equirectangular 2:1)
+   Rejilla de 84×50 = 4200 muestras sobre un canvas oculto de
+   180×90. Mar = azul-verdoso (b domina sobre r); tierra = resto.
+   ============================================================ */
+function muestrearMapa(img){
+  const W = 180, H = 90;
+  const oculto = document.createElement('canvas');
+  oculto.width = W; oculto.height = H;
+  const ox = oculto.getContext('2d', { willReadFrequently:true });
+  ox.drawImage(img, 0, 0, W, H);
+  const d = ox.getImageData(0, 0, W, H).data;   // lanza si el canvas queda "tainted"
+
+  const COLS = 84, FILAS = 50;
+  const rng = mulberry32(7);
+  const pts = [];
+  let muestras = 0, tierra = 0;
+  for (let f = 0; f < FILAS; f++){
+    const v = (f + .5) / FILAS;
+    const lat = 90 - 180*v;
+    const densidad = Math.cos(lat*RAD);         // densidad uniforme sobre la esfera
+    for (let c = 0; c < COLS; c++){
+      muestras++;
+      if (rng() > densidad) continue;
+      const u = (c + .5) / COLS;
+      const px = Math.min(W-1, u*W | 0), py = Math.min(H-1, v*H | 0);
+      const i = (py*W + px) * 4;
+      const r = d[i], g = d[i+1], b = d[i+2];
+      const lum = .2126*r + .7152*g + .0722*b;
+      const esMar = (b - r > 8 && b > 55);      // mares azul-verdosos del mapa
+      if (esMar || lum < 26) continue;          // fuera mar y trazos negros
+      tierra++;
+      for (let k = 0; k < 3; k++){              // 3 puntos por celda de tierra (densidad)
+        const jLat = lat + (rng()-.5) * (180/FILAS) * 1.15;
+        const jLon = -180 + 360*u + (rng()-.5) * (360/COLS) * 1.15;
+        const vv = vecDe(jLat, jLon);
+        pts.push({ ...vv, s: .7 + rng()*.7, b: .6 + rng()*.4 });
+      }
+    }
+  }
+  console.info(`[Engren] muestras: ${muestras} · celdas de tierra: ${tierra} · puntos dibujados: ${pts.length} · origen: mapa real`);
+  return pts;
+}
+
+/* ============================================================
+   FALLBACK — matriz de continentes aproximada (semilla fija):
+   ~30 blobs que evocan Calixar (O), Cetus (NE), Fortuna (C-S)
+   y Vorath (S). La experiencia nunca se rompe.
+   ============================================================ */
+function puntosFallback(){
+  const rng = mulberry32(1234);
+  const zonas = [
+    { lat:[-14, 40], lon:[-135,-55], n:10 },  // Calixar — oeste
+    { lat:[ 24, 68], lon:[  15,110], n: 8 },  // Cetus — noreste
+    { lat:[-30, 10], lon:[ -35, 22], n: 7 },  // Fortuna — centro-sur
+    { lat:[-62,-26], lon:[  -2, 72], n: 5 },  // Vorath — sur
+  ];
+  const blobs = [];
+  for (const z of zonas)
+    for (let i = 0; i < z.n; i++)
+      blobs.push({
+        lat: z.lat[0] + rng()*(z.lat[1]-z.lat[0]),
+        lon: z.lon[0] + rng()*(z.lon[1]-z.lon[0]),
+        rl: 5 + rng()*9,          // radio en latitud
+        ro: 8 + rng()*16,         // radio en longitud
+      });
+  const pts = [];
+  const COLS = 108, FILAS = 60;
+  for (let f = 0; f < FILAS; f++){
+    const lat = 90 - 180*(f+.5)/FILAS;
+    if (rng() > Math.cos(lat*RAD)) continue;
+    for (let c = 0; c < COLS; c++){
+      const lon = -180 + 360*(c+.5)/COLS;
+      let dentro = false;
+      for (const b of blobs){
+        const dl = (lat-b.lat)/b.rl, dn = (lon-b.lon)/b.ro;
+        if (dl*dl + dn*dn < 1 + (rng()-.5)*.5){ dentro = true; break; }
+      }
+      if (!dentro) continue;
+      for (let k = 0; k < 2; k++){
+        const vv = vecDe(lat + (rng()-.5)*3, lon + (rng()-.5)*3.4);
+        pts.push({ ...vv, s: .7 + rng()*.7, b: .6 + rng()*.4 });
+      }
+    }
+  }
+  console.info(`[Engren] puntos de tierra: ${pts.length} · origen: fallback (continentes aproximados)`);
+  return pts;
+}
+
+/* --------- carga del mapa con red de seguridad --------- */
+function cargarPuntos(){
+  return new Promise(res => {
+    if (location.search.includes('fallback')){    // ?fallback=1 fuerza la matriz local
+      usaFallback = true; res(puntosFallback()); return;
+    }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';                // GitHub Pages sirve CORS *
+    const plan_b = () => { usaFallback = true; res(puntosFallback()); };
+    const reloj = setTimeout(plan_b, 9000);
+    img.onload = () => {
+      clearTimeout(reloj);
+      try { res(muestrearMapa(img)); }            // canvas tainted -> catch
+      catch(e){ plan_b(); }
+    };
+    img.onerror = () => { clearTimeout(reloj); plan_b(); };
+    img.src = URL_MAPA;
+  });
+}
+
+/* --------- estrellas fijas del observatorio --------- */
+function pintarEstrellas(){ if(!document.getElementById('estrellas')) return;
+  const c = $('#estrellas');
+  const dpr = Math.min(2, devicePixelRatio || 1);
+  c.width  = innerWidth  * dpr;
+  c.height = innerHeight * dpr;
+  const x = c.getContext('2d');
+  x.setTransform(dpr,0,0,dpr,0,0);
+  const rng = mulberry32(42);
+  const n = Math.round(innerWidth * innerHeight / 16000);
+  for (let i = 0; i < n; i++){
+    const px = rng()*innerWidth, py = rng()*innerHeight;
+    const t = rng();
+    x.globalAlpha = .12 + t*.5;
+    x.fillStyle = t > .9 ? '#E4B75B' : '#E8DFC8';
+    const s = t > .96 ? 1.8 : 1 + t*.6;
+    x.fillRect(px, py, s, s);
+  }
+  x.globalAlpha = 1;
+}
+
+/* --------- montura astronómica de latón (SVG generado) --------- */
+function montarMontura(){
+  const svg = $('#montura'), NS = 'http://www.w3.org/2000/svg';
+  const P = (r,a) => [50 + r*Math.cos(a*RAD), 50 + r*Math.sin(a*RAD)];
+  const arco = (r,a0,a1) => {
+    const [x0,y0] = P(r,a0), [x1,y1] = P(r,a1);
+    return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${r} ${r} 0 ${a1-a0>180?1:0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+  };
+  const el = (tag, at) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in at) e.setAttribute(k, at[k]);
+    svg.appendChild(e); return e;
+  };
+  const A0 = 180, A1 = 360;   // sombrero: arco simétrico sobre el globo                    // media elipse generosa
+  el('path',{ d: arco(48.2, A0, A1), fill:'none', stroke:'#B08D57', 'stroke-width':.55, opacity:.9 });
+  el('path',{ d: arco(45.6, A0, A1), fill:'none', stroke:'#6E5637', 'stroke-width':.35, opacity:.8 });
+  for (let a = A0; a <= A1; a += 5){          // graduaciones
+    const mayor = a % 15 === 0;
+    const [x0,y0] = P(mayor ? 45.9 : 46.6, a), [x1,y1] = P(48, a);
+    el('line',{ x1:x0, y1:y0, x2:x1, y2:y1,
+      stroke: mayor ? '#B08D57' : '#6E5637',
+      'stroke-width': mayor ? .4 : .25, opacity:.85 });
+  }
+  for (const a of [A0, A1]){                  // pivotes en los extremos
+    const [px,py] = P(46.9, a);
+    el('circle',{ cx:px, cy:py, r:1.7, fill:'#0E1116', stroke:'#B08D57', 'stroke-width':.5 });
+    el('circle',{ cx:px, cy:py, r:.5,  fill:'#E4B75B' });
+  }
+}
+
+/* --------- medidas / retina --------- */
+function medir(){
+  const s = wrap.clientWidth;
+  geo.dpr = Math.min(2, devicePixelRatio || 1);
+  geo.w = geo.h = s;
+  geo.cx = geo.cy = s/2;
+  geo.R = s * .46;
+  lienzo.width = lienzo.height = Math.round(s * geo.dpr);
+  ctx.setTransform(geo.dpr, 0, 0, geo.dpr, 0, 0);
+  if (RM && st.cargado) pintar(0);
+}
+
+
+'use strict';
+/* ============================================================
+   RENDER — proyección ortográfica del hemisferio visible
+   ============================================================ */
+function rotar(v){
+  const cA = Math.cos(st.rotY), sA = Math.sin(st.rotY);
+  const cT = Math.cos(st.tilt), sT = Math.sin(st.tilt);
+  const x1 = v.x*cA + v.z*sA;
+  const z1 = v.z*cA - v.x*sA;
+  return { x: x1, y: v.y*cT - z1*sT, z: v.y*sT + z1*cT };
+}
+
+function pintar(t){
+  const { cx, cy, R, w } = geo;
+  ctx.clearRect(0, 0, w, w);
+
+  /* limbo del planeta */
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU);
+  ctx.strokeStyle = 'rgba(159,232,112,.28)'; ctx.lineWidth = 1.1; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, R*.995, 0, TAU);
+  ctx.fillStyle = 'rgba(232,223,200,.016)'; ctx.fill();
+
+  /* puntos de tierra (solo z > 0: hemisferio visible) */
+  const cA = Math.cos(st.rotY), sA = Math.sin(st.rotY);
+  const cT = Math.cos(st.tilt), sT = Math.sin(st.tilt);
+  const esc = R / 300;
+  for (let i = 0; i < puntos.length; i++){
+    const p = puntos[i];
+    const x1 = p.x*cA + p.z*sA;
+    const z1 = p.z*cA - p.x*sA;
+    const y2 = p.y*cT - z1*sT;
+    const z2 = p.y*sT + z1*cT;
+    if (z2 <= 0) continue;
+    const s = (1 + 1.1*z2) * p.s * esc * 1.35;      // ~1–1.6px, mayor al frente
+    ctx.globalAlpha = (.16 + .84*z2) * p.b;         // atenuado hacia el limbo
+    ctx.drawImage(sprTierra, cx + x1*R - s, cy - y2*R - s, s*2, s*2);
+  }
+  ctx.globalAlpha = 1;
+
+  pintarArcos(t);
+  colocarMarcadores();
+}
+
+/* ============================================================
+   ARCOS — rutas del correo y del Astato (se dibujan y desvanecen)
+   ============================================================ */
+function prepararArcos(){
+  const porId = Object.fromEntries(MARCADORES.map(m => [m.id, m]));
+  arcos = RUTAS.map(([a,b], i) => {
+    const va = vecDe(porId[a].lat, porId[a].lon);
+    const vb = vecDe(porId[b].lat, porId[b].lon);
+    const ang = Math.acos(clamp(va.x*vb.x + va.y*vb.y + va.z*vb.z, -1, 1));
+    return { va, vb, ang, sin: Math.sin(ang), fase: i*1650, ciclo: 6600 };
+  });
+}
+function puntoArco(a, tt){
+  const k1 = Math.sin((1-tt)*a.ang) / a.sin;
+  const k2 = Math.sin(tt*a.ang) / a.sin;
+  const e  = 1 + .17 * Math.sin(Math.PI*tt);        // elevación sobre la superficie
+  return { x:(a.va.x*k1 + a.vb.x*k2)*e,
+           y:(a.va.y*k1 + a.vb.y*k2)*e,
+           z:(a.va.z*k1 + a.vb.z*k2)*e };
+}
+function pintarArcos(t){
+  const { cx, cy, R } = geo;
+  const esc = R/300;
+  for (const a of arcos){
+    let head = 1, tail = 0;                         // reduced-motion: arco completo, quieto
+    if (!RM){
+      const p = ((t + a.fase) % a.ciclo) / a.ciclo;
+      head = p * 1.42; tail = head - .34;
+      if (tail > 1) continue;
+    }
+    const N = 44, kCabeza = Math.round(clamp(head,0,1)*N);
+    for (let k = 0; k <= N; k++){
+      const tt = k/N;
+      if (tt < tail || tt > head || tt > 1) continue;
+      const q = rotar(puntoArco(a, tt));
+      if (q.z <= .04) continue;
+      const cerca = RM ? .55 : (tt - tail)/.34;     // cola tenue, cabeza viva
+      const s = (1.1 + .9*q.z) * esc * (!RM && k === kCabeza ? 2.2 : 1.05);
+      ctx.globalAlpha = clamp(cerca,0,1) * (.2 + .65*q.z) * .95;
+      ctx.drawImage(sprArco, cx + q.x*R - s, cy - q.y*R - s, s*2, s*2);
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* ============================================================
+   MARCADORES DOM — botones accesibles proyectados con el globo
+   ============================================================ */
+function crearMarcadores(){
+  const capa = $('#capaMarcadores');
+  const listaUl = $('#listaRMul');
+  for (const m of MARCADORES){
+    m.v = vecDe(m.lat, m.lon);
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'marcador';
+    b.setAttribute('aria-label', `${m.nombre} — abrir tarjeta del lugar`);
+    b.innerHTML = `<span class="anillo" aria-hidden="true"></span>
+                   <span class="punto" aria-hidden="true"></span>
+                   <span class="m-label" aria-hidden="true">${m.corto}</span>`;
+    b.addEventListener('click', () => pulsarMarcador(m));
+    b.addEventListener('focus', () => {             // teclado: trae el lugar al frente
+      if (b.matches(':focus-visible') && rotar(m.v).z < .25) centrar(m);
+    });
+    capa.appendChild(b);
+    m.el = b;
+
+    const li = document.createElement('li');        // lista accesible (reduced-motion)
+    const bl = document.createElement('button');
+    bl.type = 'button'; bl.textContent = m.corto;
+    bl.setAttribute('aria-label', `${m.nombre} — abrir tarjeta del lugar`);
+    bl.addEventListener('click', () => { centrar(m); abrirTarjeta(m, true); });
+    li.appendChild(bl); listaUl.appendChild(li);
+  }
+}
+function colocarMarcadores(){
+  const { cx, cy, R } = geo;
+  for (const m of MARCADORES){
+    const q = rotar(m.v);
+    const detras = q.z < .04;
+    const sx = cx + q.x*R, sy = cy - q.y*R;
+    m.sx = sx; m.sy = sy; m.z = q.z;
+    m.el.style.transform =
+      `translate(${(sx-18).toFixed(1)}px, ${(sy-18).toFixed(1)}px) scale(${(detras ? .5 : .72 + .38*q.z).toFixed(3)})`;
+    m.el.style.opacity = detras ? .08 : (.3 + .7*q.z).toFixed(3);
+    m.el.style.pointerEvents = detras ? 'none' : 'auto';
+    m.el.style.zIndex = detras ? 1 : 2 + Math.round(q.z*10);
+    m.el.querySelector('.m-label').style.opacity = clamp((q.z - .38)/.3, 0, 1).toFixed(3);
+  }
+  if (marcadorAbierto) seguirTarjeta();
+}
+function pulsarMarcador(m){
+  if (seArrastro) return;                           // era un arrastre, no un clic
+  if (m.z < .3 && !RM) centrar(m, () => abrirTarjeta(m));
+  else abrirTarjeta(m);
+}
+
+/* --------- centrado animado de un marcador --------- */
+function centrar(m, luego){
+  const objRot = -m.lon*RAD;
+  let delta = (objRot - st.rotY) % TAU;             // camino más corto
+  if (delta >  Math.PI) delta -= TAU;
+  if (delta < -Math.PI) delta += TAU;
+  const objTilt = clamp(m.lat*RAD, -1.05, 1.05);
+  if (RM || !G){
+    st.rotY += delta; st.tilt = objTilt;
+    if (RM) pintar(0);
+    luego && luego(); return;
+  }
+  st.animando = true; st.vel = 0;
+  G.to(st, {
+    rotY: st.rotY + delta, tilt: objTilt,
+    duration: 1.05, ease: 'power3.inOut', overwrite: 'auto',
+    onComplete: () => { st.animando = false; luego && luego(); }
+  });
+}
+
+/* ============================================================
+   TARJETA DE LUGAR (popover anclado al marcador)
+   ============================================================ */
+const tarjeta = $('#tarjeta');
+function abrirTarjeta(m, centradaRM){
+  marcadorAbierto = m;
+  $('#tarjetaRegion').textContent = m.region;
+  $('#tarjetaTitulo').textContent = m.nombre;
+  $('#tarjetaL1').textContent = m.lore[0];
+  $('#tarjetaL2').textContent = m.lore[1];
+  tarjeta.hidden = false;
+  tarjeta.classList.toggle('centrada', !!(centradaRM && RM));
+  seguirTarjeta();
+  if (G && !RM) G.fromTo(tarjeta, { opacity:0, scale:.9 },
+    { opacity:1, scale:1, duration:.45, ease:'back.out(1.9)', overwrite:'auto',
+      transformOrigin:'left center' });
+  $('#tarjetaCerrar').focus({ preventScroll:true });
+}
+function seguirTarjeta(){
+  const m = marcadorAbierto; if (!m) return;
+  if (!RM && m.z < .05){ cerrarTarjeta(false); return; }   // se fue al otro hemisferio
+  if (tarjeta.classList.contains('centrada')) return;      // fija en el centro (RM)
+  const anchoT = tarjeta.offsetWidth || 285, altoT = tarjeta.offsetHeight || 150;
+  let x = m.sx + 22, y = m.sy - altoT*.5;
+  if (x + anchoT > geo.w + 40) x = m.sx - anchoT - 22;     // si no cabe, al otro lado
+  x = Math.max(x, -geo.cx*.35);
+  y = clamp(y, -24, geo.h - altoT + 24);
+  tarjeta.style.left = x.toFixed(1) + 'px';
+  tarjeta.style.top  = y.toFixed(1) + 'px';
+}
+function cerrarTarjeta(devolverFoco = true){
+  if (!marcadorAbierto) return;
+  const m = marcadorAbierto; marcadorAbierto = null;
+  tarjeta.hidden = true;
+  if (devolverFoco) m.el.focus({ preventScroll:true });
+}
+$('#tarjetaCerrar').addEventListener('click', () => cerrarTarjeta());
+
+/* ============================================================
+   INTERACCIÓN — arrastre con inercia, flechas, doble clic, pausa
+   ============================================================ */
+let seArrastro = false;
+if (!RM){
+  let px = 0, py = 0, velAcum = 0;
+  lienzo.addEventListener('pointerdown', e => {
+    try { lienzo.setPointerCapture(e.pointerId); } catch(_){ /* puntero sintético */ }
+    st.arrastrando = true; seArrastro = false;
+    st.vel = 0; velAcum = 0;
+    if (G) G.killTweensOf(st);
+    st.animando = false;
+    px = e.clientX; py = e.clientY;
+    lienzo.classList.add('agarrando');
+  });
+  lienzo.addEventListener('pointermove', e => {
+    if (!st.arrastrando) return;
+    const dx = e.clientX - px, dy = e.clientY - py;
+    if (Math.abs(dx) + Math.abs(dy) > 3) seArrastro = true;
+    px = e.clientX; py = e.clientY;
+    const k = 1 / geo.R;
+    st.rotY += dx * k;
+    st.tilt  = clamp(st.tilt + dy * k * .8, -1.05, 1.05);
+    velAcum = velAcum*.65 + (dx*k)*.35;             // suavizado para la inercia
+  });
+  const soltar = () => {
+    if (!st.arrastrando) return;
+    st.arrastrando = false;
+    st.vel = clamp(velAcum, -.09, .09);
+    lienzo.classList.remove('agarrando');
+    setTimeout(() => { seArrastro = false; }, 0);
+  };
+  lienzo.addEventListener('pointerup', soltar);
+  lienzo.addEventListener('pointercancel', soltar);
+}
+lienzo.addEventListener('dblclick', e => {          // doble clic: centra el marcador más próximo
+  const r = lienzo.getBoundingClientRect();
+  const mx = (e.clientX - r.left) * (geo.w / r.width);
+  const my = (e.clientY - r.top)  * (geo.h / r.height);
+  let mejor = null, dMin = Infinity;
+  for (const m of MARCADORES){
+    if (m.z < .04) continue;
+    const d = (m.sx-mx)**2 + (m.sy-my)**2;
+    if (d < dMin){ dMin = d; mejor = m; }
+  }
+  if (mejor) centrar(mejor);
+});
+addEventListener('keydown', e => {
+  if (e.key === 'Escape' && marcadorAbierto){ cerrarTarjeta(); return; }
+  if (e.target.closest && e.target.closest('dialog, input, textarea')) return;
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){
+    const dir = e.key === 'ArrowLeft' ? -1 : 1;
+    if (RM){ st.rotY += dir*.35; pintar(0); }
+    else st.vel = clamp(st.vel + dir*.011, -.06, .06);
+    e.preventDefault();
+  }
+});
+
+/* ============================================================
+   DOCK — pastillas de latón (Bestiario abre la ficha)
+   ============================================================ */
+let rafId = 0, tPrev = 0;
+function frame(t){
+  if (!st.arrastrando && !st.animando){
+    if (Math.abs(st.vel) > .0004){ st.rotY += st.vel; st.vel *= .95; }   // inercia
+    else {
+      st.vel = 0;
+      if (!st.pausado && !marcadorAbierto)
+        st.rotY += .055 * Math.min(.05, (t - tPrev)/1000);               // giro lento
+    }
+  }
+  tPrev = t;
+  pintar(t);
+  rafId = requestAnimationFrame(frame);
+}
+document.addEventListener('visibilitychange', () => {
+  if (RM || !st.cargado) return;
+  if (document.hidden){ cancelAnimationFrame(rafId); rafId = 0; }
+  else if (!rafId){ tPrev = performance.now(); rafId = requestAnimationFrame(frame); }
+});
+
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
+window.__engren = {              // sonda mínima para depurar/verificar
+  get puntos(){ return puntos.length; },
+  get fallback(){ return usaFallback; },
+  // Los puntos de tierra ({x,y,z} unitarios). Los usa el planisferio de
+  // "Pines del planeta" (ModPlaneta) para dibujar el MISMO mundo que se ve
+  // sobre el globo, y así colocar los pines donde toca.
+  get lista(){ return puntos; },
+  st,
+};
+async function arrancar(){
+  pintarEstrellas();
+  montarMontura();
+  crearMarcadores();
+  prepararArcos();
+  medir();
+  new ResizeObserver(medir).observe(wrap);
+  addEventListener('resize', () => { medir(); pintarEstrellas(); });
+
+  puntos = puntosFallback(); usaFallback = true;
+  st.cargado = true;
+  $('#cargando').remove();
+
+  if (RM){
+    pintar(0);                                      // una sola vista, fija
+  } else {
+    tPrev = performance.now();
+    rafId = requestAnimationFrame(frame);
+    if (G){                                         // entrada suave del observatorio
+      G.from('.globo-wrap',    { scale: .95, opacity: 0, duration: 1.1, ease: 'power2.out' });
+    }
+  }
+}
+arrancar();
+
+</script><script>
+(function(){
+  function bind(){
+    var bms = document.querySelectorAll('.bm[data-view]');
+    var views = document.querySelectorAll('.view[data-view]');
+    if(!bms.length){ return setTimeout(bind, 60); }
+    var poc = document.querySelector('.view[data-view="pociones"] iframe');
+    function activar(key){
+      views.forEach(function(v){ v.hidden = v.dataset.view !== key; });
+      bms.forEach(function(b){ b.classList.toggle('activo', b.dataset.view === key); });
+      // Sala de Pociones: cargar el iframe solo mientras está activa; al salir se
+      // descarga (about:blank) para que la app deje de generar burbujas y no se
+      // acumulen ni exploten de golpe al volver.
+      if (poc) {
+        var real = poc.getAttribute('data-src');
+        if (key === 'pociones') {
+          if (real && poc.getAttribute('src') !== real) poc.setAttribute('src', real);
+        } else if (poc.getAttribute('src') !== 'about:blank') {
+          poc.setAttribute('src', 'about:blank');
+        }
+      }
+      window.dispatchEvent(new Event('resize'));
+      // Avisar a las islas de que esta vista ya es visible (algunas, como el
+      // Libro, necesitan medir el contenedor para montarse).
+      window.dispatchEvent(new CustomEvent('phaingea:vista', { detail: { vista: key } }));
+    }
+    bms.forEach(function(b){ b.addEventListener('click', function(){
+      // sonido discreto de madera al cambiar de sala (guia 29)
+      try {
+        var prefs = JSON.parse(localStorage.getItem('phaingea_prefs') || '{}');
+        if (prefs.sonidos !== false && window.__phaingeaSonar) window.__phaingeaSonar('madera');
+      } catch(e) {}
+      activar(b.dataset.view);
+    }); });
+    activar('inicio');
+  }
+  bind();
+})();
+</script>
