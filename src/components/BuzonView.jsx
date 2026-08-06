@@ -27,6 +27,7 @@ export default function BuzonView() {
   const user = useStore($user);
   const [notis, setNotis] = useState([]);
   const [sobreAbierto, setSobreAbierto] = useState(false);
+  const [sobreHover, setSobreHover] = useState(false);
   const [abierta, setAbierta] = useState(null);
   const [volando, setVolando] = useState(null);
   const [paginaAlbum, setPaginaAlbum] = useState(0);
@@ -116,10 +117,33 @@ export default function BuzonView() {
           <button
             className={`buzon ${sobreAbierto ? 'abierto' : ''}`}
             onClick={() => setSobreAbierto((v) => !v)}
+            onMouseEnter={() => setSobreHover(true)}
+            onMouseLeave={() => setSobreHover(false)}
+            onFocus={() => setSobreHover(true)}
+            onBlur={() => setSobreHover(false)}
             aria-label={sobreAbierto ? 'Cerrar el sobre' : 'Abrir el sobre'}
           >
             <span className="buzon-cuerpo" />
-            {!sobreAbierto && pendientes.length > 0 && <span className="sobre" />}
+            {pendientes.length > 0 && (
+              <span
+                className="sobre"
+                /* La altura del sobre se calcula aquí, no en el CSS: asoma por
+                   la ranura, sube al pasar el ratón y sale del todo al abrir. */
+                style={{
+                  bottom: `${sobreAbierto ? 106 : sobreHover ? 84 : 62}px`,
+                  transform: `translateX(-50%) rotate(${sobreAbierto ? -4 : 0}deg)`,
+                  boxShadow: sobreHover && !sobreAbierto
+                    ? '0 10px 18px rgba(0,0,0,.4), 0 0 14px rgba(255,220,140,.35)'
+                    : '0 5px 10px rgba(0,0,0,.35)',
+                }}
+              >
+                <span className="sobre-dentro" />
+                <span
+                  className="sobre-solapa"
+                  style={{ transform: `rotateX(${sobreAbierto ? 150 : 0}deg)` }}
+                />
+              </span>
+            )}
             {pendientes.length > 0 && <span className="contador">{pendientes.length}</span>}
           </button>
           <p className="mono muted pie-buzon">
@@ -226,10 +250,20 @@ const css = `
 }
 .buzon { position: relative; width: 120px; height: 128px; background: none; border: 0; cursor: pointer; }
 .buzon-cuerpo {
-  position: absolute; inset: 52px 0 0 0; border-radius: 10px 10px 4px 4px;
-  background: linear-gradient(180deg, #6e7480, #3a3f48);
-  box-shadow: inset 0 2px 0 rgba(255,255,255,.25), 0 8px 18px rgba(0,0,0,.5);
+  position: absolute; inset: 52px 12px 22px 12px; border-radius: 10px 10px 5px 5px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.12), transparent 40%),
+    linear-gradient(180deg, #6b4a2c, #3a2618 78%);
+  border: 1px solid #24170d;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.18), 0 8px 18px rgba(0,0,0,.5);
   z-index: 2;
+}
+/* el poste sobre el que se apoya */
+.buzon-cuerpo::after {
+  content: ''; position: absolute; left: 50%; top: 100%; width: 16px; height: 22px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #4a3220, #6b4a2c 45%, #3a2618);
+  border-radius: 0 0 3px 3px;
 }
 /* la ranura por la que asoma el sobre */
 .buzon-cuerpo::before {
@@ -240,19 +274,40 @@ const css = `
    sale del todo antes de que las cartas se desplieguen (diseño de Didilon). */
 .sobre {
   position: absolute; left: 50%; bottom: 62px; width: 76px; height: 52px;
-  transform: translateX(-50%);
-  border-radius: 3px; background: linear-gradient(160deg, #f0e6cd, #cdbc98);
-  box-shadow: 0 4px 10px rgba(0,0,0,.5);
-  transition: bottom .28s var(--ease), transform .28s var(--ease);
+  transform: translateX(-50%); perspective: 300px;
+  border-radius: 3px; border: 1px solid #8a6a3a;
+  background: linear-gradient(160deg, #e9d3a3, #cdae74);
+  box-shadow: 0 5px 10px rgba(0,0,0,.35);
+  transition: bottom .28s var(--ease), transform .28s var(--ease), box-shadow .3s ease;
   z-index: 1;
 }
-.buzon:hover .sobre, .buzon:focus-visible .sobre { bottom: 84px; }
-.buzon.abierto .sobre { bottom: 104px; transform: translateX(-50%) rotate(-4deg); }
+
+/* el interior oscuro que se ve cuando la solapa se abre */
+.sobre-dentro {
+  position: absolute; left: 0; top: 0; width: 100%; height: 56%;
+  background: linear-gradient(180deg, #b8955a 0%, #8a6a3a 55%, #6b4f28 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  box-shadow: inset 0 -12px 16px rgba(50,35,15,.5);
+}
+/* la solapa: cerrada tapa el interior; al abrir el buzón se abate hacia atrás */
+.sobre-solapa {
+  position: absolute; left: 0; top: 0; width: 100%; height: 56%;
+  background: linear-gradient(160deg, #f0dfb6, #dcc084);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-bottom: 1px solid #8a6a3a;
+  transform-origin: top center; transform: rotateX(0deg);
+  transition: transform .55s var(--ease);
+}
+
 .sobre::after {
   content: ''; position: absolute; inset: 0;
   border-top: 26px solid rgba(0,0,0,.12); border-left: 38px solid transparent; border-right: 38px solid transparent;
 }
-.buzon.abierto .buzon-cuerpo { background: linear-gradient(180deg, #7d8492, #454b55); }
+.buzon.abierto .buzon-cuerpo {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.16), transparent 40%),
+    linear-gradient(180deg, #7d5734, #46301d 78%);
+}
 .contador {
   position: absolute; right: -6px; top: 12px; min-width: 24px; height: 24px; border-radius: 999px;
   display: grid; place-items: center; padding: 0 .3rem;
