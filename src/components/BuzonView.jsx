@@ -28,6 +28,22 @@ export default function BuzonView() {
   const [notis, setNotis] = useState([]);
   const [sobreAbierto, setSobreAbierto] = useState(false);
   const [sobreHover, setSobreHover] = useState(false);
+  // Chispas: puntitos dorados que salen al abrir el buzón y al archivar una
+  // carta. Duran un segundo y se limpian solas. Se respeta a quien pide menos
+  // animación en el sistema (guía §29).
+  const [chispas, setChispas] = useState([]);
+
+  function lanzarChispas(cuantas = 6) {
+    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    const nuevas = Array.from({ length: cuantas }, (_, i) => ({
+      id: `${Date.now()}-${i}`,
+      x: 50 + (Math.random() - 0.5) * 60,
+      y: 50 + (Math.random() - 0.5) * 60,
+      retraso: Math.random() * 0.3,
+    }));
+    setChispas((c) => [...c, ...nuevas]);
+    setTimeout(() => setChispas([]), 1100);
+  }
   const [abierta, setAbierta] = useState(null);
   const [volando, setVolando] = useState(null);
   const [paginaAlbum, setPaginaAlbum] = useState(0);
@@ -65,6 +81,7 @@ export default function BuzonView() {
 
   async function archivar(n) {
     sonar('archivar');
+    lanzarChispas(5);
     setVolando(n.id);
     setAbierta(null);
     setTimeout(async () => {
@@ -116,7 +133,10 @@ export default function BuzonView() {
         <div className="pared">
           <button
             className={`buzon ${sobreAbierto ? 'abierto' : ''}`}
-            onClick={() => setSobreAbierto((v) => !v)}
+            onClick={() => {
+              setSobreAbierto((v) => !v);
+              lanzarChispas(6);
+            }}
             onMouseEnter={() => setSobreHover(true)}
             onMouseLeave={() => setSobreHover(false)}
             onFocus={() => setSobreHover(true)}
@@ -124,6 +144,13 @@ export default function BuzonView() {
             aria-label={sobreAbierto ? 'Cerrar el sobre' : 'Abrir el sobre'}
           >
             <span className="buzon-cuerpo" />
+            {chispas.map((c) => (
+              <span
+                key={c.id}
+                className="chispa"
+                style={{ left: `${c.x}%`, top: `${c.y}%`, animationDelay: `${c.retraso}s` }}
+              />
+            ))}
             {pendientes.length > 0 && (
               <span
                 className="sobre"
@@ -157,11 +184,23 @@ export default function BuzonView() {
         <div className="carta-fondo" onClick={() => setAbierta(null)}>
           <div className="carta-grande" onClick={(e) => e.stopPropagation()}>
             <button className="cerrar" onClick={() => setAbierta(null)} aria-label="Cerrar">✕</button>
-            <p className="mono cg-fecha">{fecha(abierta.fecha)}</p>
+            <div className="cg-cabecera">
+              <span className="cg-medallon">
+                {campana?.logoUrl ? (
+                  <img src={campana.logoUrl} alt="" />
+                ) : (
+                  <b>{(campana?.nombre || '?').charAt(0)}</b>
+                )}
+              </span>
+              <span className="cg-quien">
+                <span className="cg-remite">{campana?.nombre || 'Phaingea'}</span>
+                <span className="mono cg-fecha">{fecha(abierta.fecha)}</span>
+              </span>
+            </div>
             <h3>{abierta.asunto}</h3>
             <p className="cg-texto">{abierta.contenido || 'Sin más detalles.'}</p>
             {abierta.estado === 'pendiente' && (
-              <button className="btn" onClick={() => archivar(abierta)}>Archivar</button>
+              <button className="btn" onClick={() => archivar(abierta)}>Archivar ⟶</button>
             )}
             <p className="mono muted nota-cierre">Cerrar sin archivar la deja pendiente.</p>
           </div>
@@ -315,6 +354,31 @@ const css = `
   box-shadow: 0 2px 8px rgba(0,0,0,.5);
 }
 .pie-buzon { font-size: .62rem; }
+
+/* cabecera de la carta ampliada: medallón del logo + remitente y fecha */
+.cg-cabecera { display: flex; align-items: center; gap: .7rem; margin-bottom: .2rem; }
+.cg-medallon {
+  width: 46px; height: 46px; border-radius: 50%; flex: none; overflow: hidden;
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, #b8860b, #f5d98a, #a3781c);
+  box-shadow: 0 2px 8px rgba(0,0,0,.35), inset 0 0 0 2px rgba(255,255,255,.3);
+}
+.cg-medallon img { width: 100%; height: 100%; object-fit: cover; }
+.cg-medallon b { font-family: var(--font-title); font-size: 1.3rem; color: #2a1d10; }
+.cg-quien { display: grid; line-height: 1.2; }
+.cg-remite { font-family: var(--font-title); color: var(--camp-a); font-size: .96rem; }
+
+/* chispas doradas al abrir el buzón y al archivar */
+.chispa {
+  position: absolute; width: 6px; height: 6px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, #fff6cf, var(--gold) 60%, transparent 70%);
+  animation: chispear 1s var(--ease) forwards;
+}
+@keyframes chispear {
+  0% { opacity: 0; transform: translate(-50%,-50%) scale(.3); }
+  40% { opacity: 1; transform: translate(-50%,-160%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%,-320%) scale(.4); }
+}
 
 .carta-fondo {
   position: fixed; inset: 0; z-index: 150; display: grid; place-items: center; padding: 5vh 5vw;
