@@ -3,6 +3,8 @@
 [-] pendiente test;
 [x] hecho
 
+---
+
 Bug: Al entrar en la categoria de Taller, muchas veces no sale el libro, quedando solo la jaula y tips de pantalla, para solucionarlo recargo página, pero siempre que se entra a una campaña desde otra es igual.
 
 Bug: Al abrir un libro en "pantalla completa" se ve más pequeño del que se ve en la página normal, tendria que verse bastante más grande.
