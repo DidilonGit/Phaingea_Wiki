@@ -359,6 +359,17 @@ export default function MapaViewer() {
 
       {/* ---- marco con el mapa ---- */}
       <div className="marco-madera" ref={marcoRef}>
+        {/* Volver al lugar que contiene a este. Solo aparece si hay a dónde
+            volver: en el mapamundi no sale (§10.6). */}
+        {activo?.superior && porId[activo.superior] && (
+          <button
+            className="btn-atras"
+            onClick={() => entrarEn(activo.superior)}
+            title={`Volver a ${porId[activo.superior].nombre}`}
+          >
+            ‹ <span>{porId[activo.superior].nombre}</span>
+          </button>
+        )}
         <div
           className={`mapa-hueco ${herramienta ? 'con-' + herramienta : ''}`}
           onPointerDown={onDown}
@@ -530,6 +541,16 @@ const css = `
 .modos button.sel { background: rgba(201,164,90,.25); color: var(--paper); }
 .limpiar { font-size: .6rem; padding: .25rem .5rem; }
 
+.btn-atras {
+  position: absolute; left: 26px; top: 26px; z-index: 6; cursor: pointer;
+  display: inline-flex; align-items: center; gap: .35rem;
+  background: rgba(24,16,9,.82); border: 1px solid rgba(201,164,90,.5); color: var(--gold);
+  border-radius: 999px; padding: .3rem .7rem;
+  font-family: ui-monospace, monospace; font-size: .66rem; letter-spacing: .06em;
+  box-shadow: 0 4px 12px rgba(0,0,0,.5);
+}
+.btn-atras:hover { background: rgba(201,164,90,.25); color: var(--paper); }
+.btn-atras span { max-width: 16ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .marco-madera { position: relative; padding: 18px; border-radius: 6px;
   background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(0,0,0,.35)), linear-gradient(135deg,#6b4a2c,#3a2618 70%);
   box-shadow: 0 16px 40px rgba(0,0,0,.6), inset 0 0 0 2px rgba(201,164,90,.35), inset 0 2px 0 rgba(255,255,255,.12); }

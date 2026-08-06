@@ -11,12 +11,14 @@
 [-] Bug: Al abrir un libro en "pantalla completa" se ve más pequeño del que se ve en la página normal, tendria que verse bastante más grande.
 > Lo frenaban tres cosas a la vez: el max-height del libro, los topes internos del componente y que el ancho lo marcaba el contenedor en vez de la ventana. Ahora en pantalla completa manda el alto y ocupa el 84% de la ventana. Medido en 1280x720: de 356x461 pasa a 467x605.
 
-[0] Bug: He aprobado la subida de una imagen en galeria, acto seguido el resto de imagenes no se veian hasta que vas a otra categoria y vuelves a entrar a galeria
+[-] Bug: He aprobado la subida de una imagen en galeria, acto seguido el resto de imagenes no se veian hasta que vas a otra categoria y vuelves a entrar a galeria
+> Estabas en la vista de "Pendientes" y, al aprobar la última, esa lista se quedaba vacía: parecía que se habían borrado todas. Ahora, al vaciarse los pendientes, se vuelve solo a la galería. Probado: 3 imágenes al entrar, 1 pendiente, y al aprobarla salen las 4 sin moverse de la categoría.
 
 [0] Pendiente: Los jugadores que participen en una campaña deben ver que estan participando en esa campaña, dejandoles rellenar los datos de su personaje en su perfil, actualmente aunque este configurado como "jugador" para la campaña, el usuario ve como si no participase.
 
-[0] Pendiente/Bug: En las categorias con libro, se pueden borrar páginas individualmente, pero esto parece estar dando un problema al indice, ya que se ha probado borrando una página, y aunque los nombres en el indice se reajustan, clicar para que te lleve a esa página, resulta llevarte una página antes.
-> Queda el desfase del índice. De paso: al borrar páginas saltaba un fallo que tumbaba el libro entero (React intentaba quitar hojas que el componente de paso de página ya se había llevado a su propio DOM); eso ya está arreglado.
+[-] Pendiente/Bug: En las categorias con libro, se pueden borrar páginas individualmente, pero esto parece estar dando un problema al indice, ya que se ha probado borrando una página, y aunque los nombres en el indice se reajustan, clicar para que te lleve a esa página, resulta llevarte una página antes.
+> Dos cosas: (1) los saltos del índice usaban la animación de pasar página, que en saltos largos se queda a medias — pedir la última página te dejaba por la mitad del libro; ahora van directos. (2) A doble página el contador solo enseñaba la hoja de la izquierda, así que al saltar a una página que cae a la derecha parecía que te llevaba una antes; ahora enseña las dos hojas abiertas (4–5 / 13). Probado saltando a la primera, a Cazmia, a Homom, a Youth y a la última: todas caen en su hoja.
+> AVISO: al probar esto se me quedó borrada una página del documento de dioses (la Tabla de contenidos) y otra del de Rol de Rol 2. Las dos están restauradas; los documentos vuelven a tener sus 14 páginas.
 
 [x] Pendiente/Bug: El dial todavia no cumple del todo su funcionamiento, mover hacia un lado u otro del dial da como resultado que alguna campaña siempre quede separada de la cola, todos los circulos tendrían que estar una ranura al lado de la otra, sin ranuras de separación entre ellos, por defecto ordenados de cierta forma que quede cómoda para rápido acceso.
 
@@ -25,7 +27,11 @@
 
 [0] Bug: En los libros, cuando se mueve la portada hacia "pagina 1", el libro se eleva de forma antinatural, quedando el borde más bajo del libro donde antes estaba el centro; ocurre algo similar al pasar desde la primera pagina a la portada, ya que al sostener la portada (desde la página de indice), esta se eleva de forma antinatural; No deberia elevarse nada de esto; Los datos han sido recogidos a partir de la vista en "pantalla completa" de libros, en su vista normal la elevación es menor.
 
-[0] Pendiente: Los usuarios jugadores rellenan los datos de su personaje (esto parece funcional ya), el nombre y foto de perfil que les aparezca arriba a la derecha deberian ser los del personaje cuando esten en una campaña donde tengan personaje. Actualmente parece que aunque pertenezcas a una campaña nada cambia, en perfil sigue poniendo que no perteneces.
+[-] Pendiente: Los usuarios jugadores rellenan los datos de su personaje (esto parece funcional ya), el nombre y foto de perfil que les aparezca arriba a la derecha deberian ser los del personaje cuando esten en una campaña donde tengan personaje.
+> Hecho: en una campaña donde tienes personaje, la chapa de arriba a la derecha enseña la FOTO y el NOMBRE del personaje, con tu nombre de jugador debajo en pequeño. Fuera de esas campañas vuelve a enseñarte a ti. Probado con Bruna en Campaña de Pruebas y sin personaje en Base.
+
+[0] Pendiente: ...y en perfil sigue poniendo que no perteneces.
+> Esto no lo he podido reproducir: el aviso "No participas" sale cuando tu usuario no está en la lista de jugadores de esa campaña. Ahora mismo en la base: Base de Phaingea no tiene jugadores, Mil años tampoco, Rol de Rol 2 tiene a CRIS, Joel y Leo, y Campaña de Pruebas a Didac, Jowy y Leo. Decidme con qué usuario y en qué campaña os pasa y lo miro.
 
 [-] Pendiente: Entrar en la categoría moderación, donde existen "pestañas" por campañas, debería seleccionarse por defecto la campaña en la que estés al entrar a la categoria.
 > Comprobado con "Campaña de Pruebas" activa: al entrar en Moderación la pestaña marcada es esa y el panel dice "Jugadores y másteres · Campaña de Pruebas". Si os sigue fallando, decidme con qué campaña y con qué usuario.
@@ -41,7 +47,8 @@
 
 [0] A Decidir: Estudiar el comportamiento de la base de datos para optimizar el espacio ocupado, tal vez eliminar la foto de perfil anterior de alguien de la base de datos cuando este se cambia la foto de perfil (de personaje) o cosas por el estilo.
 
-[0] Pendiente: Añadir un boton de "atrás" en la categoria cartografia, sobre el mapa o alguna esquina como herramienta, solo aparecerá el botón atrás si el mapa pertenece a alguna categoria, el mapa mundi por ejemplo no tendrá botón atrás, el botón atrás te lleva al lugar en el que se ubica el mapa donde estas, por ejemplo si clicas sobre una región y entras en su mapa, tirar atrás te llevará al mapa mundi, ya que es el que contiene la región; Si hubiera problemas con esto, cambiar la mecanica a que te lleve al mapa donde antes estabas, y añadir otro boton que te lleve al mapa mundi de vuelta también.
+[-] Pendiente: Añadir un boton de "atrás" en la categoria cartografia, sobre el mapa o alguna esquina como herramienta, solo aparecerá el botón atrás si el mapa pertenece a alguna categoria, el mapa mundi por ejemplo no tendrá botón atrás, el botón atrás te lleva al lugar en el que se ubica el mapa donde estas, por ejemplo si clicas sobre una región y entras en su mapa, tirar atrás te llevará al mapa mundi, ya que es el que contiene la región; Si hubiera problemas con esto, cambiar la mecanica a que te lleve al mapa donde antes estabas, y añadir otro boton que te lleve al mapa mundi de vuelta también.
+> Hecho tal cual: arriba a la izquierda del mapa sale «‹ Nombre del lugar que lo contiene», y solo si hay a dónde volver (en el mapamundi no aparece). Probado entrando en Bosque Beta y volviendo a Isla de Pruebas.
 
 ---
 

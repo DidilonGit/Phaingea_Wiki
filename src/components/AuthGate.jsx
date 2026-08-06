@@ -130,15 +130,34 @@ export default function AuthGate() {
         <div style={chip.wrap}>
           {/* el sobre del Buzón, dentro de la chapa para que no la pise */}
           <AvisoBuzon />
+          {/* En una campaña donde tienes personaje, la chapa enseña al PERSONAJE
+              (su foto y su nombre) y deja el nombre del jugador debajo; fuera de
+              esas campañas, enseña al jugador (guía §19.4). */}
           <button
             style={chip.avatarBtn}
             onClick={() => setPerfilAbierto(true)}
-            title="Abrir perfil"
+            title={
+              personajeActivo
+                ? `${personajeActivo.nombre} · jugado por ${user.nombreVisible || user.nombre}`
+                : 'Abrir perfil'
+            }
             aria-label="Abrir perfil"
           >
-            <span style={{ ...chip.avatar, ...(user.colorAvatar ? { background: user.colorAvatar } : {}) }}>{inicial}</span>
-            <span style={chip.name}>{user.nombreVisible || user.nombre}</span>
-            {personajeActivo && <span style={chip.personaje} title={`Personaje activo: ${personajeActivo.nombre}`}>· {personajeActivo.nombre}</span>}
+            {personajeActivo?.imagenUrl ? (
+              <img
+                src={personajeActivo.imagenUrl}
+                alt=""
+                style={{ ...chip.avatar, objectFit: 'cover', objectPosition: 'top center' }}
+              />
+            ) : (
+              <span style={{ ...chip.avatar, ...(user.colorAvatar ? { background: user.colorAvatar } : {}) }}>
+                {(personajeActivo?.nombre || user.nombre || '?').charAt(0).toUpperCase()}
+              </span>
+            )}
+            <span style={chip.nombres}>
+              <span style={chip.name}>{personajeActivo ? personajeActivo.nombre : user.nombreVisible || user.nombre}</span>
+              {personajeActivo && <span style={chip.jugador}>{user.nombreVisible || user.nombre}</span>}
+            </span>
           </button>
           <button style={chip.salir} onClick={cerrarSesion} title="Cerrar sesión">
             Salir
@@ -271,7 +290,9 @@ const chip = {
     fontFamily: 'var(--font-title)', fontSize: '0.9rem', color: 'var(--paper)',
     border: '1px solid rgba(201,164,90,.5)',
   },
-  name: { color: 'var(--paper)', fontFamily: 'ui-monospace, monospace', fontSize: '0.72rem' },
+  nombres: { display: 'grid', lineHeight: 1.15, textAlign: 'left' },
+  name: { color: 'var(--paper)', fontFamily: 'ui-monospace, monospace', fontSize: '0.72rem', maxWidth: '16ch', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  jugador: { color: 'var(--stone)', fontFamily: 'ui-monospace, monospace', fontSize: '0.56rem', letterSpacing: '0.06em' },
   personaje: { color: 'var(--gold)', fontFamily: 'var(--font-body)', fontSize: '0.72rem', maxWidth: '11ch', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   salir: {
     background: 'rgba(201,164,90,.15)', border: '1px solid rgba(201,164,90,.4)',
