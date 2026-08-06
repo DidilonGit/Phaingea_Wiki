@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { $user, esOwner } from '../../stores/user.js';
 import { $campaigns } from '../../stores/campaign.js';
@@ -10,6 +10,7 @@ import {
   PROGRESIONES,
   ID_BASE,
 } from '../../lib/db/campanas.js';
+import { comprimirImagen } from '../../lib/db/galeria.js';
 
 // Gestión mínima de campañas (T08, guía §25 parcial): crear, editar, cambiar
 // estado y reordenar. Solo owner/admin (los másteres gestionarán lo suyo en
@@ -21,6 +22,9 @@ import {
 //                            personajes en los Podios
 //   colorContorno         -> el contorno de ese título
 //   fuenteTitulo          -> con qué letra se escribe
+//   logoUrl               -> si la campaña tiene logo, es lo que se ve en su
+//                            bola del dial (en vez de las dos letras) y en la
+//                            barra de arriba
 // El recuadro de muestra del formulario los enseña tal cual quedarán.
 export default function ModCampanas() {
   const user = useStore($user);
@@ -50,6 +54,7 @@ export default function ModCampanas() {
       nombre: '', descripcion: '', estado: 'activa', progresionXP: 'media',
       colorA: '#5b6a8a', colorB: '#2b3350',
       colorTexto: '#efe6d2', colorContorno: '#c9a45a', fuenteTitulo: FUENTES[0].valor,
+      logoUrl: '',
     });
     setEditando('nueva');
     setError('');
@@ -63,6 +68,7 @@ export default function ModCampanas() {
       colorTexto: c.colorTexto || '#efe6d2',
       colorContorno: c.colorContorno || '#c9a45a',
       fuenteTitulo: c.fuenteTitulo || FUENTES[0].valor,
+      logoUrl: c.logoUrl || '',
     });
     setEditando(c.id);
     setError('');
@@ -80,6 +86,7 @@ export default function ModCampanas() {
       colorTexto: form.colorTexto,
       colorContorno: form.colorContorno,
       fuenteTitulo: form.fuenteTitulo,
+      logoUrl: form.logoUrl || '',
     };
     try {
       if (editando === 'nueva') await crearCampana(datos);
@@ -111,7 +118,14 @@ export default function ModCampanas() {
       {campanas.map((c) => (
         <div key={c.id} className="panel" style={{ padding: '0.8rem 1rem' }}>
           <div style={fila}>
-            <span style={{ ...bolita, background: `linear-gradient(140deg, ${c.planeta?.colorA || '#5b6a8a'}, ${c.planeta?.colorB || '#2b3350'})` }} />
+            <span
+              style={{
+                ...bolita,
+                background: c.logoUrl
+                  ? `center / cover no-repeat url(${c.logoUrl})`
+                  : `linear-gradient(140deg, ${c.planeta?.colorA || '#5b6a8a'}, ${c.planeta?.colorB || '#2b3350'})`,
+              }}
+            />
             <strong style={{ fontFamily: 'var(--font-title)', color: 'var(--gold-soft)' }}>{c.nombre}</strong>
             {c.esBase && <span className="mono" style={etiqueta}>BASE</span>}
             <span className="mono" style={etiqueta}>{c.estado}</span>
@@ -145,6 +159,22 @@ export default function ModCampanas() {
 }
 
 function FormCampana({ campo, form, setForm, onSubmit, onCancelar, error, esBase }) {
+  const inputLogo = useRef(null);
+  const [subiendo, setSubiendo] = useState(false);
+
+  /** El logo se guarda comprimido dentro de la propia base, como las imágenes
+   *  de la galería (Storage necesitaría plan de pago). */
+  async function elegirLogo(archivo) {
+    if (!archivo) return;
+    setSubiendo(true);
+    try {
+      const { dataUrl } = await comprimirImagen(archivo, { maxLado: 400, maxBytes: 90 * 1024 });
+      setForm((f) => ({ ...f, logoUrl: dataUrl }));
+    } finally {
+      setSubiendo(false);
+    }
+  }
+
   return (
     <form onSubmit={onSubmit} className="stack" style={{ marginTop: '0.8rem', gap: '0.6rem' }}>
       <label style={lbl}>Nombre <input style={inp} {...campo('nombre')} /></label>
@@ -170,6 +200,29 @@ function FormCampana({ campo, form, setForm, onSubmit, onCancelar, error, esBase
         <label style={lbl}>Planeta B <input type="color" value={form.colorB} onChange={(e) => setForm({ ...form, colorB: e.target.value })} /></label>
         <label style={lbl}>Texto <input type="color" value={form.colorTexto || '#efe6d2'} onChange={(e) => setForm({ ...form, colorTexto: e.target.value })} /></label>
         <label style={lbl}>Contorno <input type="color" value={form.colorContorno || '#c9a45a'} onChange={(e) => setForm({ ...form, colorContorno: e.target.value })} /></label>
+      </div>
+
+      {/* logo de la campaña: si lo tiene, es lo que se ve en su bola del dial */}
+      <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        <span style={{ ...bolita, width: '46px', height: '46px',
+          background: form.logoUrl ? `center / cover no-repeat url(${form.logoUrl})`
+            : `linear-gradient(140deg, ${form.colorA}, ${form.colorB})` }} />
+        <div style={{ display: 'grid', gap: '.3rem' }}>
+          <div style={{ display: 'flex', gap: '.5rem', flexWrap: 'wrap' }}>
+            <button className="btn ghost" type="button" style={mini} onClick={() => inputLogo.current?.click()} disabled={subiendo}>
+              {subiendo ? 'Subiendo…' : form.logoUrl ? 'Cambiar logo' : 'Subir logo'}
+            </button>
+            {form.logoUrl && (
+              <button className="btn ghost" type="button" style={mini} onClick={() => setForm({ ...form, logoUrl: '' })}>
+                Quitar logo
+              </button>
+            )}
+            <input ref={inputLogo} type="file" accept="image/*" hidden onChange={(e) => elegirLogo(e.target.files?.[0])} />
+          </div>
+          <span className="mono" style={{ fontSize: '.62rem', color: 'var(--stone)' }}>
+            Con logo, la bola del dial deja de enseñar las dos letras y enseña el logo.
+          </span>
+        </div>
       </div>
 
       {/* muestra: así se verá el título de la campaña y sus personajes */}

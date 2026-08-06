@@ -12,6 +12,7 @@
 //    (guía §9.4).
 import Comentarios from '../Comentarios.jsx';
 import CapillaLibro from '../CapillaLibro.jsx';
+import AtrilMarmol from '../AtrilMarmol.jsx';
 ---
 
 <section class="view capilla" data-view="capilla" hidden aria-label="Capilla">
@@ -31,13 +32,13 @@ import CapillaLibro from '../CapillaLibro.jsx';
       <p class="room-sub">El panteón de Phaingea, custodiado en la penumbra de la capilla.</p>
     </header>
 
-    <!-- atril elevado con su columna; el libro se coloca encima (T23) -->
+    <!-- El libro de deidades, y debajo el atril de mármol con el medallón
+         del logo de la campaña. -->
     <div class="atril-conjunto">
       <div class="atril-hueco">
         <CapillaLibro client:load />
       </div>
-      <div class="atril-tabla" aria-hidden="true"></div>
-      <div class="atril-columna" aria-hidden="true"></div>
+      <AtrilMarmol client:load />
     </div>
 
     <Comentarios client:load tipo="capilla" refId="general" />
@@ -108,7 +109,7 @@ import CapillaLibro from '../CapillaLibro.jsx';
     background: linear-gradient(180deg, transparent, rgba(240, 236, 228, 0.16));
   }
 
-  /* ---- atril elevado + columna ---- */
+  /* ---- libro + atril de mármol ---- */
   .atril-conjunto {
     position: relative;
     z-index: 1;
@@ -116,25 +117,13 @@ import CapillaLibro from '../CapillaLibro.jsx';
     justify-items: center;
     margin-top: 0.5rem;
   }
+  /* el atril asoma justo debajo del libro, como si lo sostuviera */
+  .atril-conjunto :global(.atril) { margin-top: -0.6rem; }
   /* El hueco ocupa todo el ancho de la sala: si se encoge, el libro se pinta
      a una sola página en vez de a doble. */
   .atril-hueco { position: relative; z-index: 2; width: 100%; }
-  .atril-tabla {
-    width: min(340px, 82vw);
-    height: 16px;
-    margin-top: -6px;
-    border-radius: 4px;
-    background: linear-gradient(180deg, #6b4a2c, #38240f);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-    transform: perspective(300px) rotateX(48deg);
-  }
-  .atril-columna {
-    width: 46px;
-    height: clamp(70px, 12vh, 130px);
-    border-radius: 0 0 8px 8px;
-    background: linear-gradient(90deg, #b9b2a4, #efece4 35%, #a49c8d);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
-  }
+  
+  
 
   /* el contenido va por encima del decorado */
   .capilla .room { position: relative; z-index: 1; }

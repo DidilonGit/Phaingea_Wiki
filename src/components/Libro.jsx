@@ -137,6 +137,8 @@ export default function Libro({
         });
         flipRef.current = flip;
         setListo(true);
+      } catch (_) {
+        // p. ej. el paquete no cargó: se reintenta desde el temporizador
       } finally {
         montandoRef.current = false;
       }
@@ -150,8 +152,23 @@ export default function Libro({
     const alCambiarVista = () => setTimeout(montar, 60);
     window.addEventListener('phaingea:vista', alCambiarVista);
 
+    // Red de seguridad: si por lo que sea no llegó a montarse (el contenedor
+    // todavía medía 0, o falló la carga del paquete), se reintenta un rato.
+    // Sin esto, el libro se queda como una pila de hojas sueltas y hay que
+    // recargar la página para verlo.
+    let intentos = 0;
+    const reintento = setInterval(() => {
+      if (!vivo || flipRef.current || intentos > 20) {
+        clearInterval(reintento);
+        return;
+      }
+      intentos++;
+      montar();
+    }, 500);
+
     return () => {
       vivo = false;
+      clearInterval(reintento);
       ro.disconnect();
       window.removeEventListener('phaingea:vista', alCambiarVista);
       try {

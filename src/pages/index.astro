@@ -6,6 +6,7 @@ import StarsCanvas from '../components/StarsCanvas.jsx';
 import DialCampanas from '../components/DialCampanas.jsx';
 import NotaCampana from '../components/NotaCampana.jsx';
 import PinesPlaneta from '../components/PinesPlaneta.jsx';
+import ModObservatorio from '../components/mod/ModObservatorio.jsx';
 import Capilla from '../components/views/Capilla.astro';
 import Cartografia from '../components/views/Cartografia.astro';
 import Podios from '../components/views/Podios.astro';
@@ -21,6 +22,10 @@ import Moderacion from '../components/views/Moderacion.astro';
   <StarsCanvas client:load speedMultiplier={0.22} />
 
   <section class="view obs" data-view="inicio" aria-label="Observatorio">
+    <!-- ranura fija de moderación de la sala (aquí se gestionan las campañas) -->
+    <div class="room-mod"></div>
+    <ModObservatorio client:load />
+
     <div class="globo-wrap" id="globoWrap">
       <div class="halo" aria-hidden="true"></div>
       <svg id="montura" viewBox="0 0 100 100" aria-hidden="true"></svg>

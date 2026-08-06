@@ -1,9 +1,11 @@
 ---
 // Vista Moderación (sala de gestión). Solo llega aquí quien ve su banderín
-// (gating por rol en TopBar). Gestión de campañas real (T08); el resto de
-// paneles llegan en T60 (jugadores/roles) y T61 (solicitudes/registros).
+// (gating por rol en TopBar). Aquí va lo que NO se ve en ninguna sala:
+// usuarios y roles, solicitudes pendientes, registros y herencia de contenido.
+//
+// La GESTIÓN DE CAMPAÑAS (nombre, colores, tipografía, logo…) vive en el botón
+// «Moderar categoría» del Observatorio, que es donde se nota lo que cambia.
 // Sin título de sala (guía §3).
-import ModCampanas from '../mod/ModCampanas.jsx';
 import ModPanel from '../mod/ModPanel.jsx';
 
 ---
@@ -14,13 +16,6 @@ import ModPanel from '../mod/ModPanel.jsx';
       <p class="room-kicker">Sala de gestión</p>
       <p class="room-sub">Administración de la web y de las campañas. Los másteres ven solo lo suyo; el owner, todo.</p>
     </header>
-
-    <article class="panel" style="margin-bottom:1.1rem;">
-      <h3 class="mod-titulo">Gestión de campañas</h3>
-      {/* client:load (no visible): las secciones ocultas del SPA rompen el
-          IntersectionObserver de client:visible */}
-      <ModCampanas client:load />
-    </article>
 
     <ModPanel client:load />
   </div>

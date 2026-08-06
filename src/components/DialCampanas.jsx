@@ -36,19 +36,26 @@ const MAX_VISIBLES = 8; // cuántas campañas caben a la vez en el dial
 const PASO = 34; // separación cómoda entre campañas (grados) cuando hay pocas
 const ARCO = 88; // hasta dónde llega el dial a cada lado
 const HUECO = 22; // separación mínima con Base (que ocupa el vértice)
-const RECORRIDO = 2 * (ARCO - HUECO); // longitud útil del arco
 
 /**
- * Ángulo del hueco `i` de `n`, recorriendo el arco de izquierda a derecha y
- * saltándose el vértice, que es de Base. Con pocas campañas se reparten con
- * una separación cómoda y centradas; con las 8 ocupan el arco entero.
+ * Ángulo del hueco `i` de `n`, contando de izquierda a derecha.
+ *
+ * Las campañas se reparten a los dos lados de Base y quedan SIEMPRE pegadas
+ * unas a otras: la primera de cada lado toca con Base y las demás van una
+ * ranura al lado de la anterior. Nunca queda un hueco vacío en medio.
+ * Si son tantas que no caben con la separación cómoda, se aprietan hasta
+ * llegar justo al extremo del arco.
  */
 function anguloDelHueco(i, n) {
-  if (n <= 1) return -PASO / 2;
-  const sep = Math.min(PASO, RECORRIDO / (n - 1));
-  const u = (RECORRIDO - sep * (n - 1)) / 2 + i * sep; // avance por el arco
-  const mitad = ARCO - HUECO; // dónde empieza el lado derecho
-  return u < mitad ? -ARCO + u : HUECO + (u - mitad);
+  const izquierda = Math.floor(n / 2); // cuántas van a la izquierda de Base
+  const derecha = n - izquierda;
+  const lado = Math.max(izquierda, derecha); // el lado más cargado manda
+  const sep = lado > 1 ? Math.min(PASO, (ARCO - HUECO) / (lado - 1)) : PASO;
+
+  // Las de la izquierda: la última de ellas es la que toca con Base.
+  if (i < izquierda) return -(HUECO + (izquierda - 1 - i) * sep);
+  // Las de la derecha: la primera toca con Base.
+  return HUECO + (i - izquierda) * sep;
 }
 
 export default function DialCampanas() {
