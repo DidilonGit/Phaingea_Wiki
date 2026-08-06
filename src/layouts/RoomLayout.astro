@@ -14,6 +14,14 @@ const { title = 'Phaingea' } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* El html NO se guarda en caché: es lo único que apunta a los ficheros
+        nuevos de cada despliegue. Sin esto, algunos navegadores (Opera es el
+        peor) seguían sirviendo el html viejo aunque hubiera versión nueva.
+        Los .js y .css sí se cachean, y no pasa nada: llevan un hash en el
+        nombre, así que cada despliegue son ficheros distintos. */}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>{title}</title>
     {/* El HTML se genera al construir (sin saber si hay sesión), así que la
         ventana de login viene en el paquete. Este script corre ANTES de pintar
@@ -37,6 +45,6 @@ const { title = 'Phaingea' } = Astro.props;
       <slot />
     </main>
     <AuthGate client:load />
-    <VersionWatcher client:idle />
+    <VersionWatcher client:load />
   </body>
 </html>
