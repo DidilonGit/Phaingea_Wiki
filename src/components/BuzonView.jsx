@@ -224,17 +224,30 @@ const css = `
   background: linear-gradient(160deg, #5a3d26, #2e1d10);
   box-shadow: inset 0 0 0 2px rgba(0,0,0,.35), 0 14px 30px rgba(0,0,0,.5);
 }
-.buzon { position: relative; width: 120px; height: 96px; background: none; border: 0; cursor: pointer; }
+.buzon { position: relative; width: 120px; height: 128px; background: none; border: 0; cursor: pointer; }
 .buzon-cuerpo {
-  position: absolute; inset: 20px 0 0 0; border-radius: 10px 10px 4px 4px;
+  position: absolute; inset: 52px 0 0 0; border-radius: 10px 10px 4px 4px;
   background: linear-gradient(180deg, #6e7480, #3a3f48);
   box-shadow: inset 0 2px 0 rgba(255,255,255,.25), 0 8px 18px rgba(0,0,0,.5);
+  z-index: 2;
 }
+/* la ranura por la que asoma el sobre */
+.buzon-cuerpo::before {
+  content: ''; position: absolute; left: 12%; right: 12%; top: 10px; height: 5px; border-radius: 3px;
+  background: rgba(0,0,0,.55); box-shadow: inset 0 1px 0 rgba(255,255,255,.15);
+}
+/* El sobre asoma por la ranura y SUBE al pasar por encima; al abrir el buzón
+   sale del todo antes de que las cartas se desplieguen (diseño de Didilon). */
 .sobre {
-  position: absolute; left: 50%; top: 2px; width: 76px; height: 52px; transform: translateX(-50%);
+  position: absolute; left: 50%; bottom: 62px; width: 76px; height: 52px;
+  transform: translateX(-50%);
   border-radius: 3px; background: linear-gradient(160deg, #f0e6cd, #cdbc98);
   box-shadow: 0 4px 10px rgba(0,0,0,.5);
+  transition: bottom .28s var(--ease), transform .28s var(--ease);
+  z-index: 1;
 }
+.buzon:hover .sobre, .buzon:focus-visible .sobre { bottom: 84px; }
+.buzon.abierto .sobre { bottom: 104px; transform: translateX(-50%) rotate(-4deg); }
 .sobre::after {
   content: ''; position: absolute; inset: 0;
   border-top: 26px solid rgba(0,0,0,.12); border-left: 38px solid transparent; border-right: 38px solid transparent;

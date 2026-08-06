@@ -56,7 +56,8 @@
 ## De los diseños pasados por Didilon
 
 [-] Atril de mármol para la Capilla: puesto bajo el libro de deidades, con el medallón de latón enseñando el logo de la campaña (si no tiene logo, su inicial).
-[0] Buzón medieval interactivo: pendiente de portar (el prototipo usa plantillas propias y hay que pasarlo a componente de la web).
+[-] Buzón medieval interactivo: portado a medias. Lo que ya hace tu prototipo y aquí también: sobre con el número de cartas, cartas en abanico, carta que gira y se amplía, botón de archivar y álbum de archivadas. De tu diseño he traído el SOBRE QUE ASOMA POR LA RANURA y sube al pasar el ratón y al abrir el buzón.
+> Queda por traer: el buzón de madera con su poste tal y como lo dibujaste, las chispas al abrir y archivar, y la carta ampliada con el medallón del logo. Dime si lo quieres exacto al prototipo y lo termino.
 
 ## Otras cosas arregladas por el camino
 
