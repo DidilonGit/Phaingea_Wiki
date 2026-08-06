@@ -59,6 +59,10 @@ export default function Libro({
   const [busqueda, setBusqueda] = useState('');
   const [fs, setFs] = useState(false);
   const [listo, setListo] = useState(false);
+  // ¿está abierto a doble página? Hace falta para reservarle el alto correcto:
+  // si no, al pasar de la portada (una hoja) al interior (dos) el libro cambia
+  // de tamaño y da un salto feo hacia arriba.
+  const [dobles, setDobles] = useState(false);
 
   const contRef = useRef(null);
   const libroRef = useRef(null);
@@ -137,6 +141,7 @@ export default function Libro({
         });
         flipRef.current = flip;
         setListo(true);
+        setDobles(!!el.querySelector('.stf__wrapper.--landscape'));
       } catch (_) {
         // p. ej. el paquete no cargó: se reintenta desde el temporizador
       } finally {
@@ -147,7 +152,11 @@ export default function Libro({
     montar();
     // El ResizeObserver no siempre dispara al pasar de oculto a visible, así
     // que también reintentamos cuando el SPA anuncia el cambio de sala.
-    const ro = new ResizeObserver(() => montar());
+    const ro = new ResizeObserver(() => {
+      montar();
+      // el ancho manda: por debajo de cierto tamaño el libro pasa a una hoja
+      setDobles(!!libroRef.current?.querySelector('.stf__wrapper.--landscape'));
+    });
     if (libroRef.current) ro.observe(libroRef.current);
     const alCambiarVista = () => setTimeout(montar, 60);
     window.addEventListener('phaingea:vista', alCambiarVista);
@@ -263,7 +272,14 @@ export default function Libro({
   }
 
   return (
-    <div className={`libro-wrap ${fs ? 'fs' : ''}`} ref={contRef} style={{ '--prop': proporcion }}>
+    <div
+      className={`libro-wrap ${fs ? 'fs' : ''}`}
+      ref={contRef}
+      /* proporción del libro ENTERO (alto ÷ ancho): a doble página es la mitad,
+         porque se ven dos hojas una al lado de la otra. La usa el CSS de
+         pantalla completa para darle el ancho correcto. */
+      style={{ '--prop': dobles ? proporcion / 2 : proporcion }}
+    >
       {fs && <div className="fs-fondo" onClick={() => setFs(false)} aria-hidden="true" />}
 
       {!fs && (
@@ -276,7 +292,7 @@ export default function Libro({
       <div
         className={`libro cubierta-${cubierta}`}
         ref={libroRef}
-        style={{ aspectRatio: `1 / ${proporcion}` }}
+        style={{ aspectRatio: dobles ? `2 / ${proporcion}` : `1 / ${proporcion}` }}
       >
         {/* portada: la del documento si la hay, si no la tapa de cuero */}
         <div className="hoja tapa" data-density="hard">
