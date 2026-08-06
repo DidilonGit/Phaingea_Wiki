@@ -10,31 +10,46 @@ permissions:
   pages: write
   id-token: write
 
+# Solo un despliegue a la vez. NO se cancelan los que ya estan en marcha: si se
+# cancelan, un push seguido de otro deja la web sin publicar.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Si algo se queda colgado, que falle pronto y se vea, en vez de estar
-    # quince minutos y acabar cancelado sin explicacion.
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
-      - name: Checkout
+      - name: Descargar el codigo
         uses: actions/checkout@v4
-      - name: Instalar, construir y subir
-        uses: withastro/action@v3
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 22 # Astro 7 requiere Node >= 22.12
+          node-version: 22 # Astro 7 pide Node >= 22.12
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir la web
+        run: npm run build
         env:
-          PUBLIC_APP_VERSION: ${{ github.sha }} # versión = commit; alimenta la auto-recarga
-        # withastro/action ejecuta npm ci + astro build y sube el artefacto de Pages
+          PUBLIC_APP_VERSION: ${{ github.sha }} # version = commit; alimenta la auto-recarga
+
+      - name: Preparar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir el resultado
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
