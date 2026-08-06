@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { APP_VERSION } from '../lib/version.js';
 import { getPref, aplicarPrefs } from '../lib/prefs.js';
 import '../lib/sonidos.js'; // registra window.__phaingeaSonar
@@ -28,6 +28,10 @@ import '../lib/sonidos.js'; // registra window.__phaingeaSonar
 const CLAVE_INTENTO = 'phaingea_recarga_intento';
 
 export default function VersionWatcher() {
+  // Versión nueva detectada que no se ha podido cargar sola (el navegador se
+  // empeña en servir lo viejo): se ofrece un botón para forzarlo a mano.
+  const [nueva, setNueva] = useState(null);
+
   useEffect(() => {
     aplicarPrefs(); // preferencias visuales al cargar (p. ej. contraste)
     if (APP_VERSION === 'dev') return;
@@ -77,9 +81,9 @@ export default function VersionWatcher() {
         if (intentos >= 2) {
           console.warn(
             `[Phaingea] Hay una versión nueva (${version}) pero el navegador sigue ` +
-              `sirviendo la ${APP_VERSION} desde su caché. Prueba a abrir la web en ` +
-              'una ventana privada o a vaciar la caché.'
+              `sirviendo la ${APP_VERSION} desde su caché.`
           );
+          setNueva(version); // se enseña el botón de actualizar a mano
           return;
         }
         sessionStorage.setItem(CLAVE_INTENTO, String(intentos + 1));
@@ -104,5 +108,45 @@ export default function VersionWatcher() {
     };
   }, []);
 
-  return null;
+  // Etiqueta discreta con la versión que está viendo esta pestaña. Sirve para
+  // saber de un vistazo si estás viendo lo último o una copia guardada: basta
+  // con comparar el código con el del último despliegue.
+  const corta = APP_VERSION === 'dev' ? 'dev' : APP_VERSION.slice(0, 7);
+
+  return (
+    <div className="version-pie">
+      {nueva ? (
+        <button
+          className="version-boton"
+          onClick={() => {
+            sessionStorage.removeItem(CLAVE_INTENTO);
+            const destino = new URL(window.location.href);
+            destino.searchParams.set('v', nueva);
+            window.location.replace(destino.toString());
+          }}
+          title={`Tu pestaña tiene la ${corta} y ya hay una versión más nueva`}
+        >
+          Hay una versión nueva · actualizar
+        </button>
+      ) : (
+        <span className="version-eco" title="Versión que está viendo esta pestaña">v {corta}</span>
+      )}
+
+      <style>{`
+        .version-pie {
+          position: fixed; left: .5rem; bottom: .4rem; z-index: 130;
+          font-family: ui-monospace, monospace; pointer-events: none;
+        }
+        .version-eco { font-size: .56rem; letter-spacing: .1em; color: rgba(151,160,171,.5); }
+        .version-boton {
+          pointer-events: auto; cursor: pointer;
+          font-family: ui-monospace, monospace; font-size: .62rem; letter-spacing: .08em;
+          background: linear-gradient(180deg, #f2dc94, #c9a45a 55%, #87692f);
+          color: #241a12; border: 1px solid #1c120a; border-radius: 999px;
+          padding: .3rem .7rem; box-shadow: 0 4px 12px rgba(0,0,0,.5);
+        }
+        .version-boton:hover { filter: brightness(1.08); }
+      `}</style>
+    </div>
+  );
 }
