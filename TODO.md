@@ -22,3 +22,9 @@ Pendiente: Los usuarios jugadores rellenan los datos de su personaje (esto parec
 Pendiente: Entrar en la categoría moderación, donde existen "pestañas" por campañas, debería seleccionarse por defecto la campaña en la que estés al entrar a la categoria.
 
 Pendiente: El apartado "Gestión de campañas" que ahora mismo se encuentra en la categoria de moderación general, deberia estar en el boton moderación de la categoria observatorio, ya que son colores, descripción y tipografia, cosas que practicamente solo se muestran en observatorio y no se van a modificar tan a menudo ni son "metadatos", la categoria general de moderación deberia mantenerse para cosas que no sean tangibles, como la gestión de usuarios, solicitudes pendientes y herencia de contenido.
+
+Bug: El dial en observatorio tiene un error de espaciado, hay algunas "ranuras" que nunca se ocupan, estas estan justamente a la izquierda de donde se ubica la campaña base. Los "planetas" deberian mantenerse siempre adyacentes los unos con los otros, salvo a izquierda y derecha, es decir los ultimos o primeros en la "cola" ya que no tendrán ningun otro planeta con el que hacer contacto. El comportamiento esta a medias, en la parte derecha los planetas ya se mantienen adyacentes, pero también hay una ranura no utilizada al final de la derecha.
+
+Pendiente: Debe poderse cambiar el logo de una campaña, por lo menos subirlo, esto sería también desde Gestión de Campañas, que se ubicará en la pestaña moderación del observatorio; si una campaña tiene logo, lo representado como "planeta/circulo" en el dial de observatorio deberá ser el logo. La campaña base también puede tener un logo y también puede cambiar.
+
+A Decidir: Estudiar el comportamiento de la base de datos para optimizar el espacio ocupado, tal vez eliminar la foto de perfil anterior de alguien de la base de datos cuando este se cambia la foto de perfil (de personaje) o cosas por el estilo.
