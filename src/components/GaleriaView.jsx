@@ -70,7 +70,12 @@ export default function GaleriaView() {
   const pendientes = imagenes.filter((i) => i.estado === 'pendiente');
   const misPendientes = user ? pendientes.filter((i) => i.autor === user.nombre) : [];
 
-  const base = verPendientes ? (esGestor ? pendientes : misPendientes) : aprobadas;
+  // Al aprobar (o denegar) la última pendiente, la lista de pendientes se
+  // queda vacía: se vuelve solo a la galería, que si no parecía que se habían
+  // borrado todas las imágenes hasta salir y entrar de la categoría.
+  const pendientesVisibles = esGestor ? pendientes : misPendientes;
+  const enPendientes = verPendientes && pendientesVisibles.length > 0;
+  const base = enPendientes ? pendientesVisibles : aprobadas;
   const filtradas = filtrarPorTags(base, activos);
 
   // paginación circular sobre el resultado del filtro (§13.3)
@@ -105,7 +110,7 @@ export default function GaleriaView() {
         <div className="acciones-galeria">
           {(misPendientes.length > 0 || (esGestor && pendientes.length > 0)) && (
             <button className="btn ghost" onClick={() => setVerPendientes((v) => !v)}>
-              {verPendientes ? 'Ver galería' : `Pendientes (${esGestor ? pendientes.length : misPendientes.length})`}
+              {enPendientes ? 'Ver galería' : `Pendientes (${pendientesVisibles.length})`}
             </button>
           )}
           {puedeSubir && (
@@ -126,7 +131,7 @@ export default function GaleriaView() {
       {filtradas.length === 0 ? (
         <div className="empty">
           <div className="ico">🖼️</div>
-          <p className="muted">{verPendientes ? 'No hay imágenes pendientes.' : 'La galería está vacía.'}</p>
+          <p className="muted">{enPendientes ? 'No hay imágenes pendientes.' : 'La galería está vacía.'}</p>
         </div>
       ) : (
         <div className="exposicion">

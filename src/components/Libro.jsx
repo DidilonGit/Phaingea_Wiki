@@ -199,11 +199,21 @@ export default function Libro({
     } catch (_) {}
   }, [total]);
 
+  /**
+   * Va a una hoja concreta (índice, buscador, "ir a página").
+   * OJO: `flip()` anima el paso de página y en saltos largos se queda a medias
+   * (pedir la última hoja te dejaba por la mitad del libro). Para saltar se usa
+   * `turnToPage`, que va directo; la animación se reserva para pasar de una en
+   * una con las flechas.
+   */
   function irAHoja(n) {
     const f = flipRef.current;
     if (!f) return;
+    const destino = Math.max(0, Math.min(totalHojas - 1, n));
     try {
-      f.flip(Math.max(0, Math.min(totalHojas - 1, n)));
+      if (typeof f.turnToPage === 'function') f.turnToPage(destino);
+      else f.flip(destino);
+      setPagina(destino); // por si el componente no avisa del salto
     } catch (_) {}
   }
   const siguiente = () => flipRef.current?.flipNext();
@@ -232,6 +242,25 @@ export default function Libro({
   }
 
   const enContenido = pagina >= OFFSET && pagina < OFFSET + total;
+
+  /**
+   * Qué páginas del contenido se están viendo. A doble página el libro abre de
+   * dos en dos (portada sola, luego 1-2, 3-4…), así que el contador enseña las
+   * DOS hojas abiertas. Antes solo enseñaba la de la izquierda y, al saltar
+   * desde el índice a una página de la derecha, parecía que te llevaba una
+   * página antes de la pedida.
+   */
+  function paginasALaVista() {
+    const numero = (hoja) => hoja - OFFSET + 1;
+    const dobles = !!libroRef.current?.querySelector('.stf__wrapper.--landscape');
+    if (!dobles) return String(numero(pagina));
+    const izquierda = pagina % 2 === 1 ? pagina : pagina - 1; // las impares van a la izquierda
+    const a = numero(izquierda);
+    const b = numero(izquierda + 1);
+    if (a < 1) return String(b);
+    if (b > total) return String(a);
+    return `${a}–${b}`;
+  }
 
   return (
     <div className={`libro-wrap ${fs ? 'fs' : ''}`} ref={contRef} style={{ '--prop': proporcion }}>
@@ -345,7 +374,7 @@ export default function Libro({
         </div>
       </div>
 
-      {enContenido && <p className="mono posicion">{pagina - OFFSET + 1} / {total}</p>}
+      {enContenido && <p className="mono posicion">{paginasALaVista()} / {total}</p>}
 
       {fs && <button className="fs-cerrar" onClick={() => setFs(false)} aria-label="Salir de pantalla completa">✕</button>}
 
