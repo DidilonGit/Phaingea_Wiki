@@ -25,8 +25,9 @@
 [x] Bug: El dial en observatorio tiene un error de espaciado, hay algunas "ranuras" que nunca se ocupan, estas estan justamente a la izquierda de donde se ubica la campaña base. Los "planetas" deberian mantenerse siempre adyacentes los unos con los otros, salvo a izquierda y derecha, es decir los ultimos o primeros en la "cola" ya que no tendrán ningun otro planeta con el que hacer contacto. El comportamiento esta a medias, en la parte derecha los planetas ya se mantienen adyacentes, pero también hay una ranura no utilizada al final de la derecha.
 > Los dos de arriba eran lo mismo. Ahora las campañas se reparten a los dos lados de Base y quedan siempre pegadas, la primera de cada lado tocando con Base. Con ocho: -88 -66 -44 -22 [Base] 22 44 66 88, todas a la misma distancia y sin ranuras muertas. Además el dial ya gira aunque quepan todas (antes solo se movía si sobraban campañas, y por eso parecía roto).
 
-[-] Bug: En los libros, cuando se mueve la portada hacia "pagina 1", el libro se eleva de forma antinatural, quedando el borde más bajo del libro donde antes estaba el centro; ocurre algo similar al pasar desde la primera pagina a la portada, ya que al sostener la portada (desde la página de indice), esta se eleva de forma antinatural; No deberia elevarse nada de esto; Los datos han sido recogidos a partir de la vista en "pantalla completa" de libros, en su vista normal la elevación es menor.
+[X] Bug: En los libros, cuando se mueve la portada hacia "pagina 1", el libro se eleva de forma antinatural, quedando el borde más bajo del libro donde antes estaba el centro; ocurre algo similar al pasar desde la primera pagina a la portada, ya que al sostener la portada (desde la página de indice), esta se eleva de forma antinatural; No deberia elevarse nada de esto; Los datos han sido recogidos a partir de la vista en "pantalla completa" de libros, en su vista normal la elevación es menor.
 > El libro reservaba el hueco de UNA hoja aunque estuviera abierto a dos, así que al pasar de la portada al interior cambiaba de tamaño y saltaba. Ahora reserva el hueco del libro entero. De paso, en pantalla completa el libro a doble página se veía a la mitad de tamaño del que le tocaba: ahora mide 1026x664 en una ventana de 1409x790 (antes 513x332). Queda un balanceo de unos pocos píxeles que es la propia animación de la tapa dura; decidme si sigue molestando.
+> Prueba: Funciona correctamente, ya esta corregido.
 
 [-] Pendiente: Los usuarios jugadores rellenan los datos de su personaje (esto parece funcional ya), el nombre y foto de perfil que les aparezca arriba a la derecha deberian ser los del personaje cuando esten en una campaña donde tengan personaje.
 > Hecho: en una campaña donde tienes personaje, la chapa de arriba a la derecha enseña la FOTO y el NOMBRE del personaje, con tu nombre de jugador debajo en pequeño. Fuera de esas campañas vuelve a enseñarte a ti. Probado con Bruna en Campaña de Pruebas y sin personaje en Base.
@@ -53,6 +54,11 @@
 
 [-] Pendiente: Añadir un boton de "atrás" en la categoria cartografia, sobre el mapa o alguna esquina como herramienta, solo aparecerá el botón atrás si el mapa pertenece a alguna categoria, el mapa mundi por ejemplo no tendrá botón atrás, el botón atrás te lleva al lugar en el que se ubica el mapa donde estas, por ejemplo si clicas sobre una región y entras en su mapa, tirar atrás te llevará al mapa mundi, ya que es el que contiene la región; Si hubiera problemas con esto, cambiar la mecanica a que te lleve al mapa donde antes estabas, y añadir otro boton que te lleve al mapa mundi de vuelta también.
 > Hecho tal cual: arriba a la izquierda del mapa sale «‹ Nombre del lugar que lo contiene», y solo si hay a dónde volver (en el mapamundi no aparece). Probado entrando en Bosque Beta y volviendo a Isla de Pruebas.
+
+Bug: El atril en capilla queda incompleto, la parte alta del componente es donde estaría colocado el libro, en el componente original la parte alta del atril es más grande a propósito para colocar bajo el libro.
+
+Bug: Tanto los pines redondos dorados en las puntas superiores del atril como el boton de moderar categoria de la categoria capilla se sobreponen a la vista de pantalla completa del libro, saliendo por encima del libro cuando esa vista esta activa, los pines deberian ser material del background y el boton moderación no deberia aparecer.
+
 
 ---
 
