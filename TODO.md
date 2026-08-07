@@ -70,6 +70,8 @@ Pendiente: El dial si ha quedado corregido y las ranuras parecen estar unas al l
 Pendiente: La capacidad de eliminar notificaciones ya archivadas en el álbum, o eliminarlas en lugar de archivarlas cuando son notificaciones pendientes.
 
 Bug: De vez en cuando la página se recarga sola, devolviendote a la página observatorio, esta recarga sucede aunque no hayan cambios siendo pusheados.
+
+Pendiente: Cuando clicas en "ir a galeria" o mensajes similares desde la categoria moderación general en "Solicitudes pendientes", la página se queda en la misma campaña independientemente de donde provenga la notificación, por lo tanto al ir a la galeria no se encuentra dicha petición a aprobar, tendria que cambiar la campaña y moverse hacia esa categoria después automaticamente.
 ---
 
 ## De los diseños pasados por Didilon
