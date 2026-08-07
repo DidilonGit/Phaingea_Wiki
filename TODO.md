@@ -10,6 +10,7 @@
 
 [-] Bug: Al abrir un libro en "pantalla completa" se ve más pequeño del que se ve en la página normal, tendria que verse bastante más grande.
 > Lo frenaban tres cosas a la vez: el max-height del libro, los topes internos del componente y que el ancho lo marcaba el contenedor en vez de la ventana. Ahora en pantalla completa manda el alto y ocupa el 84% de la ventana. Medido en 1280x720: de 356x461 pasa a 467x605.
+> Prueba: Corregido, pero al hacerse el libro pantalla completa, la parte superior de todas las páginas es ligeramente recortado, como si no se centrase el libro desde el centro de la pagina sino hacia top pero recortandose.
 
 [-] Bug: He aprobado la subida de una imagen en galeria, acto seguido el resto de imagenes no se veian hasta que vas a otra categoria y vuelves a entrar a galeria
 > Estabas en la vista de "Pendientes" y, al aprobar la última, esa lista se quedaba vacía: parecía que se habían borrado todas. Ahora, al vaciarse los pendientes, se vuelve solo a la galería. Probado: 3 imágenes al entrar, 1 pendiente, y al aprobarla salen las 4 sin moverse de la categoría.
