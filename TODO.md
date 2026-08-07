@@ -66,6 +66,8 @@ Bug: En varia páginas los botones quedan ligeramente ocultados por otros compon
 Bug: En las categorias con libros, el indice del libro no lleva a la página clicada sino la anterior en el mejor de los casos, en algunos casos el libro se cierra y se vuelve a abrir.
 
 Pendiente: El dial si ha quedado corregido y las ranuras parecen estar unas al lado de la otra con un comportamiento más suave y correcto, sin embargo las "ranuras" no tienen el mismo tamaño por lo que parece, ya que el circulo pegado a la derecha de Campaña Base no esta a la misma distancia que ese mismo libro lo esta del siguiente (hay mucha más distancia en este último caso), las ranuras deben ser del mismo tamaño, como tamaño estandar usemos el de Campaña Base hacia su izquierda y derecha, estan ambos a la misma distancia.
+
+Pendiente: La capacidad de eliminar notificaciones ya archivadas en el álbum, o eliminarlas en lugar de archivarlas cuando son notificaciones pendientes.
 ---
 
 ## De los diseños pasados por Didilon
