@@ -60,6 +60,8 @@ Bug: El atril en capilla queda incompleto, la parte alta del componente es donde
 
 Bug: Tanto los pines redondos dorados en las puntas superiores del atril como el boton de moderar categoria de la categoria capilla se sobreponen a la vista de pantalla completa del libro, saliendo por encima del libro cuando esa vista esta activa, los pines deberian ser material del background y el boton moderación no deberia aparecer.
 
+Bug: En varia páginas los botones quedan ligeramente ocultados por otros componentes, por ejemplo en capilla estan medio ocultados por el libro los botones bajo él, en obervatorio esta tapando una parte del planeta (mover a la derecha para que no tenga tanto protagonismo), 
+
 
 ---
 
