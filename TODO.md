@@ -72,6 +72,10 @@ Pendiente: La capacidad de eliminar notificaciones ya archivadas en el álbum, o
 Bug: De vez en cuando la página se recarga sola, devolviendote a la página observatorio, esta recarga sucede aunque no hayan cambios siendo pusheados.
 
 Pendiente: Cuando clicas en "ir a galeria" o mensajes similares desde la categoria moderación general en "Solicitudes pendientes", la página se queda en la misma campaña independientemente de donde provenga la notificación, por lo tanto al ir a la galeria no se encuentra dicha petición a aprobar, tendria que cambiar la campaña y moverse hacia esa categoria después automaticamente.
+
+Pendiente: En cartografía el circulo deberia ser visible mientras se esta creando.
+
+Bug: Parece que la rotación del planeta en observatorio usando el raton esta algo bloqueada, debe hacerse doble clic para que funcine correctamente, sino el mouse acaba apareciendo con el simbolo de bloqueado.
 ---
 
 ## De los diseños pasados por Didilon
