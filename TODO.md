@@ -76,6 +76,8 @@ Pendiente: Cuando clicas en "ir a galeria" o mensajes similares desde la categor
 Pendiente: En cartografía el circulo deberia ser visible mientras se esta creando.
 
 Bug: Parece que la rotación del planeta en observatorio usando el raton esta algo bloqueada, debe hacerse doble clic para que funcine correctamente, sino el mouse acaba apareciendo con el simbolo de bloqueado.
+
+Pendiente: Usar el componente buzón creado por el usuario para la categoria buzon.
 ---
 
 ## De los diseños pasados por Didilon
