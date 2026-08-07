@@ -10,7 +10,7 @@
 
 [-] Bug: Al abrir un libro en "pantalla completa" se ve más pequeño del que se ve en la página normal, tendria que verse bastante más grande.
 > Lo frenaban tres cosas a la vez: el max-height del libro, los topes internos del componente y que el ancho lo marcaba el contenedor en vez de la ventana. Ahora en pantalla completa manda el alto y ocupa el 84% de la ventana. Medido en 1280x720: de 356x461 pasa a 467x605.
-> Prueba: Corregido, pero al hacerse el libro pantalla completa, la parte superior de todas las páginas es ligeramente recortado, como si no se centrase el libro desde el centro de la pagina sino hacia top pero recortandose.
+> Probado: Corregido, pero al hacerse el libro pantalla completa, la parte superior de todas las páginas es ligeramente recortado, como si no se centrase el libro desde el centro de la pagina sino hacia top pero recortandose.
 
 [-] Bug: He aprobado la subida de una imagen en galeria, acto seguido el resto de imagenes no se veian hasta que vas a otra categoria y vuelves a entrar a galeria
 > Estabas en la vista de "Pendientes" y, al aprobar la última, esa lista se quedaba vacía: parecía que se habían borrado todas. Ahora, al vaciarse los pendientes, se vuelve solo a la galería. Probado: 3 imágenes al entrar, 1 pendiente, y al aprobarla salen las 4 sin moverse de la categoría.
@@ -28,7 +28,7 @@
 
 [X] Bug: En los libros, cuando se mueve la portada hacia "pagina 1", el libro se eleva de forma antinatural, quedando el borde más bajo del libro donde antes estaba el centro; ocurre algo similar al pasar desde la primera pagina a la portada, ya que al sostener la portada (desde la página de indice), esta se eleva de forma antinatural; No deberia elevarse nada de esto; Los datos han sido recogidos a partir de la vista en "pantalla completa" de libros, en su vista normal la elevación es menor.
 > El libro reservaba el hueco de UNA hoja aunque estuviera abierto a dos, así que al pasar de la portada al interior cambiaba de tamaño y saltaba. Ahora reserva el hueco del libro entero. De paso, en pantalla completa el libro a doble página se veía a la mitad de tamaño del que le tocaba: ahora mide 1026x664 en una ventana de 1409x790 (antes 513x332). Queda un balanceo de unos pocos píxeles que es la propia animación de la tapa dura; decidme si sigue molestando.
-> Prueba: Funciona correctamente, ya esta corregido.
+> Probado: Funciona correctamente, ya esta corregido.
 
 [-] Pendiente: Los usuarios jugadores rellenan los datos de su personaje (esto parece funcional ya), el nombre y foto de perfil que les aparezca arriba a la derecha deberian ser los del personaje cuando esten en una campaña donde tengan personaje.
 > Hecho: en una campaña donde tienes personaje, la chapa de arriba a la derecha enseña la FOTO y el NOMBRE del personaje, con tu nombre de jugador debajo en pequeño. Fuera de esas campañas vuelve a enseñarte a ti. Probado con Bruna en Campaña de Pruebas y sin personaje en Base.
@@ -53,8 +53,9 @@
 > Sobre borrar la foto anterior: no hace falta. Cuando alguien cambia la foto de su personaje, la nueva SUSTITUYE a la vieja en el mismo sitio, no se acumulan. Lo mismo con el logo de campaña y el mapa de un lugar.
 > Lo único que crece sin parar es la GALERÍA, porque ahí sí se guardan todas. Las imágenes ya se comprimen antes de subir (máx. 1200 px y ~180 KB cada una), así que caben unas 5.000 antes de acercarnos al límite. Mi recomendación: no tocar nada por ahora, y si algún día aprieta, mover solo la galería a un hosting de imágenes. Decidme si preferís que lo prepare ya.
 
-[-] Pendiente: Añadir un boton de "atrás" en la categoria cartografia, sobre el mapa o alguna esquina como herramienta, solo aparecerá el botón atrás si el mapa pertenece a alguna categoria, el mapa mundi por ejemplo no tendrá botón atrás, el botón atrás te lleva al lugar en el que se ubica el mapa donde estas, por ejemplo si clicas sobre una región y entras en su mapa, tirar atrás te llevará al mapa mundi, ya que es el que contiene la región; Si hubiera problemas con esto, cambiar la mecanica a que te lleve al mapa donde antes estabas, y añadir otro boton que te lleve al mapa mundi de vuelta también.
+[X] Pendiente: Añadir un boton de "atrás" en la categoria cartografia, sobre el mapa o alguna esquina como herramienta, solo aparecerá el botón atrás si el mapa pertenece a alguna categoria, el mapa mundi por ejemplo no tendrá botón atrás, el botón atrás te lleva al lugar en el que se ubica el mapa donde estas, por ejemplo si clicas sobre una región y entras en su mapa, tirar atrás te llevará al mapa mundi, ya que es el que contiene la región; Si hubiera problemas con esto, cambiar la mecanica a que te lleve al mapa donde antes estabas, y añadir otro boton que te lleve al mapa mundi de vuelta también.
 > Hecho tal cual: arriba a la izquierda del mapa sale «‹ Nombre del lugar que lo contiene», y solo si hay a dónde volver (en el mapamundi no aparece). Probado entrando en Bosque Beta y volviendo a Isla de Pruebas.
+> Probado: Funciona, completado.
 
 Bug: El atril en capilla queda incompleto, la parte alta del componente es donde estaría colocado el libro, en el componente original la parte alta del atril es más grande a propósito para colocar bajo el libro.
 
